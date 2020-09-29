@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "312521749683",
+    "firebase_url": "https://foodfair-31c5c.firebaseio.com",
+    "project_id": "foodfair-31c5c",
+    "storage_bucket": "foodfair-31c5c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:312521749683:android:29264b5540d7d5f7c96cc6",
+        "android_client_info": {
+          "package_name": "com.foodfair"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "312521749683-ti2lae6al7i78g0nkagupr7co2uktnub.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.foodfair",
+            "certificate_hash": "6318efd25c232cbe30f35c88465025b9029a0694"
+          }
+        },
+        {
+          "client_id": "312521749683-avvsrgb2iuomeso7jck3uks260v1n4rl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7MJ-gImiAcpgiipIHc7I74CyrUo1jFao"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "312521749683-avvsrgb2iuomeso7jck3uks260v1n4rl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
