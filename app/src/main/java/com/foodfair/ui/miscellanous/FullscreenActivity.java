@@ -22,10 +22,6 @@ import com.foodfair.R;
  */
 public class FullscreenActivity extends AppCompatActivity {
     Context context = this;
-    Button button;
-
-    private final int SplashTimeOut = 2500;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
