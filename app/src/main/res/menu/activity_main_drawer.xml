@@ -31,6 +31,6 @@
         <item
             android:id="@+id/nav_sign_out"
             android:icon="@drawable/ic_menu_exit"
-            android:title="@string/menu_sign_out" />
+            android:title="@string/menu_sign_out"/>
     </group>
 </menu>
