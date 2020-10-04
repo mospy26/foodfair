@@ -40,7 +40,6 @@ public class GoogleMapActivity extends FragmentActivity {
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(mLocation));
 //        mMap.setPadding(200,200,200,200);
             googleMap.getUiSettings().setMapToolbarEnabled(false);
-            googleMap.getUiSettings().setMapToolbarEnabled(false);
         });
 
         // Configure by xml (dynamic)
