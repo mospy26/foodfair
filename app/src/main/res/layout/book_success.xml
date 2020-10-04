@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -45,7 +44,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/success_FoodDescriptionContainer"
+            android:id="@+id/success_foodDescriptionContainer"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_below="@id/success_successHeaderContainer"
@@ -79,9 +78,10 @@
                             android:layout_width="80dp"
                             android:background="@drawable/table_border"
                             android:padding="3dip"
-                            android:text="Donator" />
+                            android:text="Donor" />
 
                         <TextView
+                            android:id="@+id/success_donorNameTextView"
                             android:gravity="right"
                             android:padding="3dip"
                             android:text="Thai Food Restaurant" />
@@ -96,6 +96,7 @@
                             android:text="Food" />
 
                         <TextView
+                            android:id="@+id/success_foodNameTextView"
                             android:gravity="right"
                             android:padding="3dip"
                             android:text="Delicious pasta combo" />
@@ -110,9 +111,11 @@
                             android:text="Location" />
 
                         <TextView
+                            android:id="@+id/success_pickupLocationTextView"
                             android:gravity="right"
                             android:padding="3dip"
-                            android:text="123St, Martin Rd, Camperdown" />
+                            android:text="1/102-108 Hay St, Haymarket NSW 2000"
+                            android:textSize="11sp" />
                     </TableRow>
 
                     <TableRow>
@@ -121,16 +124,18 @@
                             android:layout_width="80dp"
                             android:background="@drawable/table_border"
                             android:padding="3dip"
-                            android:text="Countdown" />
+                            android:textSize="11sp"
+                            android:text="Time to invalid" />
+
 
                         <TextView
+                            android:id="@+id/success_countdownTextView"
                             android:gravity="right"
                             android:padding="3dip"
                             android:text="1:30:22" />
                     </TableRow>
 
                 </TableLayout>
-
 
             </LinearLayout>
 
@@ -140,7 +145,7 @@
             android:id="@+id/success_mapContainer"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:layout_below="@+id/success_FoodDescriptionContainer"
+            android:layout_below="@+id/success_foodDescriptionContainer"
             android:layout_marginTop="20dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -163,9 +168,11 @@
                 </TextView>
 
                 <ImageButton
+                    android:id="@+id/success_maximizeMapButton"
                     android:layout_width="30dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/maximize_icon"
+                    android:visibility="invisible"
                     app:layout_constraintRight_toRightOf="parent">
 
                 </ImageButton>
@@ -179,7 +186,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/success_QRcodeDescriptionContainer"
+            android:id="@+id/success_qrCodeDescriptionContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/success_mapContainer"
@@ -207,10 +214,9 @@
                     android:layout_width="148dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="Donator scan the QRcode to finish the donation.">
+                    android:text="Donor scan the QRcode to finish the donation.">
 
                 </TextView>
-
 
             </LinearLayout>
 
@@ -219,20 +225,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_below="@id/success_QRcodeDescriptionContainer"
+            android:layout_below="@id/success_qrCodeDescriptionContainer"
             android:layout_marginTop="30dp"
-            android:gravity="center"
-            android:layout_marginBottom="30dp">
+            android:layout_marginBottom="30dp"
+            android:gravity="center">
 
             <Button
+                android:id="@+id/success_backButton"
                 android:layout_width="300dp"
                 android:layout_height="match_parent"
                 android:background="#8dac44"
+                android:text="Back"
                 android:textAllCaps="false"
-                android:textSize="26sp"
-                android:text="Back to Main Page"></Button>
+                android:textSize="26sp"></Button>
         </LinearLayout>
-
 
 
     </RelativeLayout>
