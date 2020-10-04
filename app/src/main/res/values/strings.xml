@@ -7,8 +7,6 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="shared_pref">com.foodfair.PREFERENCE_FILE</string>
-
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
@@ -67,4 +65,5 @@
     <string name="setting_all">All</string>
     <string name="setting_none">None</string>
 
+    <string name="title_activity_maps">Map</string>
 </resources>
