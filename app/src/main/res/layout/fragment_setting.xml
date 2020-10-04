@@ -1,22 +1,301 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<!--<androidx.constraintlayout.widget.ConstraintLayout -->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".ui.hamburger.SettingFragment">
 
-    <TextView
-        android:id="@+id/text_settings"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <RelativeLayout
+            android:id="@+id/form_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/linearLayout_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="8dp">
+
+                <LinearLayout
+                    android:id="@+id/linearLayout_section_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/setting_your_account"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp"/>
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout_profile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginHorizontal="8dp"
+                        android:background="@drawable/background_setting_menu_border">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/crying_cat"
+                            android:layout_weight="1"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:text="\nYour name\n\nAnd some info\n"
+                            android:layout_margin="8dp"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout_search_pref"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/setting_food_preferences"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:layout_marginVertical="8dp"/>
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout_preferred_meat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginVertical="4dp"
+                        android:layout_marginHorizontal="8dp"
+                        android:background="@drawable/background_setting_menu_border">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:layout_marginVertical="8dp"
+                            android:layout_marginStart="8dp"
+                            android:textColor="@android:color/black"
+                            android:text="@string/setting_preferred_meat"/>
+
+                        <TextView
+                            android:id="@+id/food_pref_meat_list"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:text="@string/setting_all"
+                            android:textColor="@android:color/black"
+                            android:layout_marginVertical="8dp"
+                            android:textAlignment="textEnd"
+                            android:ellipsize="end"
+                            android:singleLine="true"/>
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"
+                            android:layout_marginVertical="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:src="@drawable/ic_right_kb_arrow"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout_allergies"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginVertical="4dp"
+                        android:layout_marginHorizontal="8dp"
+                        android:background="@drawable/background_setting_menu_border">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:layout_marginVertical="8dp"
+                            android:layout_marginStart="8dp"
+                            android:textColor="@android:color/black"
+                            android:text="@string/setting_allergies"/>
+
+                        <TextView
+                            android:id="@+id/food_pref_allergies"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:textColor="@android:color/black"
+                            android:layout_marginVertical="8dp"
+                            android:textAlignment="textEnd"
+                            android:text="@string/setting_none"/>
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"
+                            android:layout_marginVertical="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:src="@drawable/ic_right_kb_arrow"/>
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:background="@drawable/background_setting_menu_border"
+                        android:layout_marginVertical="4dp"
+                        android:layout_marginHorizontal="8dp">
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout_search_radius"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="8dp"
+                        android:layout_marginStart="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textColor="@android:color/black"
+                            android:text="@string/setting_search_distance" />
+
+                        <TextView
+                            android:id="@+id/search_distance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textColor="@android:color/black"
+                            android:text="@string/setting_distance_default" />
+
+                    </LinearLayout>
+
+                    <SeekBar
+                        android:id="@+id/search_seekbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="32"
+                        android:progress="12"
+                        android:layout_marginBottom="4dp"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout_notifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/setting_notifications"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginVertical="8dp"/>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout_new_food"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginVertical="4dp"
+                    android:layout_marginHorizontal="8dp"
+                    android:background="@drawable/background_setting_menu_border">
+
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switch_new_food"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/setting_new_food"
+                        android:layout_margin="8dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout_item_booked_cancelled"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginVertical="4dp"
+                    android:layout_marginHorizontal="8dp"
+                    android:background="@drawable/background_setting_menu_border">
+
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switch_item_booked_cancelled"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/setting_item_booked_cancelled"
+                        android:layout_margin="8dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout_new_review"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginVertical="4dp"
+                    android:layout_marginHorizontal="8dp"
+                    android:background="@drawable/background_setting_menu_border">
+
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switch_new_review"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/setting_new_review"
+                        android:layout_margin="8dp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+                <Button
+                    android:id="@+id/btn_reset_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setting_reset_password" />
+
+                <Button
+                    android:id="@+id/btn_sign_out"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setting_sign_out" />
+
+                <TextView
+                    android:id="@+id/text_settings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:textAlignment="center"
+                    android:textSize="20sp"/>
+
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>
