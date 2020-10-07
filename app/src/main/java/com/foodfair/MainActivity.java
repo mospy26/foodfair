@@ -1,5 +1,6 @@
 package com.foodfair;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -48,6 +49,15 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+
+        // for testing purposes!!!
+        Intent intent = new Intent(MainActivity.this,
+                PostFoodActivity.class);
+        if (intent != null) {
+            startActivityForResult(intent, 111);
+        }
+
+
     }
 
     @Override
@@ -62,5 +72,14 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 111) {
+        }
     }
 }
