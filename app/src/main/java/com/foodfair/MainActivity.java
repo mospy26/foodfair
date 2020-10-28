@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         // for testing purposes!!!
         Intent intent = new Intent(MainActivity.this,
-                PostFoodActivity.class);
+                MapViewActivity.class);
         if (intent != null) {
             startActivityForResult(intent, 111);
         }
