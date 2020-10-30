@@ -17,6 +17,7 @@ import com.foodfair.MainActivity;
 import com.foodfair.R;
 import com.foodfair.network.FoodFairWSClient;
 import com.foodfair.task.UiHandler;
+import com.foodfair.ui.login.Login;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -36,7 +37,7 @@ public class FullscreenActivity extends AppCompatActivity {
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
 
-            Intent intent = new Intent(context,MainActivity.class);
+            Intent intent = new Intent(context, Login.class);
 
             @Override
             public void run() {
