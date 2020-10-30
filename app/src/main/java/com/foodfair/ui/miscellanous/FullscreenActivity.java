@@ -15,6 +15,8 @@ import android.widget.Button;
 
 import com.foodfair.MainActivity;
 import com.foodfair.R;
+import com.foodfair.network.FoodFairWSClient;
+import com.foodfair.task.UiHandler;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -22,10 +24,15 @@ import com.foodfair.R;
  */
 public class FullscreenActivity extends AppCompatActivity {
     Context context = this;
+    UiHandler uiHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen);
+
+        uiHandler =  UiHandler.createHandler(this.getMainLooper());
+        FoodFairWSClient.globalCon.connect();
+
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
 

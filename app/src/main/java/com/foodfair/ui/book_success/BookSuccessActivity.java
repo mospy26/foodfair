@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.foodfair.network.FoodFairWSClient;
 import com.foodfair.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,6 +25,8 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Date;
 
 public class BookSuccessActivity extends AppCompatActivity {
@@ -61,6 +64,7 @@ public class BookSuccessActivity extends AppCompatActivity {
         mBookSuccessViewModel = new BookSuccessViewModel(BitmapFactory.decodeResource(getResources(),
                 R.drawable.foodsample));
         ViewModelObserverSetup();
+
     }
 
     private void InitListener() {
