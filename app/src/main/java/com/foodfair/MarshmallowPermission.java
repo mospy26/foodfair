@@ -45,4 +45,28 @@ public class MarshmallowPermission {
         return true;
     }
 
+
+    /**
+     * Prompts the user for permission to use the device location.
+     */
+    public boolean checkLocationPermission(int requestCode) {
+        /*
+         * Request location permission, so that we can get the location of the
+         * device. The result of the permission request is handled by a callback,
+         * onRequestPermissionsResult.
+         */
+        if (ContextCompat.checkSelfPermission(activity,
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    requestCode);
+
+            //!!!!!!!! check this later
+            return false;
+        }
+    }
+
 }
