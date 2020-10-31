@@ -45,21 +45,6 @@ public class MainActivity extends AppCompatActivity {
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        // Sign out
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                /*if(item.getItemId() == R.id.nav_sign_out) {
-                    Toast toast = Toast.makeText(getApplicationContext(),
-                            "TODO: Implement sign out", Toast.LENGTH_LONG);
-                    toast.show();
-                    //close navigation drawer
-                    DrawerLayout drawer = findViewById(R.id.drawer_layout);
-                    drawer.closeDrawer(GravityCompat.START);
-                }*/
-                return true;
-            }
-        });
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
