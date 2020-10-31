@@ -11,6 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.foodfair.databinding.AdapterLeaderboardBinding;
 import com.foodfair.model.Leaderboard;
+import com.foodfair.model.Ranking;
+import com.foodfair.model.UsersInfo;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -61,14 +65,28 @@ public class LeaderboardAdapter extends FirestoreAdapter<LeaderboardAdapter.View
 
         public void bind(final DocumentSnapshot snapshot,
                          final OnLeaderboardSelectListener listener) {
-            Leaderboard leaderboard = snapshot.toObject(Leaderboard.class);
+            Ranking ranking = snapshot.toObject(Ranking.class);
             Resources resources = itemView.getResources();
 
-            Map<String, Object>[] rankingInfo = leaderboard.getRanking();
+            DocumentReference donorRef = ranking.getDonor();
+            donorRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    UsersInfo usersInfo = documentSnapshot.toObject(UsersInfo.class);
+                    binding.firstLine.setText(usersInfo.getName());
+                    binding.secondLine.setText(usersInfo.getBio());
+                }
+            });
 
-            for(Map<String, Object> rankingDetail: rankingInfo){
-                binding.firstLine.setText(leaderboard.getRanking());
-            }
+            // Click listener
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null) {
+                        listener.onLeaderboardSelected(snapshot);
+                    }
+                }
+            });
 
         }
     }

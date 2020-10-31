@@ -23,6 +23,7 @@
         android:id="@+id/btn_switch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:text="Switch leaderboard"
         app:layout_constraintBottom_toTopOf="@id/leaderboard_list"
         app:layout_constraintTop_toBottomOf="@id/text_leaderboard"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,7 +31,7 @@
         app:layout_constraintWidth_percent="0.7"
         />
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/leaderboard_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
