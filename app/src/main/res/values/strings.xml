@@ -16,6 +16,58 @@
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="menu_user_profile">Profile</string>
+    <string name="menu_history_of_items">History of items</string>
+    <string name="menu_leaderboards">Leaderboards</string>
+    <string name="menu_manage_food_postings">Manage food postings</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_sign_out">Sign out</string>
+
+    <string name="config_preferred_meat">CONFIG_PREF_MEAT</string>
+    <string name="config_allergies">CONFIG_ALLERGIES</string>
+    <string name="config_distance">CONFIG_DISTANCE</string>
+    <string name="config_new_food">CONFIG_NEW_FOOD</string>
+    <string name="config_item_booked_cancelled">CONFIG_BOOKED_CANCELLED</string>
+    <string name="config_new_review">CONFIG_NEW_REVIEW</string>
+
+    <string name="setting_your_account">Your account</string>
+    <string name="setting_food_preferences">Food Preferences</string>
+    <string name="setting_preferred_meat">Preferred meat</string>
+    <string name="setting_allergies">Allergies</string>
+    <string name="setting_notifications">Push Notifications</string>
+    <string name="setting_new_food">New Nearby Food</string>
+    <string name="setting_item_booked_cancelled">Item booked/ cancelled</string>
+    <string name="setting_new_review">New Item Review</string>
+    <string name="setting_search_distance">Search radius: </string>
+    <string name="setting_distance_default"> 3.00 Km</string>
+    <string name="setting_reset_password">Reset Password</string>
+    <string name="setting_sign_out">Sign Out</string>
+
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Please keep the arrays sorted alphabetically -->
+    <array name="setting_meat_preferences">
+        <item name="beef">Beef</item>
+        <item name="chicken">Chicken</item>
+        <item name="pork">Pork</item>
+        <item name="seafood">Seafood</item>
+        <item name="vegan">Vegan</item>
+    </array>
+
+    <!-- Please keep the arrays sorted alphabetically -->
+    <array name="setting_allergies">
+        <item name="beef">Beef</item>
+        <item name="chicken">Chicken</item>
+        <item name="peanuts">Peanuts</item>
+        <item name="pork">Pork</item>
+        <item name="seafood">Seafood</item>
+    </array>
+
+    <string name="setting_all">All</string>
+    <string name="setting_none">None</string>
+
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_login">FullscreenActivity</string>
     <string name="title_activity_sign__up">FullscreenActivity</string>
