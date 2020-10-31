@@ -13,7 +13,7 @@ public class UsersInfo {
     public static final String FIELD_BIO = "bio";
     public static final String FIELD_BIRTHDAY = "birthday";
     public static final String FIELD_EMAIL = "email";
-    public static final String FIELD_GENDER = "1";
+    public static final String FIELD_GENDER = "gender";
     public static final String FIELD_JOIN_DATE = "join-date";
     public static final String FIELD_LAST_LOGIN = "last-login";
     public static final String FIELD_LOCATION = "location";
@@ -38,6 +38,15 @@ public class UsersInfo {
     private Long preference;
     private String profileImage;
     private Long status;
+
+    public static final String FIREBASE_COLLECTION_USER_INFO = "usersInfo";
+    public static final String ITEMS_ON_SHELF = "itemsOnShelf";
+    public static final String ITEMS_REVIEWED = "itemsReviewed";
+    public static final Long FIREBASE_COLLECTION_USER_INFO_GENDER_VALUE_MALE = 1L;
+    public static final String FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS = "reviews";
+    public static final String FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_BADGES = "badges";
+    public static final String FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_BADGES = "badges";
+
 
     public List<Long> getAllergy() {
         return allergy;
