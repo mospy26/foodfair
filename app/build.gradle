@@ -38,6 +38,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.3.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'com.google.firebase:firebase-auth:16.0.5'
+    implementation 'com.firebaseui:firebase-ui-firestore:6.3.0'
     implementation 'com.google.firebase:firebase-firestore'
     implementation platform('com.google.firebase:firebase-bom:25.12.0')
     implementation 'com.google.android.gms:play-services-maps:17.0.0'

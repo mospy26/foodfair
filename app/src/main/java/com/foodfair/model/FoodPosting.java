@@ -13,6 +13,15 @@ public class FoodPosting implements Serializable {
     public Date foodExpiryDate;
     //I think Size is irrelavant.
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String name;
     public Date postingRemovalDate;
     public String description;
     public String locationAsString;
