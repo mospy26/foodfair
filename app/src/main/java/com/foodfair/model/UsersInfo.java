@@ -39,14 +39,6 @@ public class UsersInfo {
     private String profileImage;
     private Long status;
 
-    public static final String FIREBASE_COLLECTION_USER_INFO = "usersInfo";
-    public static final String ITEMS_ON_SHELF = "itemsOnShelf";
-    public static final String ITEMS_REVIEWED = "itemsReviewed";
-    public static final Long FIREBASE_COLLECTION_USER_INFO_GENDER_VALUE_MALE = 1L;
-    public static final String FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS = "reviews";
-    public static final String FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_BADGES = "badges";
-    public static final String FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_BADGES = "badges";
-
 
     public List<Long> getAllergy() {
         return allergy;

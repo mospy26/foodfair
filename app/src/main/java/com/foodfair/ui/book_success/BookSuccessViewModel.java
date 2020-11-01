@@ -6,24 +6,33 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.foodfair.model.FooditemTransaction;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.Timestamp;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.HashMap;
 
 public class BookSuccessViewModel extends ViewModel {
+    MutableLiveData<String> mDonorName = new MutableLiveData<>();
+    MutableLiveData<String> mFoodName = new MutableLiveData<>();
+    MutableLiveData<String> mPickupLocation = new MutableLiveData<>();
+    MutableLiveData<LatLng> mLocationLatLng = new MutableLiveData<>();
+    MutableLiveData<String> mQRCodeContent = new MutableLiveData<>();
+    MutableLiveData<String> mFoodUrl = new MutableLiveData<>();
+    MutableLiveData<Timestamp> mTransactionStartDate = new MutableLiveData<>();
+    MutableLiveData<Integer> mTransactionLiveSeconds = new MutableLiveData<>();
+    MutableLiveData<Long> mDeadlineTimeStampToPickup = new MutableLiveData<>();
 
-    private MutableLiveData<String> mDonorName = new MutableLiveData<>();
-    private MutableLiveData<String> mFoodName = new MutableLiveData<>();
-    private MutableLiveData<String> mPickupLocation = new MutableLiveData<>();
-    private MutableLiveData<Long> mDeadlineTimeStampToPickup = new MutableLiveData<>();
-    private MutableLiveData<LatLng> mLocationLatLng = new MutableLiveData<>();
-    private MutableLiveData<String> mQRCodeContent = new MutableLiveData<>();
-    private MutableLiveData<Bitmap> mFoodBitmap = new MutableLiveData<>();
+    // for testing
+    MutableLiveData<Bitmap> mFoodBitmap = new MutableLiveData<>();
 
 
-
+    private MutableLiveData<String> mTransactionId = new MutableLiveData<>();
+    BookSuccessViewModel(){}
     public BookSuccessViewModel(Bitmap foodSample) {
         // Fake data
         // todo until firebase structure completes, remove these codes
@@ -35,7 +44,20 @@ public class BookSuccessViewModel extends ViewModel {
         mQRCodeContent.setValue("It is the content of the qrcode");
         mFoodBitmap.setValue(foodSample);
     }
-
+    public BookSuccessViewModel(String donorName, String foodName, String pickupLocationText,
+                                Timestamp transactionStartDate,
+                                int transactionAliveSeconds, LatLng latLng, String transactionId, String foodUrl){
+        mDonorName.setValue(donorName);
+        mFoodName.setValue(foodName);
+        mPickupLocation.setValue(pickupLocationText);
+        mTransactionStartDate.setValue(transactionStartDate);
+        mTransactionLiveSeconds.setValue(transactionAliveSeconds);
+        mDeadlineTimeStampToPickup.setValue(transactionStartDate.toDate().getTime()/1000 + transactionAliveSeconds);
+        mLocationLatLng.setValue(latLng);
+        mQRCodeContent.setValue(transactionId);
+        mTransactionId.setValue(transactionId);
+        mFoodUrl.setValue(foodUrl);
+    }
     public LiveData<String> getDonorName() {
         return mDonorName;
     }
@@ -60,8 +82,11 @@ public class BookSuccessViewModel extends ViewModel {
         return mQRCodeContent;
     }
 
-    public LiveData<Bitmap> getFoodBitmap() {
-        return mFoodBitmap;
+    public LiveData<String> getFoodUrl() {
+        return mFoodUrl;
+    }
+    public MutableLiveData<String> getTransactionId() {
+        return mTransactionId;
     }
 
 }

@@ -41,7 +41,7 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 public class UserProfileActivity extends AppCompatActivity {
-    FirebaseFirestore db;
+    Const aConst = Const.getInstance();
     public String userId;
     public CircleImageView profileCircleImageView;
     public TextView nameTextView;
@@ -84,60 +84,18 @@ public class UserProfileActivity extends AppCompatActivity {
     public TextView donorReviewedItemTextDescriptionTextView;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_profile);
         InitUI();
-//        InitListener();
-//        mBookSuccessViewModel = new BookSuccessViewModel(BitmapFactory.decodeResource(getResources(),
-//                R.drawable.foodsample));
-//        ViewModelObserverSetup();
-
-
         userId = "yXnhEl9OBqgKqHLAPMPV";
-        Bitmap icon = BitmapFactory.decodeResource(getResources(),
-                R.drawable.sample_profile_image);
-        icon = Utility.getResizedBitmap(icon, 200);
-
-        String photoBase64 = Utility.bitmapToBase64(icon);
-        int a = 1;
-        //firebaseRegisterAndLogin("tom@gmail.com", "Iamtomspassword");
-        // db = FirebaseFirestore.getInstance();
-
-
-//        // Get the data from an ImageView as bytes
-//        FirebaseStorage storage = FirebaseStorage.getInstance();
-//        Bitmap bitmap = ((BitmapDrawable) profileCircleImageView.getDrawable()).getBitmap();
-//        bitmap = Utility.getResizedBitmap(bitmap,200);
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-//        byte[] data = baos.toByteArray();
-//
-//        StorageReference storageRef = storage.getReference();
-//        StorageReference mountainsRef = storageRef.child("tomsimage.jpg");
-//        UploadTask uploadTask = mountainsRef.putBytes(data);
-//        uploadTask.addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception exception) {
-//                // Handle unsuccessful uploads
-//            }
-//        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-//                // ...
-//                taskSnapshot.getStorage().getDownloadUrl();
-//            }
-//        });
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        firebaseRegisterAndLogin("tom@gmail.com", "Iamtomspassword");
-        db = FirebaseFirestore.getInstance();
+        firebaseRegisterAndLogin();
     }
 
     private void createBadgeViews(ArrayList<Number> badges, TableLayout tableLayout) {
@@ -213,7 +171,8 @@ public class UserProfileActivity extends AppCompatActivity {
         donorReviewedItemLinearLayout = findViewById(R.id.userProfile_donorReviewedItemLinearLayout);
 
         donorReviewedItemConsumerTextView = findViewById(R.id.userProfile_donorReviewedItemConsumerTextView);
-        donorReviewedItemFoodNameTextView = findViewById(R.id.userProfile_donorReviewedItemFoodNameTextView);;
+        donorReviewedItemFoodNameTextView = findViewById(R.id.userProfile_donorReviewedItemFoodNameTextView);
+        ;
         donorReviewedItemReviewedDateTextView = findViewById(R.id.userProfile_donorReviewedItemReviewedDateTextView);
         donorReviewedItemRatingBar = findViewById(R.id.userProfile_donorReviewedItemRatingBar);
 
@@ -227,42 +186,36 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
 
-
     /**
      * Firebase register and login jobs
      */
-    private void firebaseRegisterAndLogin(String email, String password) {
+    private void firebaseRegisterAndLogin() {
+        String email = getResources().getString(R.string.firebase_email);
+        String password = getResources().getString(R.string.firebase_password);
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this,
-                task -> {
-                    if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d("TAG", "createUserWithEmail:success");
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w("TAG", "createUserWithEmail:failure", task.getException());
-                    }
-                });
-
-        auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        fetchDBInfo(userId);
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w("TAG", "signInWithEmail:failure", task.getException());
-                    }
-                });
+        if (auth.isSignInWithEmailLink(email)){
+            fetchDBInfo(userId);
+        }else{
+            auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            fetchDBInfo(userId);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("TAG", "signInWithEmail:failure", task.getException());
+                        }
+                    });
+        }
     }
 
     private void fetchDBInfo(String userId) {
-//
-        db.collection(UsersInfo.FIREBASE_COLLECTION_USER_INFO).document(userId).get().addOnCompleteListener(task -> {
+        FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO)).document(userId).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
-                    setUserProfileUI(document);
+                    UsersInfo usersInfo = document.toObject(UsersInfo.class);
+                    setUserProfileUI(usersInfo);
                     Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                 } else {
                     Log.d("TAG", "No such document");
@@ -273,10 +226,7 @@ public class UserProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void setUserProfileUI(DocumentSnapshot documentSnapshot) {
-        HashMap<String, Object> data = (HashMap<String, Object>) documentSnapshot.getData();
-
-        UsersInfo usersInfo = documentSnapshot.toObject(UsersInfo.class);
+    private void setUserProfileUI(UsersInfo usersInfo) {
         // profile image
         String url = usersInfo.getProfileImage();
         Picasso.get().load(url).into(profileCircleImageView);
@@ -286,8 +236,8 @@ public class UserProfileActivity extends AppCompatActivity {
         nameTextView.setText(name);
 
         // gender
-        Long gender = usersInfo.getGender();
-        if (gender.equals(UsersInfo.FIREBASE_COLLECTION_USER_INFO_GENDER_VALUE_MALE)) {
+        Integer gender = usersInfo.getGender().intValue();
+        if (gender.equals(getResources().getInteger(R.integer.FIREBASE_COLLECTION_USER_INFO_GENDER_VALUE_MALE))) {
             genderImageView.setImageResource(R.drawable.icons8_male_96);
         } else {
             genderImageView.setImageResource(R.drawable.icons8_female_96);
@@ -314,7 +264,7 @@ public class UserProfileActivity extends AppCompatActivity {
         String allergy_text = "";
         if (allergy != null) {
             for (int i = 0; i < allergy.size(); ++i) {
-                allergy_text += Const.ALLERGY_DETAIL.get(allergy.get(i));
+                allergy_text += aConst.ALLERGY_DETAIL.get(allergy.get(i));
                 if (i != allergy.size() - 1 && i != allergy.size() - 2) {
                     allergy_text += ", ";
                 }
@@ -327,7 +277,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         // preference
         Long preferenceIndex = usersInfo.getPreference();
-        String preference_text = Const.FOOD_TYPE_DETAIL.get(preferenceIndex);
+        String preference_text = aConst.FOOD_TYPE_DETAIL.get(preferenceIndex);
         preferenceTextView.setText(preference_text);
 
         // location
@@ -357,7 +307,7 @@ public class UserProfileActivity extends AppCompatActivity {
         HashMap<String, Object> asConsumer = (HashMap<String, Object>) usersInfo.getAsConsumer();
         // review count
         ArrayList<DocumentReference> reviews =
-                (ArrayList<DocumentReference>)asConsumer.get(UsersInfo.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS);
+                (ArrayList<DocumentReference>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS));
         Integer reviewsCount = reviews.size();
         String reviewsCountStr = Integer.toString(reviewsCount);
         reviewsCountTextView.setText(reviewsCountStr);
@@ -373,7 +323,8 @@ public class UserProfileActivity extends AppCompatActivity {
                     DocumentReference food = reviewInfo.getFoodRef();
                     food.get().addOnCompleteListener(foodTask -> {
                         if (foodTask.isSuccessful()) {
-                            String foodName = foodTask.getResult().toObject(FoodItemInfo.class).getName();
+                            FoodItemInfo foodItemInfo = foodTask.getResult().toObject(FoodItemInfo.class);
+                            String foodName = foodItemInfo.getName();
                             // review food name
                             reviewsFoodNameTextView.setText(foodName);
                         }
@@ -417,32 +368,33 @@ public class UserProfileActivity extends AppCompatActivity {
         }
         // badge count
         ArrayList<Number> consumerBadges =
-                (ArrayList<Number>) asConsumer.get(UsersInfo.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_BADGES);
+                (ArrayList<Number>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_BADGES));
         int consumerBadgesCount = consumerBadges.size();
         usersConsumerBadgeCountTextView.setText(Integer.toString(consumerBadgesCount));
         // badges
-        createBadgeViews(consumerBadges,usersConsumerBadgeTableLayout);
+        createBadgeViews(consumerBadges, usersConsumerBadgeTableLayout);
 
         // -- as Donor --
         HashMap<String, Object> asDonor = (HashMap<String, Object>) usersInfo.getAsDonor();
         // on shelf
-        ArrayList<DocumentReference> itemsOnShelf = (ArrayList<DocumentReference>) asDonor.get(usersInfo.ITEMS_ON_SHELF);
+        ArrayList<DocumentReference> itemsOnShelf =
+                (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_ON_SHELF));
         int itemCount = itemsOnShelf.size();
         donorOnShelfCountTextView.setText(Integer.toString(itemCount));
-        if(itemCount == 0){
+        if (itemCount == 0) {
             donorOnShelfLinearLayout.setVisibility(View.GONE);
-        }else {
+        } else {
             donorOnShelfLinearLayout.setVisibility(VISIBLE);
-            DocumentReference docRef = itemsOnShelf.get(itemCount-1);
-            docRef.get().addOnCompleteListener(foodTask->{
-                if (foodTask.isSuccessful()){
+            DocumentReference docRef = itemsOnShelf.get(itemCount - 1);
+            docRef.get().addOnCompleteListener(foodTask -> {
+                if (foodTask.isSuccessful()) {
                     FoodItemInfo foodItemInfo = foodTask.getResult().toObject(FoodItemInfo.class);
                     donorOnShelfFoodNameTextView.setText(foodItemInfo.getName());
                     donorOnShelfDateOnTextView.setText(simpleDateFormat.format(foodItemInfo.getDateOn().toDate()));
                     donorOnShelfDateExpireTextView.setText(simpleDateFormat.format(foodItemInfo.getDateExpire().toDate()));
                     donorOnShelfTextDescriptionTextView.setText(foodItemInfo.getTextDescription());
-                    donorOnShelfFoodImageShapeableImageViews.forEach(e->e.setVisibility(INVISIBLE));
-                    for(int i = 0; i < donorOnShelfFoodImageShapeableImageViews.size() && i < foodItemInfo.getImageDescription().size(); ++i){
+                    donorOnShelfFoodImageShapeableImageViews.forEach(e -> e.setVisibility(INVISIBLE));
+                    for (int i = 0; i < donorOnShelfFoodImageShapeableImageViews.size() && i < foodItemInfo.getImageDescription().size(); ++i) {
                         donorOnShelfFoodImageShapeableImageViews.get(i).setVisibility(VISIBLE);
                         Picasso.get().load(foodItemInfo.getImageDescription().get(i)).into(donorOnShelfFoodImageShapeableImageViews.get(i));
                     }
@@ -452,25 +404,25 @@ public class UserProfileActivity extends AppCompatActivity {
 
         // reviewed
         ArrayList<DocumentReference> itemsReviewed =
-                (ArrayList<DocumentReference>) asDonor.get(usersInfo.ITEMS_REVIEWED);
+                (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_REVIEWED));
         int itemReviewedCount = itemsReviewed.size();
         donorReviewedItemCountTextView.setText(Integer.toString(itemReviewedCount));
-        if(itemReviewedCount == 0){
+        if (itemReviewedCount == 0) {
             donorReviewedItemLinearLayout.setVisibility(View.GONE);
-        }else {
+        } else {
             donorReviewedItemLinearLayout.setVisibility(VISIBLE);
-            DocumentReference docRef = itemsReviewed.get(itemReviewedCount-1);
-            docRef.get().addOnCompleteListener(reviewedItemTask->{
-                if (reviewedItemTask.isSuccessful()){
+            DocumentReference docRef = itemsReviewed.get(itemReviewedCount - 1);
+            docRef.get().addOnCompleteListener(reviewedItemTask -> {
+                if (reviewedItemTask.isSuccessful()) {
                     ReviewInfo reviewInfo = reviewedItemTask.getResult().toObject(ReviewInfo.class);
-                    reviewInfo.getFromUser().get().addOnCompleteListener(userTask->{
-                        if (userTask.isSuccessful()){
+                    reviewInfo.getFromUser().get().addOnCompleteListener(userTask -> {
+                        if (userTask.isSuccessful()) {
                             UsersInfo usersInfo1 = userTask.getResult().toObject(UsersInfo.class);
                             donorReviewedItemConsumerTextView.setText(usersInfo1.getName());
                         }
                     });
-                    reviewInfo.getFoodRef().get().addOnCompleteListener(foodTask->{
-                        if (foodTask.isSuccessful()){
+                    reviewInfo.getFoodRef().get().addOnCompleteListener(foodTask -> {
+                        if (foodTask.isSuccessful()) {
                             FoodItemInfo foodItemInfo = foodTask.getResult().toObject(FoodItemInfo.class);
                             donorReviewedItemFoodNameTextView.setText(foodItemInfo.getName());
                         }
@@ -479,8 +431,8 @@ public class UserProfileActivity extends AppCompatActivity {
                     donorReviewedItemRatingBar.setRating(reviewInfo.getRating().floatValue());
                     donorReviewedItemTextDescriptionTextView.setText(reviewInfo.getTextReview());
 
-                    donorReviewedItemImageShapeableImageViews.forEach(e->e.setVisibility(INVISIBLE));
-                    for(int i = 0; i < donorReviewedItemImageShapeableImageViews.size() && i < reviewInfo.getImageReviews().size(); ++i){
+                    donorReviewedItemImageShapeableImageViews.forEach(e -> e.setVisibility(INVISIBLE));
+                    for (int i = 0; i < donorReviewedItemImageShapeableImageViews.size() && i < reviewInfo.getImageReviews().size(); ++i) {
                         donorReviewedItemImageShapeableImageViews.get(i).setVisibility(VISIBLE);
                         Picasso.get().load(reviewInfo.getImageReviews().get(i)).into(donorReviewedItemImageShapeableImageViews.get(i));
                     }
@@ -490,15 +442,10 @@ public class UserProfileActivity extends AppCompatActivity {
 
         // badge count
         ArrayList<Number> donorBadges =
-                (ArrayList<Number>) asConsumer.get(UsersInfo.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_BADGES);
+                (ArrayList<Number>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_BADGES));
         int donorBadgesCount = donorBadges.size();
-        usersDonorBadgeCountTextView.setText(Integer.toString(consumerBadgesCount));
+        usersDonorBadgeCountTextView.setText(Integer.toString(donorBadgesCount));
         // badges
-        createBadgeViews(consumerBadges,usersDonorBadgeTableLayout);
-
-
-
+        createBadgeViews(consumerBadges, usersDonorBadgeTableLayout);
     }
-
-
 }
