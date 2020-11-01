@@ -478,6 +478,7 @@
                             android:textSize="14sp"></TextView>
 
                         <TextView
+                            android:id="@+id/userProfile_usersConsumerBadgeTotalCountTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="25dp"
@@ -1050,6 +1051,7 @@
                             android:textSize="14sp"></TextView>
 
                         <TextView
+                            android:id="@+id/userProfile_usersDonorBadgeTotalCountTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="25dp"

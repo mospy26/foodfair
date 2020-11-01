@@ -1,7 +1,6 @@
 package com.foodfair.ui.book_success;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -11,12 +10,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.MutableLiveData;
 
 import com.foodfair.model.FoodItemInfo;
 import com.foodfair.model.FooditemTransaction;
 import com.foodfair.model.UsersInfo;
-import com.foodfair.network.FoodFairWSClient;
 import com.foodfair.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -35,8 +32,6 @@ import com.google.zxing.WriterException;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.squareup.picasso.Picasso;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -82,7 +77,7 @@ public class BookSuccessActivity extends AppCompatActivity {
         this.transactionId = transactionId;
         if (modelInstances.containsKey(transactionId)) {
             mBookSuccessViewModel = modelInstances.get(transactionId);
-            ViewModelObserverSetup();
+            viewModelObserverSetup();
         }
 
 //        mBookSuccessViewModel = new BookSuccessViewModel(BitmapFactory.decodeResource(getResources(),
@@ -165,7 +160,7 @@ public class BookSuccessActivity extends AppCompatActivity {
                 }
                 modelInstances.put(transactionId,bookSuccessViewModel);
                 mBookSuccessViewModel = bookSuccessViewModel;
-                ViewModelObserverSetup();
+                viewModelObserverSetup();
             });
         });
     }
@@ -196,11 +191,9 @@ public class BookSuccessActivity extends AppCompatActivity {
         mQRCodeImageView = findViewById(R.id.success_qrCodeImageView);
         mFoodImageView = findViewById(R.id.success_foodImageView);
         mBackButton = findViewById(R.id.success_backButton);
-
-
     }
 
-    private void ViewModelObserverSetup() {
+    private void viewModelObserverSetup() {
         // Not all live data is here, pickup location is not here
         // todo: why this?
         mBookSuccessViewModel.getDonorName().observe(this, donorName -> {

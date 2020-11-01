@@ -3,6 +3,7 @@ package com.foodfair.ui.profiles;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.MutableLiveData;
 
 import com.foodfair.R;
 import com.foodfair.model.FoodItemInfo;
@@ -21,18 +23,24 @@ import com.foodfair.model.UsersInfo;
 import com.foodfair.model.ReviewInfo;
 import com.foodfair.utilities.Const;
 import com.foodfair.utilities.Utility;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -41,6 +49,8 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 public class UserProfileActivity extends AppCompatActivity {
+    UserProfileViewModel userProfileViewModel;
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     Const aConst = Const.getInstance();
     public String userId;
     public CircleImageView profileCircleImageView;
@@ -63,8 +73,10 @@ public class UserProfileActivity extends AppCompatActivity {
     public TextView reviewsTextReviewTextView;
     public ArrayList<ShapeableImageView> reviewsImageShapeableImageViews = new ArrayList<>();
     public TextView usersConsumerBadgeCountTextView;
+    public TextView usersConsumerBadgeTotalCountTextView;
     public TableLayout usersConsumerBadgeTableLayout;
     public TextView usersDonorBadgeCountTextView;
+    public TextView usersDonorBadgeTotalCountTextView;
     public TableLayout usersDonorBadgeTableLayout;
     public TextView donorOnShelfCountTextView;
     public LinearLayout donorOnShelfLinearLayout;
@@ -88,8 +100,300 @@ public class UserProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_profile);
+        userProfileViewModel = new UserProfileViewModel();
         InitUI();
         userId = "yXnhEl9OBqgKqHLAPMPV";
+        viewModelObserverSetup();
+    }
+
+    private void viewModelObserverSetup() {
+        userProfileViewModel.currentUserInfo.observe(this, currentUserInfo -> {
+            userProfileViewModel.profileImageUrl.setValue(currentUserInfo.getProfileImage());
+            userProfileViewModel.name.setValue(currentUserInfo.getName());
+            userProfileViewModel.gender.setValue(currentUserInfo.getGender().intValue());
+//            userProfileViewModel.id.setValue(userId);
+            userProfileViewModel.birthday.setValue(currentUserInfo.getBirthday());
+            userProfileViewModel.bio.setValue(currentUserInfo.getBio());
+            userProfileViewModel.allergy.setValue((ArrayList<Long>) currentUserInfo.getAllergy());
+            userProfileViewModel.preference.setValue(currentUserInfo.getPreference());
+            userProfileViewModel.location.setValue(currentUserInfo.getLocation());
+            userProfileViewModel.joinDate.setValue(currentUserInfo.getJoinDate());
+            userProfileViewModel.lastLoginDate.setValue(currentUserInfo.getLastLogin());
+
+            // as consumer
+            Map<String,Object> asConsumer = currentUserInfo.getAsConsumer();
+            ArrayList<DocumentReference> reviews =
+                    (ArrayList<DocumentReference>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS));
+            userProfileViewModel.asConsumerTotalReviewCount.setValue(reviews.size());
+
+            ArrayList<Number> consumerBadges =
+                    (ArrayList<Number>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_BADGES));
+            userProfileViewModel.asConsumerGotBadgeCount.setValue(consumerBadges.size());
+            userProfileViewModel.asConsumerBadges.setValue(consumerBadges);
+
+            // as donor
+            HashMap<String, Object> asDonor = (HashMap<String, Object>) currentUserInfo.getAsDonor();
+            ArrayList<DocumentReference> itemsOnShelf =
+                    (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_ON_SHELF));
+            userProfileViewModel.asDonorTotalOnShelfCount.setValue(itemsOnShelf.size());
+            ArrayList<DocumentReference> itemsReviewed =
+                    (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_REVIEWED));
+            userProfileViewModel.asDonorTotalReviewedCount.setValue(itemsReviewed.size());
+
+            ArrayList<Number> donorBadges =
+                    (ArrayList<Number>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_BADGES));
+            userProfileViewModel.asDonorGotBadgeCount.setValue(donorBadges.size());
+            userProfileViewModel.asDonorBadges.setValue(donorBadges);
+
+        });
+        userProfileViewModel.consumerReviewInfo.observe(this, consumerReviewInfo -> {
+            userProfileViewModel.asConsumerReviewDate.setValue(consumerReviewInfo.getDate());
+            userProfileViewModel.asConsumerReviewRating.setValue(consumerReviewInfo.getRating());
+            userProfileViewModel.asConsumerReviewText.setValue(consumerReviewInfo.getTextReview());
+            userProfileViewModel.asConsumerReviewImageUrls.setValue(consumerReviewInfo.getImageReviews());
+        });
+        userProfileViewModel.consumerReviewDonorUserInfo.observe(this, consumerReviewDonorUserInfo -> {
+            userProfileViewModel.asConsumerReviewDonorName.setValue(consumerReviewDonorUserInfo.getName());
+        });
+        userProfileViewModel.consumerReviewFoodInfo.observe(this, consumerReviewFoodInfo -> {
+            userProfileViewModel.asConsumerReviewFoodName.setValue(consumerReviewFoodInfo.getName());
+        });
+        userProfileViewModel.donorOnShelfFoodInfo.observe(this, donorOnShelfFoodInfo -> {
+            userProfileViewModel.asDonorFoodName.setValue(donorOnShelfFoodInfo.getName());
+            userProfileViewModel.asDonorFoodDateOn.setValue(donorOnShelfFoodInfo.getDateOn());
+            userProfileViewModel.asDonorFoodDateExpire.setValue(donorOnShelfFoodInfo.getDateExpire());
+            userProfileViewModel.asDonorFoodImageUrls.setValue(donorOnShelfFoodInfo.getImageDescription());
+            userProfileViewModel.asDonorFoodTextDescription.setValue(donorOnShelfFoodInfo.getTextDescription());
+        });
+        userProfileViewModel.donorReviewedInfo.observe(this, donorReviewedInfo -> {
+            userProfileViewModel.asDonorReviewedDate.setValue(donorReviewedInfo.getDate());
+            userProfileViewModel.asDonorReviewedRating.setValue(donorReviewedInfo.getRating());
+            userProfileViewModel.asDonorReviewedImageUrls.setValue(donorReviewedInfo.getImageReviews());
+            userProfileViewModel.asDonorReviewedText.setValue(donorReviewedInfo.getTextReview());
+        });
+        userProfileViewModel.donorReviewedUserInfo.observe(this, donorReviewedUserInfo -> {
+            userProfileViewModel.asDonorReviewedConsumerName.setValue(donorReviewedUserInfo.getName());
+        });
+        userProfileViewModel.donorReviewedFoodInfo.observe(this, donorReviewedFoodInfo -> {
+            userProfileViewModel.asDonorReviewedFoodName.setValue(donorReviewedFoodInfo.getName());
+        });
+
+        // ---------
+        userProfileViewModel.profileImageUrl.observe(this, profileImageUrl -> {
+            Picasso.get().load(profileImageUrl).into(profileCircleImageView);
+        });
+        userProfileViewModel.name.observe(this, name -> {
+            nameTextView.setText(name);
+        });
+
+        userProfileViewModel.gender.observe(this, gender -> {
+            // gender
+            if (gender.equals(getResources().getInteger(R.integer.FIREBASE_COLLECTION_USER_INFO_GENDER_VALUE_MALE))) {
+                genderImageView.setImageResource(R.drawable.icons8_male_96);
+            } else {
+                genderImageView.setImageResource(R.drawable.icons8_female_96);
+            }
+        });
+
+        userProfileViewModel.id.observe(this, id -> {
+            userIdTextView.setText("@" + id);
+        });
+
+        userProfileViewModel.birthday.observe(this, birthday -> {
+            Date dateBirthday = birthday.toDate();
+            Date now = new Date();
+            long diffInMillies = now.getTime() - dateBirthday.getTime();
+            long year = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS) / 365;
+            ageTextView.setText(Long.toString(year));
+        });
+
+        userProfileViewModel.bio.observe(this, bio -> {
+            bioTextView.setText(bio);
+        });
+
+        userProfileViewModel.allergy.observe(this, allergy -> {
+            String allergy_text = "";
+            if (allergy != null) {
+                for (int i = 0; i < allergy.size(); ++i) {
+                    allergy_text += aConst.ALLERGY_DETAIL.get(allergy.get(i));
+                    if (i != allergy.size() - 1 && i != allergy.size() - 2) {
+                        allergy_text += ", ";
+                    }
+                    if (i == allergy.size() - 2) {
+                        allergy_text += " and ";
+                    }
+                }
+            }
+            allergyTextView.setText(allergy_text);
+        });
+
+        userProfileViewModel.preference.observe(this, preference -> {
+            String preference_text = aConst.FOOD_TYPE_DETAIL.get(preference);
+            preferenceTextView.setText(preference_text);
+        });
+
+        userProfileViewModel.location.observe(this, location -> {
+            locationTextView.setText(location);
+        });
+
+        userProfileViewModel.joinDate.observe(this, joinDate -> {
+            if (joinDate != null) {
+                Date date = joinDate.toDate();
+                String joinDateText = simpleDateFormat.format(date);
+                joinDateTextView.setText(joinDateText);
+            }
+        });
+
+        userProfileViewModel.lastLoginDate.observe(this, lastLoginDate -> {
+            if (lastLoginDate != null) {
+                Date date = lastLoginDate.toDate();
+                String lastLoginDateText = simpleDateFormat.format(date);
+                lastLoginDateTextView.setText(lastLoginDateText);
+            }
+        });
+
+        // As Consumer
+        // Review
+        userProfileViewModel.asConsumerTotalReviewCount.observe(this, asConsumerTotalReviewCount -> {
+            String reviewsCountStr = Integer.toString(asConsumerTotalReviewCount);
+            reviewsCountTextView.setText(reviewsCountStr);
+            if (asConsumerTotalReviewCount.equals(0)) {
+                reviewsLinearLayout.setVisibility(View.GONE);
+            } else {
+                reviewsLinearLayout.setVisibility(VISIBLE);
+            }
+        });
+
+        userProfileViewModel.asConsumerReviewDonorName.observe(this, asConsumerReviewDonorName -> {
+            reviewsDonorNameTextView.setText(asConsumerReviewDonorName);
+        });
+
+        userProfileViewModel.asConsumerReviewFoodName.observe(this, asConsumerReviewFoodName -> {
+            reviewsFoodNameTextView.setText(asConsumerReviewFoodName);
+        });
+
+        userProfileViewModel.asConsumerReviewDate.observe(this, asConsumerReviewDate -> {
+            Date reviewDate = asConsumerReviewDate.toDate();
+            String reviewDateStr = simpleDateFormat.format(reviewDate);
+            reviewsDateTextView.setText(reviewDateStr);
+        });
+
+        userProfileViewModel.asConsumerReviewRating.observe(this, asConsumerReviewRating -> {
+            reviewsRatingBar.setRating(asConsumerReviewRating.floatValue());
+        });
+
+        userProfileViewModel.asConsumerReviewImageUrls.observe(this, asConsumerReviewImageUrls -> {
+            reviewsImageShapeableImageViews.forEach(e -> {
+                e.setVisibility(View.INVISIBLE);
+            });
+            for (int i = 0; i < asConsumerReviewImageUrls.size() && i < reviewsImageShapeableImageViews.size(); ++i) {
+                reviewsImageShapeableImageViews.get(i).setVisibility(VISIBLE);
+                Picasso.get().load(asConsumerReviewImageUrls.get(i)).into(reviewsImageShapeableImageViews.get(i));
+            }
+        });
+
+        userProfileViewModel.asConsumerReviewText.observe(this, asConsumerReviewText -> {
+            reviewsTextReviewTextView.setText(asConsumerReviewText);
+        });
+
+        // Badge
+        userProfileViewModel.asConsumerGotBadgeCount.observe(this, asConsumerGotBadgeCount -> {
+            usersConsumerBadgeCountTextView.setText(Integer.toString(asConsumerGotBadgeCount));
+        });
+
+        userProfileViewModel.asConsumerTotalBadgeCount.observe(this, asConsumerTotalBadgeCount -> {
+            usersConsumerBadgeTotalCountTextView.setText(Integer.toString(asConsumerTotalBadgeCount));
+        });
+
+        userProfileViewModel.asConsumerBadges.observe(this, asConsumerBadges -> {
+            createBadgeViews(asConsumerBadges, usersConsumerBadgeTableLayout);
+        });
+
+        // As Donor
+        // On the shelf
+        userProfileViewModel.asDonorTotalOnShelfCount.observe(this, asDonorTotalOnShelfCount -> {
+            donorOnShelfCountTextView.setText(Integer.toString(asDonorTotalOnShelfCount));
+            if (asDonorTotalOnShelfCount == 0) {
+                donorOnShelfLinearLayout.setVisibility(View.GONE);
+            } else {
+                donorOnShelfLinearLayout.setVisibility(VISIBLE);
+            }
+        });
+
+        userProfileViewModel.asDonorFoodName.observe(this, asDonorFoodName -> {
+            donorOnShelfFoodNameTextView.setText(asDonorFoodName);
+        });
+
+        userProfileViewModel.asDonorFoodDateOn.observe(this, asDonorFoodDateOn -> {
+            donorOnShelfDateOnTextView.setText(simpleDateFormat.format(asDonorFoodDateOn.toDate()));
+        });
+
+        userProfileViewModel.asDonorFoodDateExpire.observe(this, asDonorFoodDateExpire -> {
+            donorOnShelfDateExpireTextView.setText(simpleDateFormat.format(asDonorFoodDateExpire.toDate()));
+        });
+
+        userProfileViewModel.asDonorFoodImageUrls.observe(this, asDonorFoodImageUrls -> {
+            donorOnShelfFoodImageShapeableImageViews.forEach(e -> e.setVisibility(INVISIBLE));
+            for (int i = 0; i < donorOnShelfFoodImageShapeableImageViews.size() && i < asDonorFoodImageUrls.size(); ++i) {
+                donorOnShelfFoodImageShapeableImageViews.get(i).setVisibility(VISIBLE);
+                Picasso.get().load(asDonorFoodImageUrls.get(i)).into(donorOnShelfFoodImageShapeableImageViews.get(i));
+            }
+        });
+
+        userProfileViewModel.asDonorFoodTextDescription.observe(this, asDonorFoodTextDescription -> {
+            donorReviewedItemConsumerTextView.setText(asDonorFoodTextDescription);
+        });
+
+        // Reviewed
+        userProfileViewModel.asDonorTotalReviewedCount.observe(this, asDonorTotalReviewedCount -> {
+            donorReviewedItemCountTextView.setText(Integer.toString(asDonorTotalReviewedCount));
+            if (asDonorTotalReviewedCount.equals(0)){
+                donorReviewedItemLinearLayout.setVisibility(View.GONE);
+            }else {
+                donorReviewedItemLinearLayout.setVisibility(VISIBLE);
+            }
+        });
+
+        userProfileViewModel.asDonorReviewedConsumerName.observe(this, asDonorReviewedConsumerName -> {
+            donorReviewedItemConsumerTextView.setText(asDonorReviewedConsumerName);
+        });
+
+        userProfileViewModel.asDonorReviewedFoodName.observe(this, asDonorReviewedFoodName -> {
+            donorReviewedItemFoodNameTextView.setText(asDonorReviewedFoodName);
+        });
+
+        userProfileViewModel.asDonorReviewedDate.observe(this, asDonorReviewedDate -> {
+            donorReviewedItemReviewedDateTextView.setText(simpleDateFormat.format(asDonorReviewedDate.toDate()));
+        });
+
+        userProfileViewModel.asDonorReviewedRating.observe(this, asDonorReviewedRating -> {
+            donorReviewedItemRatingBar.setRating(asDonorReviewedRating.floatValue());
+        });
+
+        userProfileViewModel.asDonorReviewedImageUrls.observe(this, asDonorReviewedImageUrls -> {
+            donorReviewedItemImageShapeableImageViews.forEach(e -> e.setVisibility(INVISIBLE));
+            for (int i = 0; i < donorReviewedItemImageShapeableImageViews.size() && i < asDonorReviewedImageUrls.size(); ++i) {
+                donorReviewedItemImageShapeableImageViews.get(i).setVisibility(VISIBLE);
+                Picasso.get().load(asDonorReviewedImageUrls.get(i)).into(donorReviewedItemImageShapeableImageViews.get(i));
+            }
+        });
+
+        userProfileViewModel.asDonorReviewedText.observe(this, asDonorReviewedText -> {
+            donorReviewedItemTextDescriptionTextView.setText(asDonorReviewedText);
+        });
+
+        // Badge
+        userProfileViewModel.asDonorGotBadgeCount.observe(this, asDonorGotBadgeCount -> {
+            usersDonorBadgeCountTextView.setText(Integer.toString(asDonorGotBadgeCount));
+        });
+
+        userProfileViewModel.asDonorTotalBadgeCount.observe(this, asDonorTotalBadgeCount -> {
+            usersDonorBadgeTotalCountTextView.setText(Integer.toString(asDonorTotalBadgeCount));
+        });
+
+        userProfileViewModel.asDonorBadges.observe(this, asDonorBadges -> {
+            createBadgeViews(asDonorBadges, usersDonorBadgeTableLayout);
+        });
     }
 
     @Override
@@ -154,8 +458,10 @@ public class UserProfileActivity extends AppCompatActivity {
         reviewsImageShapeableImageViews.add(findViewById(R.id.userProfile_reviewsImageReviewShapeableImageView3));
         reviewsImageShapeableImageViews.add(findViewById(R.id.userProfile_reviewsImageReviewShapeableImageView4));
         usersConsumerBadgeCountTextView = findViewById(R.id.userProfile_usersConsumerBadgeCountTextView);
+        usersConsumerBadgeTotalCountTextView = findViewById(R.id.userProfile_usersConsumerBadgeTotalCountTextView);
         usersConsumerBadgeTableLayout = findViewById(R.id.userProfile_usersConsumerBadgeTableLayout);
         usersDonorBadgeCountTextView = findViewById(R.id.userProfile_usersDonorBadgeCountTextView);
+        usersDonorBadgeTotalCountTextView = findViewById(R.id.userProfile_usersDonorBadgeTotalCountTextView);
         usersDonorBadgeTableLayout = findViewById(R.id.userProfile_usersDonorBadgeTableLayout);
         donorOnShelfCountTextView = findViewById(R.id.userProfile_donorOnShelfCountTextView);
         donorOnShelfLinearLayout = findViewById(R.id.userProfile_donorOnShelfLinearLayout);
@@ -193,9 +499,9 @@ public class UserProfileActivity extends AppCompatActivity {
         String email = getResources().getString(R.string.firebase_email);
         String password = getResources().getString(R.string.firebase_password);
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        if (auth.isSignInWithEmailLink(email)){
+        if (auth.isSignInWithEmailLink(email)) {
             fetchDBInfo(userId);
-        }else{
+        } else {
             auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, task -> {
                         if (task.isSuccessful()) {
@@ -227,177 +533,46 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void setUserProfileUI(UsersInfo usersInfo) {
-        // profile image
-        String url = usersInfo.getProfileImage();
-        Picasso.get().load(url).into(profileCircleImageView);
-
-        // name
-        String name = usersInfo.getName();
-        nameTextView.setText(name);
-
-        // gender
-        Integer gender = usersInfo.getGender().intValue();
-        if (gender.equals(getResources().getInteger(R.integer.FIREBASE_COLLECTION_USER_INFO_GENDER_VALUE_MALE))) {
-            genderImageView.setImageResource(R.drawable.icons8_male_96);
-        } else {
-            genderImageView.setImageResource(R.drawable.icons8_female_96);
-        }
-
-        // userId
-        String userId = this.userId;
-        userIdTextView.setText("@" + userId);
-
-        // birthday
-        Timestamp birthday = usersInfo.getBirthday();
-        Date dateBirthday = birthday.toDate();
-        Date now = new Date();
-        long diffInMillies = now.getTime() - dateBirthday.getTime();
-        long year = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS) / 365;
-        ageTextView.setText(Long.toString(year));
-
-        // bio
-        String bio = usersInfo.getBio();
-        bioTextView.setText(bio);
-
-        // allergy
-        ArrayList<Long> allergy = (ArrayList<Long>) usersInfo.getAllergy();
-        String allergy_text = "";
-        if (allergy != null) {
-            for (int i = 0; i < allergy.size(); ++i) {
-                allergy_text += aConst.ALLERGY_DETAIL.get(allergy.get(i));
-                if (i != allergy.size() - 1 && i != allergy.size() - 2) {
-                    allergy_text += ", ";
-                }
-                if (i == allergy.size() - 2) {
-                    allergy_text += " and ";
-                }
-            }
-        }
-        allergyTextView.setText(allergy_text);
-
-        // preference
-        Long preferenceIndex = usersInfo.getPreference();
-        String preference_text = aConst.FOOD_TYPE_DETAIL.get(preferenceIndex);
-        preferenceTextView.setText(preference_text);
-
-        // location
-        String location = usersInfo.getLocation();
-        locationTextView.setText(location);
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-
-        // joinDate
-        Timestamp joinDate = usersInfo.getJoinDate();
-        if (joinDate != null) {
-            Date date = joinDate.toDate();
-            String joinDateText = simpleDateFormat.format(date);
-            joinDateTextView.setText(joinDateText);
-
-        }
-
-        // lastLoginDate
-        Timestamp lastLoginDate = usersInfo.getLastLogin();
-        if (lastLoginDate != null) {
-            Date date = lastLoginDate.toDate();
-            String lastLoginDateText = simpleDateFormat.format(date);
-            lastLoginDateTextView.setText(lastLoginDateText);
-
-        }
+        userProfileViewModel.currentUserInfo.setValue(usersInfo);
         // -- as Consumer --
         HashMap<String, Object> asConsumer = (HashMap<String, Object>) usersInfo.getAsConsumer();
         // review count
         ArrayList<DocumentReference> reviews =
                 (ArrayList<DocumentReference>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS));
-        Integer reviewsCount = reviews.size();
-        String reviewsCountStr = Integer.toString(reviewsCount);
-        reviewsCountTextView.setText(reviewsCountStr);
-        if (reviewsCount.equals(0)) {
-            reviewsLinearLayout.setVisibility(View.GONE);
-        } else {
-            reviewsLinearLayout.setVisibility(VISIBLE);
+        if (reviews.size() > 0) {
             DocumentReference lastReviewRef = reviews.get(reviews.size() - 1);
             lastReviewRef.get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     // In review document
                     ReviewInfo reviewInfo = task.getResult().toObject(ReviewInfo.class);
+                    userProfileViewModel.consumerReviewInfo.setValue(reviewInfo);
                     DocumentReference food = reviewInfo.getFoodRef();
                     food.get().addOnCompleteListener(foodTask -> {
                         if (foodTask.isSuccessful()) {
-                            FoodItemInfo foodItemInfo = foodTask.getResult().toObject(FoodItemInfo.class);
-                            String foodName = foodItemInfo.getName();
-                            // review food name
-                            reviewsFoodNameTextView.setText(foodName);
+                            userProfileViewModel.consumerReviewFoodInfo.setValue(foodTask.getResult().toObject(FoodItemInfo.class));
                         }
                     });
-
                     DocumentReference donor =
                             reviewInfo.getToUser();
                     donor.get().addOnCompleteListener(donorTask -> {
                         if (donorTask.isSuccessful()) {
-                            String donorName = donorTask.getResult().toObject(UsersInfo.class).getName();
-                            // review donor name
-                            reviewsDonorNameTextView.setText(donorName);
+                            userProfileViewModel.consumerReviewDonorUserInfo.setValue(donorTask.getResult().toObject(UsersInfo.class));
                         }
                     });
-
-                    // review date
-                    Timestamp date = reviewInfo.getDate();
-                    Date reviewDate = date.toDate();
-                    String reviewDateStr = simpleDateFormat.format(reviewDate);
-                    reviewsDateTextView.setText(reviewDateStr);
-
-                    // review rating
-                    Number rating = reviewInfo.getRating();
-                    reviewsRatingBar.setRating(rating.floatValue());
-
-                    // review text review description
-                    String textReviewDescription = reviewInfo.getTextReview();
-                    reviewsTextReviewTextView.setText(textReviewDescription);
-
-                    // review image reviews
-                    reviewsImageShapeableImageViews.forEach(e -> {
-                        e.setVisibility(View.INVISIBLE);
-                    });
-                    ArrayList<String> imageUrls = reviewInfo.getImageReviews();
-                    for (int i = 0; i < imageUrls.size() && i < reviewsImageShapeableImageViews.size(); ++i) {
-                        reviewsImageShapeableImageViews.get(i).setVisibility(VISIBLE);
-                        Picasso.get().load(imageUrls.get(i)).into(reviewsImageShapeableImageViews.get(i));
-                    }
                 }
             });
         }
-        // badge count
-        ArrayList<Number> consumerBadges =
-                (ArrayList<Number>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_BADGES));
-        int consumerBadgesCount = consumerBadges.size();
-        usersConsumerBadgeCountTextView.setText(Integer.toString(consumerBadgesCount));
-        // badges
-        createBadgeViews(consumerBadges, usersConsumerBadgeTableLayout);
 
         // -- as Donor --
         HashMap<String, Object> asDonor = (HashMap<String, Object>) usersInfo.getAsDonor();
         // on shelf
         ArrayList<DocumentReference> itemsOnShelf =
                 (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_ON_SHELF));
-        int itemCount = itemsOnShelf.size();
-        donorOnShelfCountTextView.setText(Integer.toString(itemCount));
-        if (itemCount == 0) {
-            donorOnShelfLinearLayout.setVisibility(View.GONE);
-        } else {
-            donorOnShelfLinearLayout.setVisibility(VISIBLE);
-            DocumentReference docRef = itemsOnShelf.get(itemCount - 1);
+        if (itemsOnShelf.size() > 0) {
+            DocumentReference docRef = itemsOnShelf.get(itemsOnShelf.size() - 1);
             docRef.get().addOnCompleteListener(foodTask -> {
                 if (foodTask.isSuccessful()) {
-                    FoodItemInfo foodItemInfo = foodTask.getResult().toObject(FoodItemInfo.class);
-                    donorOnShelfFoodNameTextView.setText(foodItemInfo.getName());
-                    donorOnShelfDateOnTextView.setText(simpleDateFormat.format(foodItemInfo.getDateOn().toDate()));
-                    donorOnShelfDateExpireTextView.setText(simpleDateFormat.format(foodItemInfo.getDateExpire().toDate()));
-                    donorOnShelfTextDescriptionTextView.setText(foodItemInfo.getTextDescription());
-                    donorOnShelfFoodImageShapeableImageViews.forEach(e -> e.setVisibility(INVISIBLE));
-                    for (int i = 0; i < donorOnShelfFoodImageShapeableImageViews.size() && i < foodItemInfo.getImageDescription().size(); ++i) {
-                        donorOnShelfFoodImageShapeableImageViews.get(i).setVisibility(VISIBLE);
-                        Picasso.get().load(foodItemInfo.getImageDescription().get(i)).into(donorOnShelfFoodImageShapeableImageViews.get(i));
-                    }
+                    userProfileViewModel.donorOnShelfFoodInfo.setValue(foodTask.getResult().toObject(FoodItemInfo.class));
                 }
             });
         }
@@ -405,47 +580,23 @@ public class UserProfileActivity extends AppCompatActivity {
         // reviewed
         ArrayList<DocumentReference> itemsReviewed =
                 (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_REVIEWED));
-        int itemReviewedCount = itemsReviewed.size();
-        donorReviewedItemCountTextView.setText(Integer.toString(itemReviewedCount));
-        if (itemReviewedCount == 0) {
-            donorReviewedItemLinearLayout.setVisibility(View.GONE);
-        } else {
-            donorReviewedItemLinearLayout.setVisibility(VISIBLE);
-            DocumentReference docRef = itemsReviewed.get(itemReviewedCount - 1);
+        if (itemsReviewed.size() > 0) {
+            DocumentReference docRef = itemsReviewed.get(itemsReviewed.size() - 1);
             docRef.get().addOnCompleteListener(reviewedItemTask -> {
                 if (reviewedItemTask.isSuccessful()) {
-                    ReviewInfo reviewInfo = reviewedItemTask.getResult().toObject(ReviewInfo.class);
-                    reviewInfo.getFromUser().get().addOnCompleteListener(userTask -> {
+                    userProfileViewModel.donorReviewedInfo.setValue(reviewedItemTask.getResult().toObject(ReviewInfo.class));
+                    userProfileViewModel.donorReviewedInfo.getValue().getFromUser().get().addOnCompleteListener(userTask -> {
                         if (userTask.isSuccessful()) {
-                            UsersInfo usersInfo1 = userTask.getResult().toObject(UsersInfo.class);
-                            donorReviewedItemConsumerTextView.setText(usersInfo1.getName());
+                            userProfileViewModel.donorReviewedUserInfo.setValue(userTask.getResult().toObject(UsersInfo.class));
                         }
                     });
-                    reviewInfo.getFoodRef().get().addOnCompleteListener(foodTask -> {
+                    userProfileViewModel.donorReviewedInfo.getValue().getFoodRef().get().addOnCompleteListener(foodTask -> {
                         if (foodTask.isSuccessful()) {
-                            FoodItemInfo foodItemInfo = foodTask.getResult().toObject(FoodItemInfo.class);
-                            donorReviewedItemFoodNameTextView.setText(foodItemInfo.getName());
+                            userProfileViewModel.donorReviewedFoodInfo.setValue(foodTask.getResult().toObject(FoodItemInfo.class));
                         }
                     });
-                    donorReviewedItemReviewedDateTextView.setText(simpleDateFormat.format(reviewInfo.getDate().toDate()));
-                    donorReviewedItemRatingBar.setRating(reviewInfo.getRating().floatValue());
-                    donorReviewedItemTextDescriptionTextView.setText(reviewInfo.getTextReview());
-
-                    donorReviewedItemImageShapeableImageViews.forEach(e -> e.setVisibility(INVISIBLE));
-                    for (int i = 0; i < donorReviewedItemImageShapeableImageViews.size() && i < reviewInfo.getImageReviews().size(); ++i) {
-                        donorReviewedItemImageShapeableImageViews.get(i).setVisibility(VISIBLE);
-                        Picasso.get().load(reviewInfo.getImageReviews().get(i)).into(donorReviewedItemImageShapeableImageViews.get(i));
-                    }
                 }
             });
         }
-
-        // badge count
-        ArrayList<Number> donorBadges =
-                (ArrayList<Number>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_BADGES));
-        int donorBadgesCount = donorBadges.size();
-        usersDonorBadgeCountTextView.setText(Integer.toString(donorBadgesCount));
-        // badges
-        createBadgeViews(consumerBadges, usersDonorBadgeTableLayout);
     }
 }
