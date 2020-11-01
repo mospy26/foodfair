@@ -9,6 +9,8 @@
 
     <string name="hint"><font size="10">Password</font></string>
 
+    <string name="app_label">Food Fair</string>
+
 
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
