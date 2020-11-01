@@ -20,7 +20,6 @@ public class LeaderboardFragment extends Fragment implements
         LeaderboardAdapter.OnLeaderboardSelectListener, View.OnClickListener {
 
     private static final String TAG = "LeaderboardFragment";
-    private LeaderboardViewModel leaderboardViewModel;
     private FirebaseFirestore mFirestore;
     private Query mQueryMonthly;
     private Query mQueryAllTime;
@@ -77,24 +76,7 @@ public class LeaderboardFragment extends Fragment implements
                 .orderBy("position", Query.Direction.DESCENDING)
                 .limit(10);
 
-        mAdapterAllTime = new LeaderboardAdapter(mQueryAllTime, this){
-            @Override
-            protected void onDataChanged() {
-                // Show/hide content if the query returns empty.
-                if (getItemCount() == 0) {
-                    mBinding.leaderboardList.setVisibility(View.GONE);
-                } else {
-                    mBinding.leaderboardList.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            protected void onError(FirebaseFirestoreException e) {
-                // Show a snackbar on errors
-                Snackbar.make(mBinding.getRoot(),
-                        "Error: check logs for info.", Snackbar.LENGTH_LONG).show();
-            }
-        };
+        mAdapterAllTime = new LeaderboardAdapter(mQueryAllTime, this);
 
         mBinding.leaderboardList.setAdapter(mAdapterMonthly);
         mBinding.leaderboardList.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -129,6 +111,9 @@ public class LeaderboardFragment extends Fragment implements
         if (mAdapterMonthly != null) {
             mAdapterMonthly.startListening();
         }
+        if (mAdapterAllTime != null) {
+            mAdapterAllTime.startListening();
+        }
     }
 
     @Override
@@ -136,6 +121,9 @@ public class LeaderboardFragment extends Fragment implements
         super.onStop();
         if (mAdapterMonthly != null) {
             mAdapterMonthly.stopListening();
+        }
+        if (mAdapterAllTime != null) {
+            mAdapterAllTime.stopListening();
         }
     }
 

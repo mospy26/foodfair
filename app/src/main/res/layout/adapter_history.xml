@@ -16,41 +16,80 @@
             android:padding="16dp"
             >
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/donate_receive"
-                android:text="You donated"
-                android:textAlignment="center"
-                />
-
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:id="@+id/food_photo"
                 android:layout_alignParentLeft="true"
                 android:layout_marginRight="16dp"
-                android:layout_below="@+id/donate_receive"
                 />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/person_name"
+                android:id="@+id/food_name"
                 android:layout_toRightOf="@+id/food_photo"
-                android:layout_below="@+id/donate_receive"
                 android:textSize="30sp"
                 android:text="Loading information..."
                 />
 
+
+            <TextView
+                android:id="@+id/quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/food_name"
+                android:layout_toRightOf="@+id/food_photo"
+                android:text="loading information 2" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/person_age"
+                android:id="@+id/donation_date"
                 android:layout_toRightOf="@+id/food_photo"
-                android:layout_below="@+id/person_name"
+                android:layout_below="@+id/quantity"
                 android:text="loading information 2"
                 />
+
+            <TextView
+                android:id="@+id/to_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/food_name"
+                android:layout_alignParentRight="true"
+                android:text="To"/>
+
+            <ImageView
+                android:id="@+id/to_from_photo"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_below="@id/to_from"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_menu_profile"/>
+
+            <LinearLayout
+                android:id="@+id/review_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/to_from_photo"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:layout_gravity="center"
+                    android:text="Review goes here"/>
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    android:text="Submit Review"
+                    android:layout_gravity="center"/>
+
+
+            </LinearLayout>
 
         </RelativeLayout>
 
