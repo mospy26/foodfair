@@ -486,12 +486,9 @@ public class UserProfileActivity extends AppCompatActivity {
         ArrayList<Number> donorBadges =
                 (ArrayList<Number>) asConsumer.get(UsersInfo.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_BADGES);
         int donorBadgesCount = donorBadges.size();
-        usersDonorBadgeCountTextView.setText(Integer.toString(consumerBadgesCount));
+        usersDonorBadgeCountTextView.setText(Integer.toString(donorBadgesCount));
         // badges
         createBadgeViews(consumerBadges,usersDonorBadgeTableLayout);
-
-
-
     }
 
 
