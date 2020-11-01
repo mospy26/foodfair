@@ -17,6 +17,10 @@ import com.budiyev.android.codescanner.DecodeCallback;
 import com.foodfair.R;
 import com.google.zxing.Result;
 
+/**
+ * Adopted from https://github.com/yuriy-budiyev/code-scanner
+ *
+ */
 public class QRScanner extends AppCompatActivity {
 
     private CodeScanner codeScanner;
