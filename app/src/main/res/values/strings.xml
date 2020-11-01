@@ -88,4 +88,10 @@
     <string name="FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_LAT">lat</string>
     <string name="FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_LON">lon</string>
     <string name="FIREBASE_COLLECTION_TRANSACTION_INFO">fooditemTransaction</string>
+
+    <string name="FIREBASE_COLLECTION_FOOD_ITEM_INFO">foodItemInfo</string>
+    <string name="FIREBASE_COLLECTION_FOOD_ITEM_TRANSACTION">fooditemTransaction</string>
+    <string name="FIREBASE_COLLECTION_LEADERBOARD">leaderboard</string>
+    <string name="FIREBASE_COLLECTION_REVIEW_INFO">reviewInfo</string>
+
 </resources>

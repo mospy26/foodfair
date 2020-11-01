@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.foodfair.R;
 import com.foodfair.databinding.FragmentHistoryBinding;
+import com.foodfair.model.FooditemTransaction;
+import com.foodfair.utilities.Const;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -55,15 +57,16 @@ public class HistoryFragment extends Fragment implements
         // Firestore
         mFirestore = FirebaseFirestore.getInstance();
 
-        String userId = "1";
+        // TODO: Change to legit user id
+        String userId = "yXnhEl9OBqgKqHLAPMPV";
 
-        DocumentReference userCriteria = mFirestore.collection("users-info")
+        DocumentReference userCriteria = mFirestore.collection(
+                getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO))
                 .document(userId);
 
-//        mQuery = mFirestore.collection("fooditemTransaction")
-//                .whereEqualTo("donor", userCriteria);
-        mQuery = mFirestore.collection("fooditemTransaction")
-                            .orderBy("finishDate").limit(20);
+        mQuery = mFirestore.collection(
+                getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_TRANSACTION))
+                .whereEqualTo(FooditemTransaction.FIELD_DONOR, userCriteria);
 
         mAdapter = new HistoryAdapter(mQuery, this){
             @Override
@@ -71,7 +74,9 @@ public class HistoryFragment extends Fragment implements
                 // Show/hide content if the query returns empty.
                 if (getItemCount() == 0) {
                     mBinding.historyList.setVisibility(View.GONE);
+                    mBinding.textHistory.setText("No history data found :(");
                 } else {
+                    mBinding.textHistory.setText("History");
                     mBinding.historyList.setVisibility(View.VISIBLE);
                 }
             }

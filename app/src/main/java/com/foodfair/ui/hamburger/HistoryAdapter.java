@@ -65,9 +65,9 @@ public class HistoryAdapter extends FirestoreAdapter<HistoryAdapter.ViewHolder> 
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     FoodItemInfo foodItemInfo = documentSnapshot.toObject(FoodItemInfo.class);
-                    if(foodItemInfo!= null && foodItemInfo.getCount() > 0){
+                    if(foodItemInfo!= null){
                         Picasso.get()
-                                .load(foodItemInfo.getImageDescription().get(1))
+                                .load(foodItemInfo.getImageDescription().get(0))
                                 .into(binding.foodPhoto);
                         binding.personName.setText(foodItemInfo.getName());
                         binding.personAge.setText(foodItemInfo.getDateOn().toString());

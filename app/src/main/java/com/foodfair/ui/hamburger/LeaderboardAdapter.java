@@ -73,8 +73,13 @@ public class LeaderboardAdapter extends FirestoreAdapter<LeaderboardAdapter.View
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     UsersInfo usersInfo = documentSnapshot.toObject(UsersInfo.class);
-                    binding.firstLine.setText(usersInfo.getName());
-                    binding.secondLine.setText(usersInfo.getBio());
+                    if(usersInfo != null){
+                        binding.firstLine.setText(usersInfo.getName());
+                        binding.secondLine.setText(usersInfo.getBio());
+                    } else {
+                        // TODO: Error messages
+                    }
+
                 }
             });
 
