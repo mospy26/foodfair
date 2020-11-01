@@ -42,7 +42,6 @@ import static android.view.View.VISIBLE;
 
 public class UserProfileActivity extends AppCompatActivity {
     Const aConst = Const.getInstance();
-    FirebaseFirestore db;
     public String userId;
     public CircleImageView profileCircleImageView;
     public TextView nameTextView;
@@ -91,13 +90,12 @@ public class UserProfileActivity extends AppCompatActivity {
         setContentView(R.layout.user_profile);
         InitUI();
         userId = "yXnhEl9OBqgKqHLAPMPV";
-        db = FirebaseFirestore.getInstance();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        firebaseRegisterAndLogin("tom@gmail.com", "Iamtomspassword");
+        firebaseRegisterAndLogin();
     }
 
     private void createBadgeViews(ArrayList<Number> badges, TableLayout tableLayout) {
@@ -191,38 +189,33 @@ public class UserProfileActivity extends AppCompatActivity {
     /**
      * Firebase register and login jobs
      */
-    private void firebaseRegisterAndLogin(String email, String password) {
+    private void firebaseRegisterAndLogin() {
+        String email = getResources().getString(R.string.firebase_email);
+        String password = getResources().getString(R.string.firebase_password);
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this,
-                task -> {
-                    if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d("TAG", "createUserWithEmail:success");
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w("TAG", "createUserWithEmail:failure", task.getException());
-                    }
-                });
-
-        auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        fetchDBInfo(userId);
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w("TAG", "signInWithEmail:failure", task.getException());
-                    }
-                });
+        if (auth.isSignInWithEmailLink(email)){
+            fetchDBInfo(userId);
+        }else{
+            auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            fetchDBInfo(userId);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("TAG", "signInWithEmail:failure", task.getException());
+                        }
+                    });
+        }
     }
 
     private void fetchDBInfo(String userId) {
-//
-        db.collection(FIREBASE_COLLECTION_USER_INFO).document(userId).get().addOnCompleteListener(task -> {
+        FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO)).document(userId).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
-                    setUserProfileUI(document);
+                    UsersInfo usersInfo = document.toObject(UsersInfo.class);
+                    setUserProfileUI(usersInfo);
                     Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                 } else {
                     Log.d("TAG", "No such document");
@@ -233,10 +226,7 @@ public class UserProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void setUserProfileUI(DocumentSnapshot documentSnapshot) {
-        HashMap<String, Object> data = (HashMap<String, Object>) documentSnapshot.getData();
-
-        UsersInfo usersInfo = documentSnapshot.toObject(UsersInfo.class);
+    private void setUserProfileUI(UsersInfo usersInfo) {
         // profile image
         String url = usersInfo.getProfileImage();
         Picasso.get().load(url).into(profileCircleImageView);
@@ -246,8 +236,8 @@ public class UserProfileActivity extends AppCompatActivity {
         nameTextView.setText(name);
 
         // gender
-        Long gender = usersInfo.getGender();
-        if (gender.equals(FIREBASE_COLLECTION_USER_INFO_GENDER_VALUE_MALE)) {
+        Integer gender = usersInfo.getGender().intValue();
+        if (gender.equals(getResources().getInteger(R.integer.FIREBASE_COLLECTION_USER_INFO_GENDER_VALUE_MALE))) {
             genderImageView.setImageResource(R.drawable.icons8_male_96);
         } else {
             genderImageView.setImageResource(R.drawable.icons8_female_96);
@@ -317,7 +307,7 @@ public class UserProfileActivity extends AppCompatActivity {
         HashMap<String, Object> asConsumer = (HashMap<String, Object>) usersInfo.getAsConsumer();
         // review count
         ArrayList<DocumentReference> reviews =
-                (ArrayList<DocumentReference>) asConsumer.get(FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS);
+                (ArrayList<DocumentReference>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS));
         Integer reviewsCount = reviews.size();
         String reviewsCountStr = Integer.toString(reviewsCount);
         reviewsCountTextView.setText(reviewsCountStr);
@@ -378,7 +368,7 @@ public class UserProfileActivity extends AppCompatActivity {
         }
         // badge count
         ArrayList<Number> consumerBadges =
-                (ArrayList<Number>) asConsumer.get(FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_BADGES);
+                (ArrayList<Number>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_BADGES));
         int consumerBadgesCount = consumerBadges.size();
         usersConsumerBadgeCountTextView.setText(Integer.toString(consumerBadgesCount));
         // badges
@@ -387,7 +377,8 @@ public class UserProfileActivity extends AppCompatActivity {
         // -- as Donor --
         HashMap<String, Object> asDonor = (HashMap<String, Object>) usersInfo.getAsDonor();
         // on shelf
-        ArrayList<DocumentReference> itemsOnShelf = (ArrayList<DocumentReference>) asDonor.get(ITEMS_ON_SHELF);
+        ArrayList<DocumentReference> itemsOnShelf =
+                (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_ON_SHELF));
         int itemCount = itemsOnShelf.size();
         donorOnShelfCountTextView.setText(Integer.toString(itemCount));
         if (itemCount == 0) {
@@ -413,7 +404,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         // reviewed
         ArrayList<DocumentReference> itemsReviewed =
-                (ArrayList<DocumentReference>) asDonor.get(ITEMS_REVIEWED);
+                (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_REVIEWED));
         int itemReviewedCount = itemsReviewed.size();
         donorReviewedItemCountTextView.setText(Integer.toString(itemReviewedCount));
         if (itemReviewedCount == 0) {
@@ -451,19 +442,10 @@ public class UserProfileActivity extends AppCompatActivity {
 
         // badge count
         ArrayList<Number> donorBadges =
-                (ArrayList<Number>) asConsumer.get(FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_BADGES);
+                (ArrayList<Number>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_BADGES));
         int donorBadgesCount = donorBadges.size();
         usersDonorBadgeCountTextView.setText(Integer.toString(donorBadgesCount));
         // badges
         createBadgeViews(consumerBadges, usersDonorBadgeTableLayout);
     }
-
-
-    public final String FIREBASE_COLLECTION_USER_INFO = "usersInfo";
-    public final String ITEMS_ON_SHELF = "itemsOnShelf";
-    public final String ITEMS_REVIEWED = "itemsReviewed";
-    public final Long FIREBASE_COLLECTION_USER_INFO_GENDER_VALUE_MALE = 1L;
-    public final String FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS = "reviews";
-    public final String FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_BADGES = "badges";
-    public final String FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_BADGES = "badges";
 }

@@ -71,4 +71,19 @@
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_login">FullscreenActivity</string>
     <string name="title_activity_sign__up">FullscreenActivity</string>
+
+    <!--    Firebase account  -->
+    <string name="firebase_email">tom@gmail.com</string>
+    <string name="firebase_password">Iamtomspassword</string>
+    <!--    Firebase keys     -->
+    <string name="FIREBASE_COLLECTION_USER_INFO">usersInfo</string>
+    <string name="ITEMS_ON_SHELF">itemsOnShelf</string>
+    <string name="ITEMS_REVIEWED">itemsReviewed</string>
+    <integer name="FIREBASE_COLLECTION_USER_INFO_GENDER_VALUE_MALE">1</integer>
+    <string name="FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS">reviews</string>
+    <string name="FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_BADGES">badges</string>
+    <string name="FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_BADGES">badges</string>
+    <string name="FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_LAT">lat</string>
+    <string name="FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_LON">lon</string>
+    <string name="FIREBASE_COLLECTION_TRANSACTION_INFO">fooditemTransaction</string>
 </resources>
