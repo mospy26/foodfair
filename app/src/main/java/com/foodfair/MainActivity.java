@@ -1,6 +1,8 @@
 package com.foodfair;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,10 +17,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.foodfair.ui.home.HomeFragment;
+import com.foodfair.ui.profiles.UserProfileActivity;
+import com.foodfair.ui.qrscanner.QRScanner;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -57,6 +62,25 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if(item.getItemId() == R.id.nav_user_profile) {
+                    Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+                    startActivity(intent);
+                } else if(item.getItemId() == R.id.nav_qr_scanner) {
+                    Intent intent = new Intent(getApplicationContext(), QRScanner.class);
+                    // Could be startActivityForResult or something
+                    startActivity(intent);
+                } else {
+                    navController.navigate(item.getItemId());
+                    DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                    drawer.close();
+                }
+                return true;
+            }
+        });
 
     }
 

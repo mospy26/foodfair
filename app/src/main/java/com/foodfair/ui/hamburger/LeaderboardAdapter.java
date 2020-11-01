@@ -7,8 +7,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.foodfair.R;
 import com.foodfair.databinding.AdapterLeaderboardBinding;
 import com.foodfair.model.Leaderboard;
 import com.foodfair.model.Ranking;
@@ -21,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -73,12 +76,21 @@ public class LeaderboardAdapter extends FirestoreAdapter<LeaderboardAdapter.View
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     UsersInfo usersInfo = documentSnapshot.toObject(UsersInfo.class);
-                    binding.firstLine.setText(usersInfo.getName());
-                    binding.secondLine.setText(usersInfo.getBio());
+                    if(usersInfo != null){
+                        binding.leaderboardRank.setText(ranking.getPosition().toString());
+                        Picasso.get().load(usersInfo.getProfileImage())
+                                .into(binding.icon);
+                        binding.userName.setText(usersInfo.getName());
+                        binding.userBio.setText(usersInfo.getBio());
+                    } else {
+                        // TODO: Error messages
+                    }
+
                 }
             });
 
             // Click listener
+            // in case we want to do something
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
