@@ -1,0 +1,1184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/success_successHeaderContainer"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="#ad593b">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:gravity="center_horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/success_successText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:gravity="center"
+                    android:text="Profile"
+                    android:textSize="32sp"
+                    android:textStyle="bold">
+
+                </TextView>
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/userProfile_profileCircleImageView"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:src="@drawable/sample_profile_image"
+                app:civ_border_color="#FF000000"
+                app:civ_border_width="1dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Daniel Grangler"
+                    android:id="@+id/userProfile_nameTextView"
+                    android:textSize="25dp" />
+
+                <ImageView
+                    android:layout_marginBottom="5dp"
+                    android:id="@+id/userProfile_genderImageView"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/icons8_female_96"></ImageView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/userProfile_userIdTextView"
+                    android:text="\@daniG632"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="#e9e9e9"
+                android:gravity="center">
+
+                <TableLayout
+                    android:layout_width="320dp"
+                    android:layout_height="match_parent"
+                    android:stretchColumns="1">
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="80dp"
+                            android:background="@drawable/table_border"
+                            android:padding="3dip"
+                            android:text="Age" />
+
+                        <TextView
+                            android:id="@+id/userProfile_ageTextView"
+                            android:gravity="right"
+                            android:padding="3dip"
+                            android:text="32" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="80dp"
+                            android:background="@drawable/table_border"
+                            android:padding="3dip"
+                            android:text="Bio" />
+
+                        <TextView
+                            android:id="@+id/userProfile_bioTextView"
+                            android:gravity="right"
+                            android:padding="3dip"
+                            android:text="I am a lazy fat guy." />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="80dp"
+                            android:background="@drawable/table_border"
+                            android:padding="3dip"
+                            android:text="Allergy" />
+
+                        <TextView
+                            android:id="@+id/userProfile_allergyTextView"
+                            android:gravity="right"
+                            android:padding="3dip"
+                            android:text="shallot, onion, and etc" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="80dp"
+                            android:background="@drawable/table_border"
+                            android:padding="3dip"
+                            android:text="Preference" />
+
+                        <TextView
+                            android:id="@+id/userProfile_preferenceTextView"
+                            android:gravity="right"
+                            android:padding="3dip"
+                            android:text="Ramen" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="80dp"
+                            android:background="@drawable/table_border"
+                            android:padding="3dip"
+                            android:text="Location" />
+
+                        <TextView
+                            android:id="@+id/userProfile_locationTextView"
+                            android:gravity="right"
+                            android:padding="3dip"
+                            android:text="1/102-108 Hay St, Haymarket NSW 2000"
+                            android:textSize="11sp" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="80dp"
+                            android:background="@drawable/table_border"
+                            android:padding="3dip"
+                            android:text="Join Date" />
+
+                        <TextView
+                            android:id="@+id/userProfile_joinDateTextView"
+                            android:gravity="right"
+                            android:padding="3dip"
+                            android:text="07/03/2020 1:30:22" />
+                    </TableRow>
+
+                    <TableRow>
+                        <TextView
+                            android:layout_width="80dp"
+                            android:background="@drawable/table_border"
+                            android:padding="3dip"
+                            android:text="Last Login" />
+
+
+                        <TextView
+                            android:id="@+id/userProfile_lastLoginDateTextView"
+                            android:gravity="right"
+                            android:padding="3dip"
+                            android:text="07/03/2020 1:30:22" />
+                    </TableRow>
+
+                </TableLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="As Consumer"
+                    android:textSize="20sp"></TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="#e9e9e9"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:text="Reviews"
+                        android:textSize="20sp"></TextView>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/userProfile_reviewsCountTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:text="35"
+                            android:textSize="14sp"></TextView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="20dp"
+                            android:text="in total"
+                            android:textSize="14sp"></TextView>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/userProfile_reviewsLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#e9e9e9"
+                    android:gravity="center">
+
+                    <TableLayout
+                        android:layout_width="320dp"
+                        android:layout_height="match_parent"
+                        android:stretchColumns="1">
+
+                        <TableRow>
+
+                            <TextView
+                                android:layout_width="80dp"
+                                android:background="@drawable/table_border"
+                                android:padding="3dip"
+                                android:text="Donor" />
+
+                            <TextView
+                                android:id="@+id/userProfile_reviewsDonorNameTextView"
+                                android:gravity="right"
+                                android:padding="3dip"
+                                android:text="Grill" />
+                        </TableRow>
+
+                        <TableRow>
+
+                            <TextView
+                                android:layout_width="80dp"
+                                android:background="@drawable/table_border"
+                                android:padding="3dip"
+                                android:text="Item Name" />
+
+                            <TextView
+                                android:id="@+id/userProfile_reviewsFoodNameTextView"
+                                android:gravity="right"
+                                android:padding="3dip"
+                                android:text="3 level Beef Burger" />
+                        </TableRow>
+
+                        <TableRow>
+
+                            <TextView
+                                android:layout_width="80dp"
+                                android:background="@drawable/table_border"
+                                android:padding="3dip"
+                                android:text="Date" />
+
+                            <TextView
+                                android:id="@+id/userProfile_reviewsDateTextView"
+                                android:gravity="right"
+                                android:padding="3dip"
+                                android:text="07/03/2020 1:30:22" />
+                        </TableRow>
+
+                        <TableRow>
+
+                            <TextView
+                                android:layout_width="80dp"
+                                android:background="@drawable/table_border"
+                                android:padding="3dip"
+                                android:text="Rate" />
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <RatingBar
+                                    android:id="@+id/userProfile_reviewsRatingBar"
+                                    style="?android:attr/ratingBarStyleSmall"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:isIndicator="true"
+                                    android:max="5"
+                                    android:rating="3.2" />
+                            </RelativeLayout>
+
+
+                        </TableRow>
+
+                        <TableRow android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="80dp"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/table_border"
+                                android:gravity="center_vertical"
+                                android:padding="3dip"
+                                android:text="Description" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center">
+
+                                    <com.google.android.material.imageview.ShapeableImageView
+                                        android:id="@+id/userProfile_reviewsImageReviewShapeableImageView4"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="40dp"
+                                        android:layout_height="40dp"
+                                        android:layout_gravity="center"
+                                        android:adjustViewBounds="true"
+                                        android:scaleType="fitXY"
+                                        app:shapeAppearanceOverlay="@style/roundedImageView"
+                                        app:srcCompat="@drawable/foodsample" />
+
+                                    <com.google.android.material.imageview.ShapeableImageView
+                                        android:id="@+id/userProfile_reviewsImageReviewShapeableImageView3"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="40dp"
+                                        android:layout_height="40dp"
+                                        android:layout_gravity="center"
+                                        android:adjustViewBounds="true"
+                                        android:scaleType="fitXY"
+                                        app:shapeAppearanceOverlay="@style/roundedImageView"
+                                        app:srcCompat="@drawable/foodsample" />
+                                    <com.google.android.material.imageview.ShapeableImageView
+                                        android:id="@+id/userProfile_reviewsImageReviewShapeableImageView2"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="40dp"
+                                        android:layout_height="40dp"
+                                        android:layout_gravity="center"
+                                        android:adjustViewBounds="true"
+                                        android:scaleType="fitXY"
+                                        app:shapeAppearanceOverlay="@style/roundedImageView"
+                                        app:srcCompat="@drawable/foodsample" />
+
+                                    <com.google.android.material.imageview.ShapeableImageView
+                                        android:id="@+id/userProfile_reviewsImageReviewShapeableImageView1"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="40dp"
+                                        android:layout_height="40dp"
+                                        android:layout_gravity="center"
+                                        android:adjustViewBounds="true"
+                                        android:scaleType="fitXY"
+                                        app:shapeAppearanceOverlay="@style/roundedImageView"
+                                        app:srcCompat="@drawable/foodsample" />
+
+
+                                </LinearLayout>
+
+
+                                <TextView
+                                    android:id="@+id/userProfile_reviewsTextReviewTextView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="right"
+                                    android:padding="3dip"
+                                    android:text="1/102-108 Hay St, Haymarket NSW 2000"
+                                    android:textSize="11sp" />
+                            </LinearLayout>
+
+                        </TableRow>
+                        <Button
+                            android:visibility="gone"
+                            android:layout_width="fill_parent"
+                            android:layout_height="match_parent"
+                            android:text="View More" />
+
+                    </TableLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#e9e9e9"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:text="Badges"
+                        android:textSize="20sp"></TextView>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/userProfile_usersConsumerBadgeCountTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:text="5"
+                            android:textSize="14sp"></TextView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:text="of total"
+                            android:textSize="14sp"></TextView>
+
+                        <TextView
+                            android:id="@+id/userProfile_usersConsumerBadgeTotalCountTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="25dp"
+                            android:text="35"
+                            android:textSize="14sp"></TextView>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#e9e9e9"
+
+
+                    android:gravity="center">
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        >
+                        <TableLayout
+                            android:id="@+id/userProfile_usersConsumerBadgeTableLayout"
+                            android:layout_width="320dp"
+                            android:layout_height="match_parent"
+
+                            >
+<!--                             <TableRow-->
+<!--                                 android:layout_marginTop="10dp" android:layout_marginBottom="10dp">-->
+<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--                                    android:layout_width="45dp"-->
+<!--                                    android:layout_height="45dp"-->
+<!--                                    android:src="@drawable/foodsample"-->
+<!--                                    app:civ_border_color="#FF000000"-->
+<!--                                    app:civ_border_width="1dp"-->
+<!--                                    android:layout_weight="1"-->
+<!--                                    />-->
+<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--                                    android:layout_width="45dp"-->
+<!--                                    android:layout_height="45dp"-->
+<!--                                    android:src="@drawable/foodsample"-->
+<!--                                    app:civ_border_color="#FF000000"-->
+<!--                                    app:civ_border_width="1dp"-->
+<!--                                    android:layout_weight="1"-->
+
+<!--                                    />-->
+<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--                                    android:layout_width="45dp"-->
+<!--                                    android:layout_height="45dp"-->
+<!--                                    android:src="@drawable/foodsample"-->
+<!--                                    app:civ_border_color="#FF000000"-->
+<!--                                    app:civ_border_width="1dp"-->
+<!--                                    android:layout_weight="1"-->
+<!--                                    />-->
+<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--                                    android:layout_width="45dp"-->
+<!--                                    android:layout_height="45dp"-->
+<!--                                    android:src="@drawable/foodsample"-->
+<!--                                    app:civ_border_color="#FF000000"-->
+<!--                                    app:civ_border_width="1dp"-->
+<!--                                    android:layout_weight="1"-->
+<!--                                    />-->
+<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--                                    android:layout_width="45dp"-->
+<!--                                    android:layout_height="45dp"-->
+<!--                                    android:src="@drawable/foodsample"-->
+<!--                                    app:civ_border_color="#FF000000"-->
+<!--                                    app:civ_border_width="1dp"-->
+<!--                                    android:layout_weight="1"-->
+<!--                                    />-->
+
+
+<!--                            </TableRow>-->
+<!--                            <TableRow android:layout_marginTop="10dp" android:layout_marginBottom="10dp">-->
+<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--                                    android:layout_width="45dp"-->
+<!--                                    android:layout_height="45dp"-->
+<!--                                    android:src="@drawable/foodsample"-->
+<!--                                    app:civ_border_color="#FF000000"-->
+<!--                                    app:civ_border_width="1dp"-->
+<!--                                    android:layout_weight="1"-->
+<!--                                    />-->
+<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--                                    android:layout_width="45dp"-->
+<!--                                    android:layout_height="45dp"-->
+<!--                                    android:src="@drawable/foodsample"-->
+<!--                                    app:civ_border_color="#FF000000"-->
+<!--                                    app:civ_border_width="1dp"-->
+<!--                                    android:layout_weight="1"-->
+
+<!--                                    />-->
+<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--                                    android:layout_width="45dp"-->
+<!--                                    android:layout_height="45dp"-->
+<!--                                    android:src="@drawable/foodsample"-->
+<!--                                    app:civ_border_color="#FF000000"-->
+<!--                                    app:civ_border_width="1dp"-->
+<!--                                    android:layout_weight="1"-->
+<!--                                    />-->
+<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--                                    android:layout_width="45dp"-->
+<!--                                    android:layout_height="45dp"-->
+<!--                                    android:src="@drawable/foodsample"-->
+<!--                                    app:civ_border_color="#FF000000"-->
+<!--                                    app:civ_border_width="1dp"-->
+<!--                                    android:layout_weight="1"-->
+<!--                                    />-->
+<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--                                    android:layout_width="45dp"-->
+<!--                                    android:layout_height="45dp"-->
+<!--                                    android:src="@drawable/foodsample"-->
+<!--                                    app:civ_border_color="#FF000000"-->
+<!--                                    app:civ_border_width="1dp"-->
+<!--                                    android:layout_weight="1"-->
+<!--                                    />-->
+
+
+<!--                            </TableRow>-->
+
+
+                        </TableLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="As Donnor"
+                    android:textSize="20sp"></TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="#e9e9e9"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:text="On the shelf"
+                        android:textSize="20sp"></TextView>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/userProfile_donorOnShelfCountTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:text="35"
+                            android:textSize="14sp"></TextView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="20dp"
+                            android:text="in total"
+                            android:textSize="14sp"></TextView>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/userProfile_donorOnShelfLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#e9e9e9"
+                    android:gravity="center">
+
+                    <TableLayout
+                        android:layout_width="320dp"
+                        android:layout_height="match_parent"
+                        android:stretchColumns="1">
+                        <TableRow>
+
+                            <TextView
+                                android:layout_width="80dp"
+                                android:background="@drawable/table_border"
+                                android:padding="3dip"
+                                android:text="Item Name" />
+
+                            <TextView
+                                android:id="@+id/userProfile_donorOnShelfFoodNameTextView"
+                                android:gravity="right"
+                                android:padding="3dip"
+                                android:text="3 level Beef Burger" />
+                        </TableRow>
+
+                        <TableRow>
+                            <TextView
+                                android:layout_width="80dp"
+                                android:background="@drawable/table_border"
+                                android:padding="3dip"
+                                android:text="Date On" />
+
+                            <TextView
+                                android:id="@+id/userProfile_donorOnShelfDateOnTextView"
+                                android:gravity="right"
+                                android:padding="3dip"
+                                android:text="07/03/2020 1:30:22" />
+                        </TableRow>
+                        <TableRow>
+                            <TextView
+                                android:layout_width="80dp"
+                                android:background="@drawable/table_border"
+                                android:padding="3dip"
+                                android:text="Date Expire" />
+                            <TextView
+                                android:id="@+id/userProfile_donorOnShelfDateExpireTextView"
+                                android:gravity="right"
+                                android:padding="3dip"
+                                android:text="07/03/2020 1:30:22" />
+                        </TableRow>
+
+
+                        <TableRow android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="80dp"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/table_border"
+                                android:gravity="center_vertical"
+                                android:padding="3dip"
+                                android:text="Description" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center">
+
+                                    <com.google.android.material.imageview.ShapeableImageView
+                                        android:id="@+id/userProfile_donorOnShelfFoodImageImageView4"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="40dp"
+                                        android:layout_height="40dp"
+                                        android:layout_gravity="center"
+                                        android:adjustViewBounds="true"
+                                        android:scaleType="fitXY"
+                                        app:shapeAppearanceOverlay="@style/roundedImageView"
+                                        app:srcCompat="@drawable/foodsample" />
+
+                                    <com.google.android.material.imageview.ShapeableImageView
+                                        android:id="@+id/userProfile_donorOnShelfFoodImageImageView3"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="40dp"
+                                        android:layout_height="40dp"
+                                        android:layout_gravity="center"
+                                        android:adjustViewBounds="true"
+                                        android:scaleType="fitXY"
+                                        app:shapeAppearanceOverlay="@style/roundedImageView"
+                                        app:srcCompat="@drawable/foodsample" />
+                                    <com.google.android.material.imageview.ShapeableImageView
+                                        android:id="@+id/userProfile_donorOnShelfFoodImageImageView2"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="40dp"
+                                        android:layout_height="40dp"
+                                        android:layout_gravity="center"
+                                        android:adjustViewBounds="true"
+                                        android:scaleType="fitXY"
+                                        app:shapeAppearanceOverlay="@style/roundedImageView"
+                                        app:srcCompat="@drawable/foodsample" />
+
+                                    <com.google.android.material.imageview.ShapeableImageView
+                                        android:id="@+id/userProfile_donorOnShelfFoodImageImageView1"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="40dp"
+                                        android:layout_height="40dp"
+                                        android:layout_gravity="center"
+                                        android:adjustViewBounds="true"
+                                        android:scaleType="fitXY"
+                                        app:shapeAppearanceOverlay="@style/roundedImageView"
+                                        app:srcCompat="@drawable/foodsample" />
+                                </LinearLayout>
+
+
+                                <TextView
+                                    android:id="@+id/userProfile_donorOnShelfTextDescriptionTextView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="right"
+                                    android:padding="3dip"
+                                    android:text="1/102-108 Hay St, Haymarket NSW 2000"
+                                    android:textSize="11sp" />
+                            </LinearLayout>
+
+                        </TableRow>
+                        <Button
+                            android:visibility="gone"
+                            android:layout_width="fill_parent"
+                            android:layout_height="match_parent"
+                            android:text="View More" />
+
+                    </TableLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="#e9e9e9"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:text="Reviewed"
+                        android:textSize="20sp"></TextView>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/userProfile_donorReviewedItemCountTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:text="35"
+                            android:textSize="14sp"></TextView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="20dp"
+                            android:text="in total"
+                            android:textSize="14sp"></TextView>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/userProfile_donorReviewedItemLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#e9e9e9"
+                    android:gravity="center">
+
+                    <TableLayout
+                        android:layout_width="320dp"
+                        android:layout_height="match_parent"
+                        android:stretchColumns="1">
+                        <TableRow>
+
+                            <TextView
+                                android:layout_width="80dp"
+                                android:background="@drawable/table_border"
+                                android:padding="3dip"
+                                android:text="Consumer" />
+
+                            <TextView
+                                android:id="@+id/userProfile_donorReviewedItemConsumerTextView"
+                                android:gravity="right"
+                                android:padding="3dip"
+                                android:text="Tom" />
+                        </TableRow>
+                        <TableRow>
+
+                            <TextView
+                                android:layout_width="80dp"
+                                android:background="@drawable/table_border"
+                                android:padding="3dip"
+                                android:text="Item Name" />
+
+                            <TextView
+                                android:id="@+id/userProfile_donorReviewedItemFoodNameTextView"
+                                android:gravity="right"
+                                android:padding="3dip"
+                                android:text="3 level Beef Burger" />
+                        </TableRow>
+                        <TableRow>
+                            <TextView
+                                android:layout_width="80dp"
+                                android:background="@drawable/table_border"
+                                android:padding="3dip"
+                                android:text="Date" />
+
+                            <TextView
+                                android:id="@+id/userProfile_donorReviewedItemReviewedDateTextView"
+                                android:gravity="right"
+                                android:padding="3dip"
+                                android:text="07/03/2020 1:30:22" />
+                        </TableRow>
+                        <TableRow>
+                            <TextView
+                                android:layout_width="80dp"
+                                android:background="@drawable/table_border"
+                                android:padding="3dip"
+                                android:text="Rate" />
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <RatingBar
+                                    android:id="@+id/userProfile_donorReviewedItemRatingBar"
+                                    style="?android:attr/ratingBarStyleSmall"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:isIndicator="true"
+                                    android:max="5"
+                                    android:rating="3.2" />
+                            </RelativeLayout>
+
+
+                        </TableRow>
+
+
+                        <TableRow android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="80dp"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/table_border"
+                                android:gravity="center_vertical"
+                                android:padding="3dip"
+                                android:text="Description" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center">
+
+                                    <com.google.android.material.imageview.ShapeableImageView
+                                        android:id="@+id/userProfile_donorReviewedItemFoodImageImageView4"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="40dp"
+                                        android:layout_height="40dp"
+                                        android:layout_gravity="center"
+                                        android:adjustViewBounds="true"
+                                        android:scaleType="fitXY"
+                                        app:shapeAppearanceOverlay="@style/roundedImageView"
+                                        app:srcCompat="@drawable/foodsample" />
+
+                                    <com.google.android.material.imageview.ShapeableImageView
+                                        android:id="@+id/userProfile_donorReviewedItemFoodImageImageView3"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="40dp"
+                                        android:layout_height="40dp"
+                                        android:layout_gravity="center"
+                                        android:adjustViewBounds="true"
+                                        android:scaleType="fitXY"
+                                        app:shapeAppearanceOverlay="@style/roundedImageView"
+                                        app:srcCompat="@drawable/foodsample" />
+                                    <com.google.android.material.imageview.ShapeableImageView
+                                        android:id="@+id/userProfile_donorReviewedItemFoodImageImageView2"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="40dp"
+                                        android:layout_height="40dp"
+                                        android:layout_gravity="center"
+                                        android:adjustViewBounds="true"
+                                        android:scaleType="fitXY"
+                                        app:shapeAppearanceOverlay="@style/roundedImageView"
+                                        app:srcCompat="@drawable/foodsample" />
+
+                                    <com.google.android.material.imageview.ShapeableImageView
+                                        android:id="@+id/userProfile_donorReviewedItemFoodImageImageView1"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="40dp"
+                                        android:layout_height="40dp"
+                                        android:layout_gravity="center"
+                                        android:adjustViewBounds="true"
+                                        android:scaleType="fitXY"
+                                        app:shapeAppearanceOverlay="@style/roundedImageView"
+                                        app:srcCompat="@drawable/foodsample" />
+
+
+                                </LinearLayout>
+
+
+                                <TextView
+                                    android:id="@+id/userProfile_donorReviewedItemTextDescriptionTextView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="right"
+                                    android:padding="3dip"
+                                    android:text="1/102-108 Hay St, Haymarket NSW 2000"
+                                    android:textSize="11sp" />
+                            </LinearLayout>
+
+                        </TableRow>
+                        <Button
+                            android:visibility="gone"
+                            android:layout_width="fill_parent"
+                            android:layout_height="match_parent"
+                            android:text="View More" />
+
+                    </TableLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#e9e9e9"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:text="Badges"
+                        android:textSize="20sp"></TextView>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/userProfile_usersDonorBadgeCountTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:text="5"
+                            android:textSize="14sp"></TextView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:text="of total"
+                            android:textSize="14sp"></TextView>
+
+                        <TextView
+                            android:id="@+id/userProfile_usersDonorBadgeTotalCountTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="25dp"
+                            android:text="35"
+                            android:textSize="14sp"></TextView>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#e9e9e9"
+
+
+                    android:gravity="center">
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        >
+                        <TableLayout
+                            android:id="@+id/userProfile_usersDonorBadgeTableLayout"
+                            android:layout_width="320dp"
+                            android:layout_height="match_parent"
+
+                            >
+<!--                            <TableRow android:layout_marginTop="10dp" android:layout_marginBottom="10dp">-->
+<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--                                    android:layout_width="45dp"-->
+<!--                                    android:layout_height="45dp"-->
+<!--                                    android:src="@drawable/foodsample"-->
+<!--                                    app:civ_border_color="#FF000000"-->
+<!--                                    app:civ_border_width="1dp"-->
+<!--                                    android:layout_weight="1"-->
+<!--                                    />-->
+<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--                                    android:layout_width="45dp"-->
+<!--                                    android:layout_height="45dp"-->
+<!--                                    android:src="@drawable/foodsample"-->
+<!--                                    app:civ_border_color="#FF000000"-->
+<!--                                    app:civ_border_width="1dp"-->
+<!--                                    android:layout_weight="1"-->
+
+<!--                                    />-->
+<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--                                    android:layout_width="45dp"-->
+<!--                                    android:layout_height="45dp"-->
+<!--                                    android:src="@drawable/foodsample"-->
+<!--                                    app:civ_border_color="#FF000000"-->
+<!--                                    app:civ_border_width="1dp"-->
+<!--                                    android:layout_weight="1"-->
+<!--                                    />-->
+<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--                                    android:layout_width="45dp"-->
+<!--                                    android:layout_height="45dp"-->
+<!--                                    android:src="@drawable/foodsample"-->
+<!--                                    app:civ_border_color="#FF000000"-->
+<!--                                    app:civ_border_width="1dp"-->
+<!--                                    android:layout_weight="1"-->
+<!--                                    />-->
+<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--                                    android:layout_width="45dp"-->
+<!--                                    android:layout_height="45dp"-->
+<!--                                    android:src="@drawable/foodsample"-->
+<!--                                    app:civ_border_color="#FF000000"-->
+<!--                                    app:civ_border_width="1dp"-->
+<!--                                    android:layout_weight="1"-->
+<!--                                    />-->
+
+
+<!--                            </TableRow>-->
+<!--                            <TableRow android:layout_marginTop="10dp" android:layout_marginBottom="10dp">-->
+<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--                                    android:layout_width="45dp"-->
+<!--                                    android:layout_height="45dp"-->
+<!--                                    android:src="@drawable/foodsample"-->
+<!--                                    app:civ_border_color="#FF000000"-->
+<!--                                    app:civ_border_width="1dp"-->
+<!--                                    android:layout_weight="1"-->
+<!--                                    />-->
+<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--                                    android:layout_width="45dp"-->
+<!--                                    android:layout_height="45dp"-->
+<!--                                    android:src="@drawable/foodsample"-->
+<!--                                    app:civ_border_color="#FF000000"-->
+<!--                                    app:civ_border_width="1dp"-->
+<!--                                    android:layout_weight="1"-->
+
+<!--                                    />-->
+<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--                                    android:layout_width="45dp"-->
+<!--                                    android:layout_height="45dp"-->
+<!--                                    android:src="@drawable/foodsample"-->
+<!--                                    app:civ_border_color="#FF000000"-->
+<!--                                    app:civ_border_width="1dp"-->
+<!--                                    android:layout_weight="1"-->
+<!--                                    />-->
+<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--                                    android:layout_width="45dp"-->
+<!--                                    android:layout_height="45dp"-->
+<!--                                    android:src="@drawable/foodsample"-->
+<!--                                    app:civ_border_color="#FF000000"-->
+<!--                                    app:civ_border_width="1dp"-->
+<!--                                    android:layout_weight="1"-->
+<!--                                    />-->
+<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--                                    android:layout_width="45dp"-->
+<!--                                    android:layout_height="45dp"-->
+<!--                                    android:src="@drawable/foodsample"-->
+<!--                                    app:civ_border_color="#FF000000"-->
+<!--                                    app:civ_border_width="1dp"-->
+<!--                                    android:layout_weight="1"-->
+<!--                                    />-->
+
+
+<!--                            </TableRow>-->
+
+
+                        </TableLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</ScrollView>
