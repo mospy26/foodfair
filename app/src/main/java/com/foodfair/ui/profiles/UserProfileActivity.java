@@ -366,7 +366,8 @@ public class UserProfileActivity extends AppCompatActivity {
                     DocumentReference food = reviewInfo.getFoodRef();
                     food.get().addOnCompleteListener(foodTask -> {
                         if (foodTask.isSuccessful()) {
-                            String foodName = foodTask.getResult().toObject(FoodItemInfo.class).getName();
+                            FoodItemInfo foodItemInfo = foodTask.getResult().toObject(FoodItemInfo.class);
+                            String foodName = foodItemInfo.getName();
                             // review food name
                             reviewsFoodNameTextView.setText(foodName);
                         }
