@@ -54,6 +54,9 @@ public class QRScanner extends AppCompatActivity {
                     @Override
                     public void run() {
                         Toast.makeText(getApplicationContext(), result.getText(), Toast.LENGTH_SHORT).show();
+
+
+
                         //TODO: Need to return this result somewhere
                         Toast.makeText(getApplicationContext(), "Need to return this result", Toast.LENGTH_LONG).show();
                     }
