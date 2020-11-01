@@ -32,8 +32,7 @@ public class SignInHandler {
             Toast.makeText(context, "Please fill in both email and password", Toast.LENGTH_LONG).show();
             return;
         }
-        Log.e("HAH", email);
-        Log.e("HAH", password);
+
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {

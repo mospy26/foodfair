@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -21,12 +22,13 @@ import com.google.firebase.auth.FirebaseUser;
  */
 public class Login extends AppCompatActivity implements LoginSuccessListener {
 
-    TextView  textView;
+    TextView textView;
     Button signIn;
     Context context = this;
     SignInHandler signInHandler;
     EditText email;
     EditText password;
+    FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +65,12 @@ public class Login extends AppCompatActivity implements LoginSuccessListener {
 
     @Override
     public void callback(FirebaseUser user) {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        // Because Firebase will call this multiple times, and they won't resolve this.
+        // https://github.com/firebase/quickstart-android/issues/80
+        if (currentUser == null) {
+            this.currentUser = user;
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
     }
-}
-
-interface LoginSuccessListener {
-    public void callback(FirebaseUser user);
 }
