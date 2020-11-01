@@ -79,6 +79,7 @@ public class LeaderboardAdapter extends FirestoreAdapter<LeaderboardAdapter.View
             });
 
             // Click listener
+            // in case we want to do something
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

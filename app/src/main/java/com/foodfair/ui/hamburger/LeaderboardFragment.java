@@ -87,6 +87,7 @@ public class LeaderboardFragment extends Fragment implements
             }
         };
 
+
         mBinding.leaderboardList.setAdapter(mAdapter);
         mBinding.leaderboardList.setLayoutManager(new LinearLayoutManager(getActivity()));
 

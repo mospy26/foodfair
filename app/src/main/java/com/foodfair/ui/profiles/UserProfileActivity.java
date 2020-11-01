@@ -103,8 +103,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
         String photoBase64 = Utility.bitmapToBase64(icon);
         int a = 1;
-        firebaseRegisterAndLogin("tom@gmail.com", "Iamtomspassword");
-        db = FirebaseFirestore.getInstance();
+        //firebaseRegisterAndLogin("tom@gmail.com", "Iamtomspassword");
+        // db = FirebaseFirestore.getInstance();
 
 
 //        // Get the data from an ImageView as bytes
@@ -131,6 +131,13 @@ public class UserProfileActivity extends AppCompatActivity {
 //                taskSnapshot.getStorage().getDownloadUrl();
 //            }
 //        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        firebaseRegisterAndLogin("tom@gmail.com", "Iamtomspassword");
+        db = FirebaseFirestore.getInstance();
     }
 
     private void createBadgeViews(ArrayList<Number> badges, TableLayout tableLayout) {

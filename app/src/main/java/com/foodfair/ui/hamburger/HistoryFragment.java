@@ -11,12 +11,28 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.foodfair.R;
+import com.foodfair.databinding.FragmentHistoryBinding;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 
-public class HistoryFragment extends Fragment {
+public class HistoryFragment extends Fragment implements
+        HistoryAdapter.OnHistorySelectedListener, View.OnClickListener {
 
+    private static final String TAG = "HistoryFragment";
     private HistoryViewModel historyViewModel;
+    private FirebaseFirestore mFirestore;
+    private Query mQuery;
+
+    private FragmentHistoryBinding mBinding;
+
+    private HistoryAdapter mAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -30,6 +46,74 @@ public class HistoryFragment extends Fragment {
                 textView.setText(s);
             }
         });
-        return root;
+
+        mBinding = FragmentHistoryBinding.inflate(getLayoutInflater());
+
+        // Enable Firestore logging
+        FirebaseFirestore.setLoggingEnabled(true);
+
+        // Firestore
+        mFirestore = FirebaseFirestore.getInstance();
+
+        String userId = "1";
+
+        DocumentReference userCriteria = mFirestore.collection("users-info")
+                .document(userId);
+
+//        mQuery = mFirestore.collection("fooditemTransaction")
+//                .whereEqualTo("donor", userCriteria);
+        mQuery = mFirestore.collection("fooditemTransaction")
+                            .orderBy("finishDate").limit(20);
+
+        mAdapter = new HistoryAdapter(mQuery, this){
+            @Override
+            protected void onDataChanged() {
+                // Show/hide content if the query returns empty.
+                if (getItemCount() == 0) {
+                    mBinding.historyList.setVisibility(View.GONE);
+                } else {
+                    mBinding.historyList.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            protected void onError(FirebaseFirestoreException e) {
+                // Show a snackbar on errors
+                Snackbar.make(mBinding.getRoot(),
+                        "Error: check logs for info.", Snackbar.LENGTH_LONG).show();
+            }
+        };
+
+        mBinding.historyList.setAdapter(mAdapter);
+        mBinding.historyList.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        return mBinding.getRoot();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Start listening for Firestore updates
+        if (mAdapter != null) {
+            mAdapter.startListening();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAdapter != null) {
+            mAdapter.stopListening();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public void onHistorySelected(DocumentSnapshot history) {
+
     }
 }
