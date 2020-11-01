@@ -1,4 +1,4 @@
-package com.foodfair;
+package com.foodfair.utilities;
 
 import android.Manifest;
 import android.app.Activity;

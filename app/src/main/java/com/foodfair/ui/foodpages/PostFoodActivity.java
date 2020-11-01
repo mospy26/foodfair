@@ -1,6 +1,7 @@
-package com.foodfair;
+package com.foodfair.ui.foodpages;
 
-import android.Manifest;
+import com.foodfair.R;
+
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,7 +9,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,17 +24,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
-import com.foodfair.model.UsersInfo;
+import com.foodfair.ui.foodpages.MapViewActivity;
+import com.foodfair.utilities.MarshmallowPermission;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -43,11 +41,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
+
+
 
 public class PostFoodActivity extends AppCompatActivity {
 
@@ -274,16 +272,16 @@ public class PostFoodActivity extends AppCompatActivity {
         DatePickerDialog datePickerDialog = new DatePickerDialog(PostFoodActivity.this,
                 new DatePickerDialog.OnDateSetListener() {
 
-            @Override
-            public void onDateSet(DatePicker view, int yearSelected,
-                                      int monthSelected, int daySelected) {
-                month = monthSelected + 1;
-                year = yearSelected;
-                day = daySelected;
-                tvDate.setText(day + "/" + month + "/" + year);
-            }
+                    @Override
+                    public void onDateSet(DatePicker view, int yearSelected,
+                                          int monthSelected, int daySelected) {
+                        month = monthSelected + 1;
+                        year = yearSelected;
+                        day = daySelected;
+                        tvDate.setText(day + "/" + month + "/" + year);
+                    }
 
-        }, mYearParam, mMonthParam, mDayParam);
+                }, mYearParam, mMonthParam, mDayParam);
 
         datePickerDialog.show();
     }

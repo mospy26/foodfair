@@ -96,3 +96,4 @@ public class FoodItemInfo {
     public void setType(ArrayList<Integer> type) {
         this.type = type;
     }
+}
