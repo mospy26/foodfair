@@ -24,12 +24,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+import com.squareup.picasso.Picasso;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Date;
+import java.util.HashMap;
 
 public class BookSuccessActivity extends AppCompatActivity {
+    static HashMap<String,BookSuccessViewModel> modelInstances = new HashMap<>();
+
     // Model
     private BookSuccessViewModel mBookSuccessViewModel;
     // UI
@@ -61,10 +65,12 @@ public class BookSuccessActivity extends AppCompatActivity {
         setContentView(R.layout.book_success);
         InitUI();
         InitListener();
-        mBookSuccessViewModel = new BookSuccessViewModel(BitmapFactory.decodeResource(getResources(),
-                R.drawable.foodsample));
-        ViewModelObserverSetup();
 
+        String transactionId = "12";
+        if (modelInstances.containsKey(transactionId)){
+            mBookSuccessViewModel = modelInstances.get(transactionId);
+        }
+        ViewModelObserverSetup();
     }
 
     private void InitListener() {
@@ -117,8 +123,8 @@ public class BookSuccessActivity extends AppCompatActivity {
             mDonorNameTextView.setText(donorName);
         });
 
-        mBookSuccessViewModel.getFoodBitmap().observe(this, foodBitmap -> {
-            mFoodImageView.setImageBitmap(foodBitmap);
+        mBookSuccessViewModel.getFoodUrl().observe(this, foodUrl -> {
+            Picasso.get().load(foodUrl).into(mFoodImageView);
         });
 
         mBookSuccessViewModel.getFoodName().observe(this, foodName -> {
@@ -180,5 +186,10 @@ public class BookSuccessActivity extends AppCompatActivity {
         remainder = remainder - mins * 60;
         int secs = remainder;
         return String.format("%02d", hours) + ":" + String.format("%02d", mins) + ":" + String.format("%02d", secs);
+    }
+
+    public static void setBookSuccessViewModel(BookSuccessViewModel bookSuccessViewModel){
+        String transactionId = bookSuccessViewModel.getTransactionId().getValue();
+        modelInstances.put(transactionId,bookSuccessViewModel);
     }
 }

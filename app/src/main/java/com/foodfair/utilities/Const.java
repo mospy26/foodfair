@@ -3,7 +3,11 @@ package com.foodfair.utilities;
 import java.util.HashMap;
 
 public class Const {
-    public static final HashMap<Long, String> ALLERGY_DETAIL = new HashMap<Long, String>() {{
+    public static Const instance;
+    static {
+        instance = new Const();
+    }
+    public final HashMap<Long, String> ALLERGY_DETAIL = new HashMap<Long, String>() {{
         put(0L, "egg");
         put(1L, "milk");
         put(2L, "bass");
@@ -23,7 +27,7 @@ public class Const {
         put(16L, "beef");
     }};
 
-    public static final HashMap<Long, String> FOOD_TYPE_DETAIL = new HashMap<Long, String>() {{
+    public final HashMap<Long, String> FOOD_TYPE_DETAIL = new HashMap<Long, String>() {{
         put(1L, "ramen");
         put(2L, "burger");
         put(3L, "pizza");
@@ -34,4 +38,8 @@ public class Const {
         put(8L, "beverage");
         put(9L, "roast");
     }};
+
+    public static Const getInstance(){
+        return instance;
+    }
 }
