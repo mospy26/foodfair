@@ -61,8 +61,7 @@ import java.util.Map;
 public class MapViewActivity extends FragmentActivity implements OnMapReadyCallback {
 
 
-    //private static final String TAG = MapViewActivity.class.getSimpleName();
-    private static final String TAG = "TTTTTTTTTtest";
+    private static final String TAG = MapViewActivity.class.getSimpleName();
     private static final int DEFAULT_ZOOM = 15;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private static final long MAX_DOWNLOAD_SIZE = 1024 * 1024;
@@ -177,8 +176,7 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
 
     }
 
-
-
+    
     /**
      * Updates the map's UI settings based on whether the user has granted location permission.
      */
