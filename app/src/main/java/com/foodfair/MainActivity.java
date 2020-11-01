@@ -23,6 +23,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.foodfair.ui.home.HomeFragment;
 import com.foodfair.ui.profiles.UserProfileActivity;
+import com.foodfair.ui.qrscanner.QRScanner;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -65,8 +66,12 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if(item.getItemId() == R.id.nav_user_profile){
+                if(item.getItemId() == R.id.nav_user_profile) {
                     Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+                    startActivity(intent);
+                } else if(item.getItemId() == R.id.nav_qr_scanner) {
+                    Intent intent = new Intent(getApplicationContext(), QRScanner.class);
+                    // Could be startActivityForResult or something
                     startActivity(intent);
                 } else {
                     navController.navigate(item.getItemId());

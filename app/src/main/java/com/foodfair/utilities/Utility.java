@@ -5,11 +5,14 @@ import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.util.Log;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Utility {
     /**
@@ -79,6 +82,18 @@ public class Utility {
             width = (int) (height * bitmapRatio);
         }
         return Bitmap.createScaledBitmap(image, width, height, true);
+    }
+
+    public static String timeStampToDateString(Timestamp timestamp) {
+        return timeStampToDateString(timestamp, null);
+    }
+
+    public static String timeStampToDateString (Timestamp timestamp, String format) {
+        if(format == null || format.isEmpty()){
+            format = "dd-MMM-yyyy";
+        }
+        SimpleDateFormat sfd = new SimpleDateFormat(format);
+        return sfd.format(timestamp.toDate());
     }
 
 }

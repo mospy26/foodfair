@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.foodfair.databinding.AdapterHistoryBinding;
 import com.foodfair.model.FoodItemInfo;
 import com.foodfair.model.FooditemTransaction;
+import com.foodfair.utilities.Utility;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -70,7 +71,8 @@ public class HistoryAdapter extends FirestoreAdapter<HistoryAdapter.ViewHolder> 
                                 .load(foodItemInfo.getImageDescription().get(0))
                                 .into(binding.foodPhoto);
                         binding.personName.setText(foodItemInfo.getName());
-                        binding.personAge.setText(foodItemInfo.getDateOn().toString());
+                        binding.personAge.setText(
+                                Utility.timeStampToDateString(transaction.getFinishDate()));
                     } else {
                         // TODO: Error messages or something
                     }
