@@ -10,7 +10,6 @@
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/success_successHeaderContainer"
             android:layout_width="match_parent"
             android:layout_height="90dp"
             android:background="#ad593b">
@@ -23,7 +22,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/success_successText"
+                    android:id="@+id/fooddetail_foodNameTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="80dp"
                     android:gravity="center"
@@ -44,6 +43,7 @@
             android:orientation="vertical">
 
             <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/fooddetail_foodImageView"
                 android:layout_width="130dp"
                 android:layout_height="130dp"
                 android:layout_gravity="center"
@@ -75,6 +75,7 @@
                             android:text="Allergen" />
 
                         <TextView
+                            android:id="@+id/fooddetail_foodallergyTextView"
                             android:layout_height="match_parent"
                             android:gravity="right|center_vertical"
                             android:padding="3dip"
@@ -92,6 +93,7 @@
                             android:text="Date On Shelf" />
 
                         <TextView
+                            android:id="@+id/fooddetail_foodOnDateTextView"
                             android:layout_height="match_parent"
                             android:gravity="right|center_vertical"
                             android:padding="3dip"
@@ -109,10 +111,11 @@
                             android:text="Time to expire" />
 
                         <TextView
+                            android:id="@+id/fooddetail_foodExpireDateTextView"
                             android:layout_height="match_parent"
                             android:gravity="right|center_vertical"
                             android:padding="3dip"
-                            android:text="08:00:22" />
+                            android:text="2020-09-10 18:33:20" />
                     </TableRow>
 
                     <TableRow>
@@ -125,6 +128,7 @@
                             android:text="Quantity left" />
 
                         <TextView
+                            android:id="@+id/fooddetail_foodQuantityTextView"
                             android:layout_height="match_parent"
                             android:gravity="right|center_vertical"
                             android:padding="3dip"
@@ -140,6 +144,7 @@
                             android:text="Donor" />
 
                         <TextView
+                            android:id="@+id/fooddetail_donorNameTextView"
                             android:layout_height="match_parent"
                             android:gravity="right|center_vertical"
                             android:padding="3dip"
@@ -155,6 +160,7 @@
                             android:padding="3dip"
                             android:text="Address" />
                         <TextView
+                            android:id="@+id/fooddetail_donorAddressTextView"
                             android:layout_height="match_parent"
                             android:gravity="right|center_vertical"
                             android:padding="3dip"
@@ -173,6 +179,7 @@
                             android:text="More Information" />
 
                         <TextView
+                            android:id="@+id/fooddetail_foodTextDescriptionTextView"
                             android:layout_height="match_parent"
                             android:layout_width="200dp"
                             android:gravity="right|center_vertical"

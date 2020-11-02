@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -104,6 +105,8 @@ public class UserProfileActivity extends AppCompatActivity {
         setContentView(R.layout.user_profile);
         userProfileViewModel = new UserProfileViewModel();
         InitUI();
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//        userId = user.getUid();
         userId = "yXnhEl9OBqgKqHLAPMPV";
         userProfileViewModel.id.setValue(userId);
         userProfileViewModel.asConsumerTotalBadgeCount.setValue(aConst.CONSUMER_BADGES.size());
