@@ -26,6 +26,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.foodfair.ui.home.HomeFragment;
 import com.foodfair.ui.profiles.UserProfileActivity;
 import com.foodfair.ui.qrscanner.QRScanner;
+import com.foodfair.utilities.Cache;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private FirebaseAuth firebaseAuth;
     private SharedPreferences sharedPreferences;
+    private Cache cache = Cache.getInstance();
 
 
         @Override
