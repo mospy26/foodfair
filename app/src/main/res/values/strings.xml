@@ -15,6 +15,16 @@
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="food_name_title">Food Name:</string>
+    <string name="allergen_helper">List of allergens, separated by commas</string>
+    <string name="type_title">Type</string>
+    <string name="allergen_title">Allergen</string>
+    <string name="expiry_date_title">Expiry Date</string>
+    <string name="select_date_text">Select Date</string>
+    <string name="quantity_title">Quantity</string>
+    <string name="description_title">Description</string>
+    <string name="description_hint">Write a short description about your food</string>
+    <string name="back_to_home">Back to Home</string>
 
     <string name="menu_user_profile">Profile</string>
     <string name="menu_history_of_items">History of items</string>
@@ -91,5 +101,6 @@
     <string name="FIREBASE_COLLECTION_FOOD_ITEM_TRANSACTION">fooditemTransaction</string>
     <string name="FIREBASE_COLLECTION_LEADERBOARD">leaderboard</string>
     <string name="FIREBASE_COLLECTION_REVIEW_INFO">reviewInfo</string>
+    <string name="firebase_username">firebase username</string>
 
 </resources>

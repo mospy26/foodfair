@@ -7,22 +7,6 @@ import java.util.Map;
 
 public class UsersInfo {
 
-    public static final String FIELD_ALLERGY = "allergy";
-    public static final String FIELD_AS_CONSUMER = "as-consumer";
-    public static final String FIELD_AS_DONOR = "as-donor";
-    public static final String FIELD_BIO = "bio";
-    public static final String FIELD_BIRTHDAY = "birthday";
-    public static final String FIELD_EMAIL = "email";
-    public static final String FIELD_GENDER = "gender";
-    public static final String FIELD_JOIN_DATE = "join-date";
-    public static final String FIELD_LAST_LOGIN = "last-login";
-    public static final String FIELD_LOCATION = "location";
-    public static final String FIELD_NAME = "name";
-    public static final String FIELD_PASSWORD_HASH = "password-hash";
-    public static final String FIELD_PREFERENCE = "preference";
-    public static final String FIELD_PROFILE_IMAGE = "profile-image";
-    public static final String FIELD_STATUS = "status";
-
     private List<Long> allergy;
     private Map<String, Object> asConsumer;
     private Map<String, Object> asDonor;
@@ -38,7 +22,6 @@ public class UsersInfo {
     private Long preference;
     private String profileImage;
     private Long status;
-
 
     public List<Long> getAllergy() {
         return allergy;
