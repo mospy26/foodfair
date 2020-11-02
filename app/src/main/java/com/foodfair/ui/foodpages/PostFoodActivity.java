@@ -13,9 +13,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,13 +28,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.core.content.FileProvider;
 
+import com.foodfair.model.FoodItemInfo;
 import com.foodfair.ui.foodpages.MapViewActivity;
+import com.foodfair.utilities.Const;
 import com.foodfair.utilities.MarshmallowPermission;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -40,25 +50,38 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
-
+import java.util.Map;
+import java.util.Set;
 
 
 public class PostFoodActivity extends AppCompatActivity {
+
 
     // developer-defined request codes
     private static final int READ_PHOTO_REQ_CODE = 101;
     private static final int OPEN_CAMERA_REQ_CODE = 102;
     private static final int CAMERA_STORAGE_REQUEST_CODE = 111;
     private static final String TAG = MapViewActivity.class.getSimpleName();
+    Const aConst = Const.getInstance();
 
     private int year, month, day;
     File mFile;
     private TextView tvDate;
     private ImageView ivAddImage;
+    private EditText etFoodName;
+    private EditText etType;
+    private EditText etAllergen;
+    private EditText etQuantity;
+    private EditText etDescription;
 
     /**
      * Firebase authentication instance
@@ -85,6 +108,11 @@ public class PostFoodActivity extends AppCompatActivity {
         setContentView(R.layout.activity_postfood);
         tvDate = (TextView) findViewById(R.id.tvExpiryDate);
         ivAddImage = (ImageView) findViewById(R.id.ivAddImage);
+        etFoodName = (EditText) findViewById(R.id.etFoodName);
+        etAllergen = (EditText) findViewById(R.id.etAllergen);
+        etDescription = (EditText) findViewById(R.id.etDescription);
+        etQuantity = (EditText) findViewById(R.id.etQuantity);
+        etType = (EditText) findViewById(R.id.etType);
 
         // initialise Firebase
         mFirestore = FirebaseFirestore.getInstance();
@@ -191,10 +219,8 @@ public class PostFoodActivity extends AppCompatActivity {
                     ivAddImage.setImageBitmap(selectedImage);
                     ivAddImage.setVisibility(View.VISIBLE);
                 } catch (FileNotFoundException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
@@ -324,10 +350,185 @@ public class PostFoodActivity extends AppCompatActivity {
         return fileUri;
     }
 
+
+    /**
+     * On submit, we want to parse the user input data
+     * and then post it onto firebase
+     * @param view
+     */
     public void onSubmitFoodClick(View view) {
-        // post food information to Firebase
+        // request to post food onto firebase
+        FoodItemInfo uFoodItemInfo = new FoodItemInfo();
+        ArrayList<Long> allergenLongList = new ArrayList<Long>();
+        final int status = 1;
+        Long typeLong;
+        Timestamp dateExpiry;
+
+        // get the current timestamp
+        Timestamp dateOn;
+        String pattern = "yyyyMMdd_HHmmss";
+        String currentTimeStr = new SimpleDateFormat(pattern, Locale.getDefault()).format(new Date());
 
 
+        String foodNameStr = etFoodName.getText().toString().trim().toLowerCase();
+        String allergenStr = etAllergen.getText().toString().trim().toLowerCase();
+        String quanStr = etQuantity.getText().toString().trim();
+        String descStr = etDescription.getText().toString().trim().toLowerCase();
+        // !!!!type is to be changed to a drop down button
+        String typeStr = etType.getText().toString().trim().toLowerCase();
+        String dateExpiryStr = tvDate.getText().toString();
+
+
+        allergenStringToLongList(allergenStr, allergenLongList);
+        typeLong = typeStringToLong(typeStr);
+        dateExpiry = parseDateTime(dateExpiryStr, "dd/MM/yyyy");
+        dateOn = parseDateTime(currentTimeStr, pattern);
+
+
+        // first check if fields are empty
+        List<EditText> etList = Arrays.asList(etFoodName, etType, etAllergen,
+                etQuantity, etDescription);
+
+
+        if (checkEachField(etList)) {
+            // if all fields are filled
+            int quantity = Integer.parseInt(quanStr);
+
+            populateFoodItemInfo(allergenLongList, quantity, dateExpiry, dateOn, null,
+                    null, foodNameStr, status, descStr, typeLong, uFoodItemInfo);
+            postFoodToFirebase(uFoodItemInfo);
+
+        }
+
+    }
+
+
+    public boolean checkEachField(List<EditText> etList) {
+        for (EditText editText: etList) {
+            String textInput = editText.getText().toString().trim();
+            String field = "";
+            if (editText.getId() == R.id.etFoodName) {
+                field = "Food Name";
+            } else if (editText.getId() == R.id.etType) {
+                field = "Type";
+            } else if (editText.getId() == R.id.etAllergen) {
+                field = "Allergen";
+            } else if (editText.getId() == R.id.etDescription) {
+                field = "Description";
+            } else if (editText.getId() == R.id.etQuantity) {
+                field = "Quantity";
+            }
+
+            // check if any of the field is empty
+            if (TextUtils.isEmpty(textInput)) {
+                Toast.makeText(this, field + " cannot be empty", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void postFoodToFirebase(FoodItemInfo foodItemInfo) {
+
+        String foodTableStr = getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_INFO);
+        CollectionReference foodCollect = mFirestore.collection(foodTableStr);
+        foodCollect.document().set(foodItemInfo)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+
+
+    }
+
+
+    /**
+     *  parse date time
+     */
+    public Timestamp parseDateTime(String dateTimeStr, String pattern) {
+
+        SimpleDateFormat inputFormat = new SimpleDateFormat(pattern);
+        Date d = null;
+        try {
+            //convert string to date
+            d = inputFormat.parse(dateTimeStr);
+        } catch (ParseException e) {
+            System.out.println("Date Format Not Supported");
+            e.printStackTrace();
+        }
+        return new Timestamp(d);
+
+    }
+
+
+    /**
+     *  looks up the Const hashset table to find out the corresponding type integers
+     */
+    public Long typeStringToLong(String typeString) {
+
+        Set<Long> keys = getKeys(aConst.FOOD_TYPE_DETAIL, typeString.trim());
+        if (!keys.isEmpty()) {
+            return(keys.iterator().next());
+        }
+        return null;
+    }
+
+
+    /**
+     *  looks up the Const hashset table to find out the corresponding allergen integers
+     */
+    public void allergenStringToLongList(String allergenString, ArrayList<Long> longList) {
+
+        String[] allergenList = allergenString.split("[,]", 0);
+        for (String allerg : allergenList) {
+            Set<Long> keys = getKeys(aConst.ALLERGY_DETAIL, allerg.trim());
+            if (!keys.isEmpty()) {
+                Long allergLong = keys.iterator().next();
+                longList.add(allergLong);
+            }
+        }
+    }
+
+    /**
+     *  given value, get the key of the map
+     */
+    public <K, V> Set<K> getKeys(Map<K, V> map, V value) {
+        Set<K> keys = new HashSet<>();
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            if (entry.getValue().equals(value)) {
+                keys.add(entry.getKey());
+            }
+        }
+        return keys;
+    }
+
+
+    /**
+     *  looks up the Const hashset table to find out the corresponding allergen integers
+     */
+    public void populateFoodItemInfo(ArrayList<Long> allergyInfo, Integer quantity, Timestamp dateExpire,
+                                     Timestamp dateOn, DocumentReference donorRef, ArrayList<String> imageDescription,
+                                     String name, Integer status, String textDescription, Long type,
+                                     FoodItemInfo foodItemInfo) {
+
+        foodItemInfo.setType(type);
+        foodItemInfo.setTextDescription(textDescription);
+        foodItemInfo.setCount(quantity);
+        foodItemInfo.setName(name);
+        foodItemInfo.setAllergyInfo(allergyInfo);
+        foodItemInfo.setDateExpire(dateExpire);
+        foodItemInfo.setStatus(status);
+        foodItemInfo.setDonorRef(donorRef);
+        foodItemInfo.setImageDescription(imageDescription);
+        foodItemInfo.setDateOn(dateOn);
 
     }
 }

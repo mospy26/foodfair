@@ -9,7 +9,7 @@ import com.google.firebase.firestore.DocumentReference;
 import java.util.ArrayList;
 
 public class FoodItemInfo /*implements Parcelable*/ {
-    ArrayList<Integer> allergyInfo;
+    ArrayList<Long> allergyInfo;
     Integer count;
     Timestamp dateExpire;
     Timestamp dateOn;
@@ -20,11 +20,11 @@ public class FoodItemInfo /*implements Parcelable*/ {
     String textDescription;
     Long type;
 
-    public ArrayList<Integer> getAllergyInfo() {
+    public ArrayList<Long> getAllergyInfo() {
         return allergyInfo;
     }
 
-    public void setAllergyInfo(ArrayList<Integer> allergyInfo) {
+    public void setAllergyInfo(ArrayList<Long> allergyInfo) {
         this.allergyInfo = allergyInfo;
     }
 
