@@ -1,5 +1,8 @@
 package com.foodfair.utilities;
 
+import com.foodfair.R;
+import com.foodfair.model.Badge;
+
 import java.util.HashMap;
 
 public class Const {
@@ -39,6 +42,14 @@ public class Const {
         put(9L, "roast");
     }};
 
+    public final HashMap<Long, Badge> CONSUMER_BADGES = new HashMap<Long, Badge>(){{
+        put(100L, new Badge(100L,"Receive donation for the first time.", R.drawable.consume_1));
+        put(101L, new Badge(101L,"Receive donation for more than 5 times.", R.drawable.consume_5));
+    }};
+    public final HashMap<Long, Badge> DONOR_BADGES = new HashMap<Long, Badge>(){{
+        put(200L, new Badge(200L,"Donate for the first time.", R.drawable.donate_1));
+        put(201L, new Badge(201L,"Donate for more than 5 times.", R.drawable.donate_5));
+    }};
     public static Const getInstance(){
         return instance;
     }
