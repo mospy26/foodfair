@@ -49,6 +49,7 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
     private UsersInfo donor;
     private UsersInfo consumer;
     private FoodItemInfo foodRef;
+    private String transactionId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,7 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
         codeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
             public void onDecoded(@NonNull final Result result) {
+                transactionId = result.getText();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -187,10 +189,6 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
                     public void onClick(DialogInterface dialog, int which) {
                         approveTransactionAndSave(transaction);
                         Intent i = new Intent(QRScanner.this, QRSuccess.class);
-                        Gson g = new Gson();
-                        String transactionJson = g.toJson(transaction);
-                        i.putExtra("transaction", transactionJson);
-//                        i.putExtra("consumer", consumer);
                         startActivity(i);
                     }
                 })
@@ -243,7 +241,7 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
     public void approveTransactionAndSave(FooditemTransaction transaction) {
 
         CollectionReference transactions = FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_TRANSACTION));
-        transactions.document().update("status", "2") // TODO replace with SUCCESS status
+        transactions.document(this.transactionId).update("status", 2) // TODO replace with SUCCESS status
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -253,7 +251,7 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w("Transaction update", "Error writing document", e);
+                        Log.e("Transaction update", "Error writing document", e);
                     }
                 });
     }

@@ -19,8 +19,7 @@ public class QRSuccess extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.qr_success);
         Bundle extras = getIntent().getExtras();
-        this.transaction = new Gson().fromJson(extras.getString("transactionId"), FooditemTransaction.class);
-        Log.e("naa", transaction.getAliveRecord().toString());
     }
 }
