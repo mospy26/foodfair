@@ -1,9 +1,14 @@
 package com.foodfair.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 
-public class FooditemTransaction {
+import java.io.Serializable;
+
+public class FooditemTransaction /*implements Parcelable*/ {
 
     public static final String FIELD_ALIVE_RECORD = "aliveRecord";
     public static final String FIELD_CD_REVIEW = "cdReview";
@@ -96,4 +101,18 @@ public class FooditemTransaction {
     public void setStatus(Long status) {
         this.status = status;
     }
+//
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel parcel, int i) {
+//        parcel.writeLong(aliveRecord);
+//        openDate.writeToParcel(parcel, i);
+//        finishDate.writeToParcel(parcel, i);
+//        parcel.writeLong(status);
+//        // fetch other data manually...
+//    }
 }

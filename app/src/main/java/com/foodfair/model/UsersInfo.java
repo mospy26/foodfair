@@ -1,11 +1,14 @@
 package com.foodfair.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.Timestamp;
 
 import java.util.List;
 import java.util.Map;
 
-public class UsersInfo {
+public class UsersInfo /*implements Parcelable*/ {
 
     private List<Long> allergy;
     private Map<String, Object> asConsumer;
@@ -142,4 +145,21 @@ public class UsersInfo {
     public void setStatus(Long status) {
         this.status = status;
     }
+//
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel parcel, int i) {
+//        parcel.writeString(bio);
+//        parcel.writeString(email);
+//        parcel.writeString(name);
+//        parcel.writeString(location);
+//        parcel.writeString(profileImage);
+//        parcel.writeLong(gender);
+//        parcel.writeLong(preference);
+//        parcel.writeLong(status);
+//    }
 }
