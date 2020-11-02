@@ -71,7 +71,7 @@ public class HistoryFragment extends Fragment implements
             @Override
             public void onClick(View v) {
                 if(isAsDonor){
-                    mBinding.textHistory.setText("Consumer History");
+                    mBinding.textHistory.setText("Consumption History");
                     mBinding.historyList.setAdapter(mAdapterConsumer);
                     mBinding.historyList.setLayoutManager(new LinearLayoutManager(getActivity()));
                     isAsDonor = false;

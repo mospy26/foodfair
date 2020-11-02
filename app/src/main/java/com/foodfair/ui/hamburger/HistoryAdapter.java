@@ -84,43 +84,49 @@ public class HistoryAdapter extends FirestoreAdapter<HistoryAdapter.ViewHolder> 
             FooditemTransaction transaction = snapshot.toObject(FooditemTransaction.class);
             Resources resources = itemView.getResources();
 
-            DocumentReference foodRef = transaction.getFoodRef();
-            foodRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    FoodItemInfo foodItemInfo = documentSnapshot.toObject(FoodItemInfo.class);
-                    if(foodItemInfo!= null){
-                        Picasso.get()
-                                .load(foodItemInfo.getImageDescription().get(0))
-                                .into(binding.foodPhoto);
-                        binding.foodName.setText(foodItemInfo.getName());
-                        binding.quantity.setText("Quantity: " + foodItemInfo.getCount());
-                        binding.donationDate.setText(
-                                Utility.timeStampToDateString(transaction.getFinishDate()));
-                    } else {
-                        // TODO: Error messages or something
+            // Only list status = success
+            if(transaction.getStatus() == 3){
+                binding.cv.setVisibility(View.VISIBLE);
+                DocumentReference foodRef = transaction.getFoodRef();
+                foodRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        FoodItemInfo foodItemInfo = documentSnapshot.toObject(FoodItemInfo.class);
+                        if(foodItemInfo!= null){
+                            Picasso.get()
+                                    .load(foodItemInfo.getImageDescription().get(0))
+                                    .into(binding.foodPhoto);
+                            binding.foodName.setText(foodItemInfo.getName());
+                            binding.quantity.setText("Quantity: " + foodItemInfo.getCount());
+                            binding.donationDate.setText(
+                                    Utility.timeStampToDateString(transaction.getFinishDate()));
+                        } else {
+                            // TODO: Error messages or something
+                        }
+
                     }
+                });
 
+                DocumentReference userRef;
+                if(isAsDonor){
+                    userRef = transaction.getConsumer();
+                } else {
+                    userRef = transaction.getDonor();
                 }
-            });
-
-            DocumentReference userRef;
-            if(isAsDonor){
-                userRef = transaction.getConsumer();
+                userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        UsersInfo usersInfo = documentSnapshot.toObject(UsersInfo.class);
+                        if(usersInfo != null){
+                            Picasso.get()
+                                    .load(usersInfo.getProfileImage())
+                                    .into(binding.toFromPhoto);
+                        }
+                    }
+                });
             } else {
-                userRef = transaction.getDonor();
+                binding.cv.setVisibility(View.GONE);
             }
-            userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    UsersInfo usersInfo = documentSnapshot.toObject(UsersInfo.class);
-                    if(usersInfo != null){
-                        Picasso.get()
-                                .load(usersInfo.getProfileImage())
-                                .into(binding.toFromPhoto);
-                    }
-                }
-            });
 
             // Click listener
             // in case we want to do something
