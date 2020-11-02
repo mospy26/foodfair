@@ -46,7 +46,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -66,6 +68,9 @@ import java.util.Set;
 public class PostFoodActivity extends AppCompatActivity {
 
 
+    // !!!!!! Assume we have user ID!!! Mustafa
+    private static final String UID = "yXnhEl9OBqgKqHLAPMPV";
+
     // developer-defined request codes
     private static final int READ_PHOTO_REQ_CODE = 101;
     private static final int OPEN_CAMERA_REQ_CODE = 102;
@@ -83,13 +88,15 @@ public class PostFoodActivity extends AppCompatActivity {
     private EditText etQuantity;
     private EditText etDescription;
 
+    Bitmap mTakenImage;
+    FoodItemInfo mFoodItemInfo = new FoodItemInfo();
+
     /**
      * Firebase authentication instance
      */
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private String mFirebaseEmail = "daydayhappy@fakemail.com";
     private String mFirebasePassword = "i_am_Password";
-    private String userTableStr = "usersInfo";
     private FirebaseFirestore mFirestore;
     FirebaseStorage mFireStorage;
     StorageReference mStorageRef;
@@ -196,10 +203,10 @@ public class PostFoodActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 ivAddImage.setVisibility(View.GONE);
                 // by this point we have the camera photo on disk
-                Bitmap takenImage = BitmapFactory.decodeFile(mFile.getAbsolutePath());
+                mTakenImage = BitmapFactory.decodeFile(mFile.getAbsolutePath());
 
                 // Load the taken image into a preview
-                ivAddImage.setImageBitmap(takenImage);
+                ivAddImage.setImageBitmap(mTakenImage);
                 ivAddImage.setVisibility(View.VISIBLE);
             } else { // Result was a failure
                 Toast.makeText(this, "Picture wasn't taken AAA!",
@@ -210,13 +217,12 @@ public class PostFoodActivity extends AppCompatActivity {
                 ivAddImage.setVisibility(View.GONE);
                 Uri photoUri = data.getData();
                 // Do something with the photo based on Uri
-                Bitmap selectedImage;
                 try {
-                    selectedImage = MediaStore.Images.Media.getBitmap(
+                    mTakenImage = MediaStore.Images.Media.getBitmap(
                             this.getContentResolver(), photoUri);
 
                     // Load the selected image into a preview
-                    ivAddImage.setImageBitmap(selectedImage);
+                    ivAddImage.setImageBitmap(mTakenImage);
                     ivAddImage.setVisibility(View.VISIBLE);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -358,7 +364,6 @@ public class PostFoodActivity extends AppCompatActivity {
      */
     public void onSubmitFoodClick(View view) {
         // request to post food onto firebase
-        FoodItemInfo uFoodItemInfo = new FoodItemInfo();
         ArrayList<Long> allergenLongList = new ArrayList<Long>();
         final int status = 1;
         Long typeLong;
@@ -381,22 +386,37 @@ public class PostFoodActivity extends AppCompatActivity {
 
         allergenStringToLongList(allergenStr, allergenLongList);
         typeLong = typeStringToLong(typeStr);
-        dateExpiry = parseDateTime(dateExpiryStr, "dd/MM/yyyy");
-        dateOn = parseDateTime(currentTimeStr, pattern);
 
 
         // first check if fields are empty
         List<EditText> etList = Arrays.asList(etFoodName, etType, etAllergen,
                 etQuantity, etDescription);
 
+        if (ivAddImage.getDrawable() == null) {
+            Toast.makeText(this, "Please add a food image", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
 
         if (checkEachField(etList)) {
             // if all fields are filled
+
+            dateExpiry = parseDateTime(dateExpiryStr, "dd/MM/yyyy");
+            dateOn = parseDateTime(currentTimeStr, pattern);
             int quantity = Integer.parseInt(quanStr);
 
-            populateFoodItemInfo(allergenLongList, quantity, dateExpiry, dateOn, null,
-                    null, foodNameStr, status, descStr, typeLong, uFoodItemInfo);
-            postFoodToFirebase(uFoodItemInfo);
+            // get donor reference
+            String userTableStr = getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO);
+            DocumentReference donorRef = mFirestore.document(userTableStr + "/" + UID);
+
+            // upload image onto storage and retrieve the url
+            String fileName = mFile.getName();
+            StorageReference foodRef = mStorageRef.child("food/" + fileName);
+
+            uploadImageOntoStorage(foodRef, mTakenImage);
+
+            populateFoodItemInfo(allergenLongList, quantity, dateExpiry, dateOn, donorRef,
+                    null, foodNameStr, status, descStr, typeLong, mFoodItemInfo);
 
         }
 
@@ -529,6 +549,46 @@ public class PostFoodActivity extends AppCompatActivity {
         foodItemInfo.setDonorRef(donorRef);
         foodItemInfo.setImageDescription(imageDescription);
         foodItemInfo.setDateOn(dateOn);
+
+    }
+
+    /**
+     *  Upload the bitmap image onto Firebase storage
+     */
+    public void uploadImageOntoStorage(StorageReference foodRef, Bitmap mTakenImage) {
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        mTakenImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = foodRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // successfully updated the image
+
+                foodRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        // successfully retrieve the download URI
+                        ArrayList<String> uriList = new ArrayList<>();
+                        uriList.add(uri.toString());
+
+                        mFoodItemInfo.setImageDescription(uriList);
+                        postFoodToFirebase(mFoodItemInfo);
+
+                        Log.d(TAG, "URI success");
+                    }
+                });
+                Log.d(TAG, "Successfully uploaded image onto storage");
+            }
+        });
+
 
     }
 }
