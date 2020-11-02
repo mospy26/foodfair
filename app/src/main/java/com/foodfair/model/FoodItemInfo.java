@@ -15,7 +15,7 @@ public class FoodItemInfo {
     String name;
     Integer status;
     String textDescription;
-    ArrayList<Integer> type;
+    Long type;
 
     public ArrayList<Integer> getAllergyInfo() {
         return allergyInfo;
@@ -89,11 +89,11 @@ public class FoodItemInfo {
         this.textDescription = textDescription;
     }
 
-    public ArrayList<Integer> getType() {
+    public Long getType() {
         return type;
     }
 
-    public void setType(ArrayList<Integer> type) {
+    public void setType(Long type) {
         this.type = type;
     }
 }
