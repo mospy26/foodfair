@@ -1,11 +1,14 @@
 package com.foodfair.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 
 import java.util.ArrayList;
 
-public class FoodItemInfo {
+public class FoodItemInfo /*implements Parcelable*/ {
     ArrayList<Integer> allergyInfo;
     Integer count;
     Timestamp dateExpire;
@@ -96,4 +99,19 @@ public class FoodItemInfo {
     public void setType(Long type) {
         this.type = type;
     }
+//
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel parcel, int i) {
+//        parcel.writeString(name);
+//        dateExpire.writeToParcel(parcel, i);
+//        dateOn.writeToParcel(parcel, i);
+//        parcel.writeInt(count);
+//        parcel.writeInt(status);
+//        parcel.writeString(textDescription);
+//    }
 }
