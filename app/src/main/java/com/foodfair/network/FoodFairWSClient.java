@@ -18,8 +18,8 @@ public class FoodFairWSClient extends WebSocketClient {
 
     static {
         try {
-            globalCon = new FoodFairWSClient(new URI("ws://10.16.149.237:8585"));
-//            globalCon = new FoodFairWSClient(new URI("ws://ss.caihuashuai.com:8282"));
+//            globalCon = new FoodFairWSClient(new URI("ws://10.16.149.237:8585"));
+            globalCon = new FoodFairWSClient(new URI("ws://ss.caihuashuai.com:8282"));
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -38,12 +38,11 @@ public class FoodFairWSClient extends WebSocketClient {
     @Override
     public void onOpen(ServerHandshake handshakedata) {
         Gson g = new Gson();
-
         // Register current user id to ws server
         send(g.toJson(new Register("b")));
 //         Tell the server what(specific package) you want to talk to whom(another id)
 //        for (int i = 0; i < 3; i++) {
-//            send(g.toJson(new BookFood("123456","123456","888888").buildToMessage("b","a")));
+//            send(g.toJson(new BookFood("123456","123456","888888").buildToMessage("b","b")));
 //        }
 //        System.out.println("new connection opened");
     }
