@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#e9e9e9">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/success_successHeaderContainer"
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:background="#ad593b">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:gravity="center_horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/success_iconImageView"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+
+                    app:srcCompat="@drawable/success_icon" />
+
+                <TextView
+                    android:id="@+id/success_successText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:gravity="center"
+                    android:text="Success"
+                    android:textSize="32sp"
+                    android:textStyle="bold">
+
+                </TextView>
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/success_foodDescriptionContainer"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_below="@id/success_successHeaderContainer"
+            android:background="#ffffff">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:gravity="center_horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/success_foodImageView"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    app:shapeAppearanceOverlay="@style/roundedImageView"
+                    app:srcCompat="@drawable/foodsample" />
+
+                <TableLayout
+                    android:layout_width="320dp"
+                    android:layout_height="match_parent"
+                    android:stretchColumns="1">
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="80dp"
+                            android:background="@drawable/table_border"
+                            android:padding="3dip"
+                            android:text="Receiver" />
+
+                        <TextView
+                            android:id="@+id/success_donorNameTextView"
+                            android:gravity="right"
+                            android:padding="3dip"
+                            android:text="Thai Food Restaurant" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="80dp"
+                            android:background="@drawable/table_border"
+                            android:padding="3dip"
+                            android:text="Food" />
+
+                        <TextView
+                            android:id="@+id/success_foodNameTextView"
+                            android:gravity="right"
+                            android:padding="3dip"
+                            android:text="Delicious pasta combo" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="80dp"
+                            android:background="@drawable/table_border"
+                            android:padding="3dip"
+                            android:text="Location" />
+
+                        <TextView
+                            android:id="@+id/success_pickupLocationTextView"
+                            android:gravity="right"
+                            android:padding="3dip"
+                            android:text="1/102-108 Hay St, Haymarket NSW 2000"
+                            android:textSize="11sp" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="80dp"
+                            android:background="@drawable/table_border"
+                            android:padding="3dip"
+                            android:textSize="11sp"
+                            android:text="Time to invalid" />
+
+
+                        <TextView
+                            android:id="@+id/success_countdownTextView"
+                            android:gravity="right"
+                            android:padding="3dip"
+                            android:text="1:30:22" />
+                    </TableRow>
+
+                </TableLayout>
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/success_qrCodeDescriptionContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/success_foodDescriptionContainer"
+            android:layout_marginTop="20dp"
+            android:background="#ffffff">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/success_qrCodeDescriptionContainer"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/success_backButton"
+                android:layout_width="300dp"
+                android:layout_height="match_parent"
+                android:background="#8dac44"
+                android:text="Exit"
+                android:textAllCaps="false"
+                android:textSize="26sp"/>
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>

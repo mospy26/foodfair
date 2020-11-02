@@ -1,14 +1,11 @@
 package com.foodfair.ui.login;
 
-import android.annotation.SuppressLint;
-
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -17,23 +14,21 @@ import android.widget.TextView;
 
 import com.foodfair.MainActivity;
 import com.foodfair.R;
-import com.foodfair.utilities.LoadingDialog;
-import com.foodfair.utilities.SignInHandler;
+import com.google.firebase.auth.FirebaseUser;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class Login extends AppCompatActivity {
+public class Login extends AppCompatActivity implements LoginSuccessListener {
 
-    TextView  textView;
+    TextView textView;
     Button signIn;
     Context context = this;
     SignInHandler signInHandler;
     EditText email;
     EditText password;
-
-
+    FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,21 +41,16 @@ public class Login extends AppCompatActivity {
         password = findViewById(R.id.loginPassword);
 
         explodeNewScene();
-        signInHandler = new SignInHandler();
-        Intent intent = new Intent(this, MainActivity.class);
+        signInHandler = new SignInHandler(this, this);
         signIn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 signInHandler.SignIn(email.getText().toString(),password.getText().toString().trim());
-                startActivity(intent);
-
                 return true;
             }
         });
 
     }
-
-
 
     public void explodeNewScene()
     {
@@ -73,6 +63,14 @@ public class Login extends AppCompatActivity {
         });
     }
 
-
-
+    @Override
+    public void callback(FirebaseUser user) {
+        // Because Firebase will call this multiple times, and they won't resolve this.
+        // https://github.com/firebase/quickstart-android/issues/80
+        if (currentUser == null) {
+            this.currentUser = user;
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
+    }
 }
