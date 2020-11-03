@@ -1,13 +1,12 @@
 package com.foodfair.ui.qr_success;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.foodfair.R;
@@ -19,10 +18,8 @@ import com.foodfair.utilities.Cache;
 import com.foodfair.utilities.CacheObject;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.gson.Gson;
 
 public class QRSuccess extends AppCompatActivity implements OnStateChangeListener {
 
@@ -31,27 +28,40 @@ public class QRSuccess extends AppCompatActivity implements OnStateChangeListene
     private UsersInfo consumer;
     private FoodItemInfo foodRef;
 
+    private TextView success_receiverNameTextView;
+    private TextView success_receivedTime;
+    private TextView success_foodNameTextView;
+    private TextView success_pickupLocationTextView;
         
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.qr_success);
+        setContentView(R.layout.activity_qrsuccess);
         Bundle extras = getIntent().getExtras();
         String transactionId = (String) extras.get("transactionId");
+        initViews();
         retrieveData(transactionId);
+    }
+
+    private void initViews() {
+        success_receiverNameTextView = findViewById(R.id.success_receiverNameTextView);
+        success_receivedTime = findViewById(R.id.success_receivedTime);
+        success_foodNameTextView = findViewById(R.id.success_foodNameTextView);
+        success_pickupLocationTextView = findViewById(R.id.success_pickupLocationTextView);
     }
 
     private void retrieveData(String transactionId) {
         Cache cache = Cache.getInstance(getApplicationContext());
         CacheObject transactionObject = cache.get(transactionId);
-        if (transactionObject == null) {
+        if (transactionObject == null || transactionObject.getData() == null) {
             fetchTransaction(transactionId);
         }
         else {
             transaction = (FooditemTransaction) cache.get(transactionId).getData();
             consumer = (UsersInfo) cache.get(transaction.getConsumer().getId()).getData();
             foodRef = (FoodItemInfo) cache.get(transaction.getFoodRef().getId()).getData();
+            onStateChange(null);
         }
     }
 
@@ -114,8 +124,11 @@ public class QRSuccess extends AppCompatActivity implements OnStateChangeListene
 
     @Override
     public void onStateChange(Object object) {
-        if (this.foodRef != null && this.consumer != null && this.transaction != null) {}
-            // TODO: Fill page in
+        if (this.foodRef != null && this.consumer != null && this.transaction != null) {
+            success_foodNameTextView.setText(foodRef.getName());
+            success_receiverNameTextView.setText(consumer.getName());
+            success_receivedTime.setText(transaction.getFinishDate().toString());
+        }
     }
 }
 

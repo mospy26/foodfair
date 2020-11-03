@@ -30,6 +30,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -38,6 +39,7 @@ import com.google.gson.Gson;
 import com.google.zxing.Result;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Adopted from https://github.com/yuriy-budiyev/code-scanner
@@ -250,7 +252,22 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
     public void approveTransactionAndSave(FooditemTransaction transaction) {
 
         CollectionReference transactions = FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_TRANSACTION));
+        transaction.setFinishDate(Timestamp.now());
         transactions.document(this.transactionId).update("status", 2) // TODO replace with SUCCESS status
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Transaction update", "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("Transaction update", "Error writing document", e);
+                    }
+                });
+
+        transactions.document(this.transactionId).update("finishDate", new Date(System.currentTimeMillis())) // TODO replace with SUCCESS status
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

@@ -55,6 +55,8 @@
                 android:layout_height="100dp"
                 android:gravity="center_horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.imageview.ShapeableImageView
@@ -68,7 +70,7 @@
                     app:srcCompat="@drawable/foodsample" />
 
                 <TableLayout
-                    android:layout_width="320dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:stretchColumns="1">
 
@@ -81,7 +83,7 @@
                             android:text="Receiver" />
 
                         <TextView
-                            android:id="@+id/success_donorNameTextView"
+                            android:id="@+id/success_receiverNameTextView"
                             android:gravity="right"
                             android:padding="3dip"
                             android:text="Thai Food Restaurant" />
@@ -129,7 +131,7 @@
 
 
                         <TextView
-                            android:id="@+id/success_countdownTextView"
+                            android:id="@+id/success_receivedTime"
                             android:gravity="right"
                             android:padding="3dip"
                             android:text="1:30:22" />
@@ -166,7 +168,7 @@
                 android:background="#8dac44"
                 android:text="Exit"
                 android:textAllCaps="false"
-                android:textSize="26sp"/>
+                android:textSize="17sp"/>
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>
