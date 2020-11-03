@@ -4,32 +4,120 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.foodfair.R;
+import com.foodfair.databinding.FragmentHistoryBinding;
+import com.foodfair.model.FooditemTransaction;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 
-public class HistoryFragment extends Fragment {
+public class HistoryFragment extends Fragment implements
+        HistoryAdapter.OnHistorySelectedListener, View.OnClickListener {
 
-    private HistoryViewModel historyViewModel;
+    private static final String TAG = "HistoryFragment";
+    private FirebaseFirestore mFirestore;
+    private Query mQueryDonor;
+    private Query mQueryConsumer;
+
+    private FragmentHistoryBinding mBinding;
+
+    private HistoryAdapter mAdapterDonor;
+    private HistoryAdapter mAdapterConsumer;
+
+    private boolean isAsDonor = true;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        historyViewModel =
-                ViewModelProviders.of(this).get(HistoryViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_history, container, false);
-        final TextView textView = root.findViewById(R.id.text_history);
-        historyViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+
+        mBinding = FragmentHistoryBinding.inflate(getLayoutInflater());
+
+        // Enable Firestore logging
+        FirebaseFirestore.setLoggingEnabled(true);
+
+        // Firestore
+        mFirestore = FirebaseFirestore.getInstance();
+
+        // TODO: Change to legit user id
+        String userId = "yXnhEl9OBqgKqHLAPMPV";
+
+        DocumentReference userCriteria = mFirestore.collection(
+                getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO))
+                .document(userId);
+
+        mQueryDonor = mFirestore.collection(
+                getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_TRANSACTION))
+                .whereEqualTo(FooditemTransaction.FIELD_DONOR, userCriteria);
+
+        mAdapterDonor = new HistoryAdapter(mQueryDonor, this, true);
+
+        mQueryConsumer = mFirestore.collection(
+                getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_TRANSACTION))
+                .whereEqualTo(FooditemTransaction.FIELD_CONSUMER, userCriteria);
+
+        mAdapterConsumer = new HistoryAdapter(mQueryConsumer, this, false);
+
+        mBinding.historyList.setAdapter(mAdapterDonor);
+        mBinding.historyList.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        mBinding.btnSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
+            public void onClick(View v) {
+                if(isAsDonor){
+                    mBinding.textHistory.setText("Consumer History");
+                    mBinding.historyList.setAdapter(mAdapterConsumer);
+                    mBinding.historyList.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    isAsDonor = false;
+                } else {
+                    mBinding.textHistory.setText("Donation History");
+                    mBinding.historyList.setAdapter(mAdapterDonor);
+                    mBinding.historyList.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    isAsDonor = true;
+                }
+
             }
         });
-        return root;
+
+        return mBinding.getRoot();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Start listening for Firestore updates
+        if (mAdapterDonor != null) {
+            mAdapterDonor.startListening();
+        }
+        if (mAdapterConsumer != null) {
+            mAdapterConsumer.startListening();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAdapterDonor != null) {
+            mAdapterDonor.stopListening();
+        }
+        if (mAdapterConsumer != null) {
+            mAdapterConsumer.stopListening();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public void onHistorySelected(DocumentSnapshot history) {
+
     }
 }

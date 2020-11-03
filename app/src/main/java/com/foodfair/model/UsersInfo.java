@@ -1,27 +1,14 @@
 package com.foodfair.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.Timestamp;
 
 import java.util.List;
 import java.util.Map;
 
-public class UsersInfo {
-
-    public static final String FIELD_ALLERGY = "allergy";
-    public static final String FIELD_AS_CONSUMER = "as-consumer";
-    public static final String FIELD_AS_DONOR = "as-donor";
-    public static final String FIELD_BIO = "bio";
-    public static final String FIELD_BIRTHDAY = "birthday";
-    public static final String FIELD_EMAIL = "email";
-    public static final String FIELD_GENDER = "1";
-    public static final String FIELD_JOIN_DATE = "join-date";
-    public static final String FIELD_LAST_LOGIN = "last-login";
-    public static final String FIELD_LOCATION = "location";
-    public static final String FIELD_NAME = "name";
-    public static final String FIELD_PASSWORD_HASH = "password-hash";
-    public static final String FIELD_PREFERENCE = "preference";
-    public static final String FIELD_PROFILE_IMAGE = "profile-image";
-    public static final String FIELD_STATUS = "status";
+public class UsersInfo /*implements Parcelable*/ {
 
     private List<Long> allergy;
     private Map<String, Object> asConsumer;
@@ -158,4 +145,21 @@ public class UsersInfo {
     public void setStatus(Long status) {
         this.status = status;
     }
+//
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel parcel, int i) {
+//        parcel.writeString(bio);
+//        parcel.writeString(email);
+//        parcel.writeString(name);
+//        parcel.writeString(location);
+//        parcel.writeString(profileImage);
+//        parcel.writeLong(gender);
+//        parcel.writeLong(preference);
+//        parcel.writeLong(status);
+//    }
 }

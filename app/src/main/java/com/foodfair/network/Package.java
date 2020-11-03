@@ -3,8 +3,6 @@ package com.foodfair.network;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 
-import java.io.Serializable;
-
 public class Package {
     public int message_name;
     Package(int message_name){
@@ -15,7 +13,7 @@ public class Package {
     public static final int MESSAGE_NAME_BOOK_A_FOOD = 2;
 
     public TransmittedPackage buildToMessage(String to_id, String from_id){
-        return new TransmittedPackage(to_id,from_id,this);
+        return new TransmittedPackage(to_id,from_id,123,this);
     }
     public static Object buildFromMessage(String message, Class clazz){
         Gson g = new Gson();

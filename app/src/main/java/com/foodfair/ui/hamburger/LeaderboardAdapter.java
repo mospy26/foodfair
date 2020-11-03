@@ -1,5 +1,7 @@
 package com.foodfair.ui.hamburger;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,12 +9,15 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.foodfair.R;
 import com.foodfair.databinding.AdapterLeaderboardBinding;
 import com.foodfair.model.Leaderboard;
 import com.foodfair.model.Ranking;
 import com.foodfair.model.UsersInfo;
+import com.foodfair.ui.profiles.UserProfileActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -21,6 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -42,7 +48,8 @@ public class LeaderboardAdapter extends FirestoreAdapter<LeaderboardAdapter.View
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(AdapterLeaderboardBinding.inflate(
-                LayoutInflater.from(parent.getContext()), parent, false));
+                LayoutInflater.from(parent.getContext()), parent, false),
+                parent.getContext());
     }
 
     @Override
@@ -53,14 +60,15 @@ public class LeaderboardAdapter extends FirestoreAdapter<LeaderboardAdapter.View
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         private AdapterLeaderboardBinding binding;
-
+        private Context context;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
         }
 
-        public ViewHolder(AdapterLeaderboardBinding binding) {
+        public ViewHolder(AdapterLeaderboardBinding binding, Context context) {
             super(binding.getRoot());
             this.binding = binding;
+            this.context = context;
         }
 
         public void bind(final DocumentSnapshot snapshot,
@@ -73,8 +81,16 @@ public class LeaderboardAdapter extends FirestoreAdapter<LeaderboardAdapter.View
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     UsersInfo usersInfo = documentSnapshot.toObject(UsersInfo.class);
-                    binding.firstLine.setText(usersInfo.getName());
-                    binding.secondLine.setText(usersInfo.getBio());
+                    if(usersInfo != null){
+                        binding.leaderboardRank.setText(ranking.getPosition().toString());
+                        Picasso.get().load(usersInfo.getProfileImage())
+                                .into(binding.icon);
+                        binding.userName.setText(usersInfo.getName());
+                        binding.userBio.setText(usersInfo.getBio());
+                    } else {
+                        // TODO: Error messages
+                    }
+
                 }
             });
 
@@ -85,6 +101,9 @@ public class LeaderboardAdapter extends FirestoreAdapter<LeaderboardAdapter.View
                     if (listener != null) {
                         listener.onLeaderboardSelected(snapshot);
                     }
+                    Intent intent =  new Intent(context, UserProfileActivity.class);
+                    // TODO: get user id information and send before starting
+                    context.startActivity(intent);
                 }
             });
 

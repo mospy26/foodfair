@@ -1,57 +1,92 @@
 package com.foodfair;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.foodfair.model.FoodPosting;
+import com.foodfair.ui.home.HomeFragment;
+import com.foodfair.ui.profiles.UserProfileActivity;
+import com.foodfair.ui.qrscanner.QRScanner;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private FirebaseAuth firebaseAuth;
-    private RecyclerView mPostingList;
-    private FirebaseFirestore firebaseFirestore;
+    private SharedPreferences sharedPreferences;
 
-    @Override
+
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_home,
+                R.id.nav_user_profile, R.id.nav_history_of_items, R.id.nav_leaderboards,
+                R.id.nav_manage_food_postings, R.id.nav_settings, R.id.nav_sign_out)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if(item.getItemId() == R.id.nav_user_profile) {
+                    Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+                    startActivity(intent);
+                } else if(item.getItemId() == R.id.nav_qr_scanner) {
+                    Intent intent = new Intent(getApplicationContext(), QRScanner.class);
+                    // Could be startActivityForResult or something
+                    startActivity(intent);
+                } else {
+                    navController.navigate(item.getItemId());
+                    DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                    drawer.close();
+                }
+                return true;
+            }
+        });
 
     }
 
@@ -69,27 +104,15 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    private void queryFirestore()
-    {
-        Query query = firebaseFirestore.collection("fooditem-info");
-        FirestoreRecyclerOptions<FoodPosting> options  = new FirestoreRecyclerOptions.Builder<FoodPosting>().setQuery(query,FoodPosting.class).build();
-
-        FirestoreRecyclerAdapter adapter = new FirestoreRecyclerAdapter<FoodPosting,FoodPostingHolder>(options) {
-
-            @NonNull
-            @Override
-            public FoodPostingHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.foodposting,parent,false);
-                return new FoodPostingHolder(view);
-            }
-
-            @Override
-            protected void onBindViewHolder(@NonNull FoodPostingHolder holder, int position, @NonNull FoodPosting model) {
-              holder.foodTitle.setText(model.getName());
-              holder.foodDesc.setText(model.getDescription());
-
-            }
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
-
     }
+
+
 }

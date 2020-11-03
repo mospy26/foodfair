@@ -52,6 +52,7 @@ public class UiHandler extends Handler {
             case Package.MESSAGE_NAME_BOOK_A_FOOD:
                 TransmittedPackage tMWizDetail  = (TransmittedPackage) Package.buildFromMessage(jsonMessage, BookFood.class);
                 BookFood bookFood = (BookFood) tMWizDetail.package_content;
+                System.out.println("Got a new booked food.");
                 break;
             default:
                 break;
