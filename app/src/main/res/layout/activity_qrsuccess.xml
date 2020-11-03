@@ -10,7 +10,7 @@
         android:background="#e9e9e9">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/success_successHeaderContainer"
+            android:id="@+id/qrsuccess_successHeaderContainer"
             android:layout_width="match_parent"
             android:layout_height="170dp"
             android:background="#ad593b">
@@ -23,14 +23,14 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/success_iconImageView"
+                    android:id="@+id/qrsuccess_iconImageView"
                     android:layout_width="60dp"
                     android:layout_height="match_parent"
 
                     app:srcCompat="@drawable/success_icon" />
 
                 <TextView
-                    android:id="@+id/success_successText"
+                    android:id="@+id/qrsuccess_successText"
                     android:layout_width="wrap_content"
                     android:layout_height="100dp"
                     android:gravity="center"
@@ -44,10 +44,10 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/success_foodDescriptionContainer"
+            android:id="@+id/qrsuccess_foodDescriptionContainer"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:layout_below="@id/success_successHeaderContainer"
+            android:layout_below="@id/qrsuccess_successHeaderContainer"
             android:background="#ffffff">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -55,32 +55,32 @@
                 android:layout_height="100dp"
                 android:gravity="center_horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/success_foodImageView"
+                    android:id="@+id/qrsuccess_foodImageView"
                     android:layout_width="75dp"
                     android:layout_height="75dp"
                     android:layout_gravity="center"
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toLeftOf="@id/success_table"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/qrsuccess_table"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:shapeAppearanceOverlay="@style/roundedImageView"
                     app:srcCompat="@drawable/foodsample" />
 
                 <TableLayout
+                    android:id="@+id/qrsuccess_table"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:id="@+id/success_table"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/qrsuccess_foodImageView"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintLeft_toRightOf="@id/success_foodImageView"
-                    app:layout_constraintBottom_toBottomOf="parent">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <TableRow>
 
@@ -91,7 +91,7 @@
                             android:text="Receiver" />
 
                         <TextView
-                            android:id="@+id/success_consumerNameTextView"
+                            android:id="@+id/qrsuccess_consumerNameTextView"
                             android:gravity="right"
                             android:padding="3dip"
                             android:text="Thai Food Restaurant" />
@@ -106,7 +106,7 @@
                             android:text="Food" />
 
                         <TextView
-                            android:id="@+id/success_foodNameTextView"
+                            android:id="@+id/qrsuccess_foodNameTextView"
                             android:gravity="right"
                             android:padding="3dip"
                             android:text="Delicious pasta combo" />
@@ -118,28 +118,12 @@
                             android:layout_width="wrap_content"
                             android:background="@drawable/table_border"
                             android:padding="3dip"
-                            android:text="Location" />
-
-                        <TextView
-                            android:id="@+id/success_pickupLocationTextView"
-                            android:gravity="right"
-                            android:padding="3dip"
-                            android:text="1/102-108 Hay St, Haymarket NSW 2000"
+                            android:text="Received Time"
                             android:textSize="11sp" />
-                    </TableRow>
-
-                    <TableRow>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:background="@drawable/table_border"
-                            android:padding="3dip"
-                            android:textSize="11sp"
-                            android:text="Received Time" />
 
 
                         <TextView
-                            android:id="@+id/success_receivedTime"
+                            android:id="@+id/qrsuccess_receivedTime"
                             android:gravity="right"
                             android:padding="3dip"
                             android:text="1:30:22" />
@@ -152,10 +136,10 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/success_qrCodeDescriptionContainer"
+            android:id="@+id/qrsuccess_qrCodeDescriptionContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/success_foodDescriptionContainer"
+            android:layout_below="@id/qrsuccess_foodDescriptionContainer"
             android:layout_marginTop="20dp"
             android:background="#ffffff">
 
@@ -164,19 +148,19 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_below="@id/success_qrCodeDescriptionContainer"
+            android:layout_below="@id/qrsuccess_qrCodeDescriptionContainer"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="30dp"
             android:gravity="center">
 
             <Button
-                android:id="@+id/success_backButton"
+                android:id="@+id/qrsuccess_backButton"
                 android:layout_width="300dp"
                 android:layout_height="match_parent"
                 android:background="#8dac44"
                 android:text="Exit"
                 android:textAllCaps="false"
-                android:textSize="17sp"/>
+                android:textSize="17sp" />
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>

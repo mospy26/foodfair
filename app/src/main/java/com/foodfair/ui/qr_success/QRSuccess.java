@@ -3,6 +3,7 @@ package com.foodfair.ui.qr_success;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,8 +21,10 @@ import com.foodfair.utilities.Cache;
 import com.foodfair.utilities.CacheObject;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,7 +34,7 @@ public class QRSuccess extends AppCompatActivity {
     private TextView success_consumerNameTextView;
     private TextView success_receivedTime;
     private TextView success_foodNameTextView;
-    private TextView success_pickupLocationTextView;
+    private ShapeableImageView success_foodImageView;
 
     private QRSuccessViewModel qrSuccessViewModel;
 
@@ -48,15 +51,16 @@ public class QRSuccess extends AppCompatActivity {
     }
 
     private void initViews() {
-        success_consumerNameTextView = findViewById(R.id.success_consumerNameTextView);
-        success_receivedTime = findViewById(R.id.success_receivedTime);
-        success_foodNameTextView = findViewById(R.id.success_foodNameTextView);
-        success_pickupLocationTextView = findViewById(R.id.success_pickupLocationTextView);
+        success_consumerNameTextView = findViewById(R.id.qrsuccess_consumerNameTextView);
+        success_receivedTime = findViewById(R.id.qrsuccess_receivedTime);
+        success_foodNameTextView = findViewById(R.id.qrsuccess_foodNameTextView);
+        success_foodImageView = findViewById(R.id.qrsuccess_foodImageView);
     }
 
     private void addObservables() {
         qrSuccessViewModel.foodItemInfo.observe(this, foodItemInfo -> {
             success_foodNameTextView.setText(foodItemInfo.getName());
+            Picasso.get().load(foodItemInfo.getImageDescription().get(0)).into(success_foodImageView);
         });
 
         qrSuccessViewModel.consumerUserInfo.observe(this, consumerUserInfo -> {
