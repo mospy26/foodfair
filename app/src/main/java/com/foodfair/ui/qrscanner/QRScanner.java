@@ -168,10 +168,6 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
                             }
                         });
                         Log.d("Transaction", "DocumentSnapshot data: " + document.getData());
-
-                        cache.add(transactionId, transaction);
-                        cache.add(transaction.getFoodRef().getId(), foodRef);
-                        cache.add(transaction.getConsumer().getId(), consumer);
                     } else {
                         Log.d("Transaction", "No such document");
                         spawnNotExistsDialog();
@@ -198,6 +194,9 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         approveTransactionAndSave(transaction);
+                        cache.add(transactionId, transaction);
+                        cache.add(transaction.getFoodRef().getId(), foodRef);
+                        cache.add(transaction.getConsumer().getId(), consumer);
                         Intent i = new Intent(QRScanner.this, QRSuccess.class);
                         i.putExtra("transactionId", transactionId);
                         startActivity(i);

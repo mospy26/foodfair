@@ -8,10 +8,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.MutableLiveData;
 
 import com.foodfair.R;
 import com.foodfair.model.FoodItemInfo;
 import com.foodfair.model.FooditemTransaction;
+import com.foodfair.model.ReviewInfo;
 import com.foodfair.model.UsersInfo;
 import com.foodfair.ui.qrscanner.OnStateChangeListener;
 import com.foodfair.utilities.Cache;
@@ -21,34 +23,51 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class QRSuccess extends AppCompatActivity implements OnStateChangeListener {
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-    private FooditemTransaction transaction;
-    private UsersInfo donor;
-    private UsersInfo consumer;
-    private FoodItemInfo foodRef;
+public class QRSuccess extends AppCompatActivity {
 
-    private TextView success_receiverNameTextView;
+    private TextView success_consumerNameTextView;
     private TextView success_receivedTime;
     private TextView success_foodNameTextView;
     private TextView success_pickupLocationTextView;
-        
+
+    private QRSuccessViewModel qrSuccessViewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrsuccess);
+        qrSuccessViewModel = new QRSuccessViewModel();
         Bundle extras = getIntent().getExtras();
         String transactionId = (String) extras.get("transactionId");
         initViews();
+        addObservables();
         retrieveData(transactionId);
     }
 
     private void initViews() {
-        success_receiverNameTextView = findViewById(R.id.success_receiverNameTextView);
+        success_consumerNameTextView = findViewById(R.id.success_consumerNameTextView);
         success_receivedTime = findViewById(R.id.success_receivedTime);
         success_foodNameTextView = findViewById(R.id.success_foodNameTextView);
         success_pickupLocationTextView = findViewById(R.id.success_pickupLocationTextView);
+    }
+
+    private void addObservables() {
+        qrSuccessViewModel.foodItemInfo.observe(this, foodItemInfo -> {
+            success_foodNameTextView.setText(foodItemInfo.getName());
+        });
+
+        qrSuccessViewModel.consumerUserInfo.observe(this, consumerUserInfo -> {
+            success_consumerNameTextView.setText(consumerUserInfo.getName());
+        });
+
+        qrSuccessViewModel.foodItemTransaction.observe(this, fooditemTransaction -> {
+            SimpleDateFormat sfd = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            String consumedDate = sfd.format(fooditemTransaction.getFinishDate().toDate());
+            success_receivedTime.setText(consumedDate);
+        });
     }
 
     private void retrieveData(String transactionId) {
@@ -58,10 +77,9 @@ public class QRSuccess extends AppCompatActivity implements OnStateChangeListene
             fetchTransaction(transactionId);
         }
         else {
-            transaction = (FooditemTransaction) cache.get(transactionId).getData();
-            consumer = (UsersInfo) cache.get(transaction.getConsumer().getId()).getData();
-            foodRef = (FoodItemInfo) cache.get(transaction.getFoodRef().getId()).getData();
-            onStateChange(null);
+            qrSuccessViewModel.foodItemTransaction.setValue((FooditemTransaction) cache.get(transactionId).getData());
+            qrSuccessViewModel.consumerUserInfo.setValue((UsersInfo) cache.get(qrSuccessViewModel.foodItemTransaction.getValue().getConsumer().getId()).getData());
+            qrSuccessViewModel.foodItemInfo.setValue((FoodItemInfo) cache.get(qrSuccessViewModel.foodItemTransaction.getValue().getFoodRef().getId()).getData());
         }
     }
 
@@ -70,14 +88,13 @@ public class QRSuccess extends AppCompatActivity implements OnStateChangeListene
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
-                    transaction = document.toObject(FooditemTransaction.class);
-                    transaction.getDonor().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    qrSuccessViewModel.foodItemTransaction.setValue(document.toObject(FooditemTransaction.class));
+                    qrSuccessViewModel.foodItemTransaction.getValue().getDonor().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                donor = document.toObject(UsersInfo.class);
-                                onStateChange(null);
+                                qrSuccessViewModel.donorUserInfo.setValue(document.toObject(UsersInfo.class));
                                 Log.d("Transaction Donor", "DocumentSnapshot data: " + document.getData());
                             } else {
                                 Log.d("Transaction Donor", "No such document");
@@ -85,13 +102,12 @@ public class QRSuccess extends AppCompatActivity implements OnStateChangeListene
                         }
                     });
 
-                    transaction.getConsumer().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    qrSuccessViewModel.foodItemTransaction.getValue().getConsumer().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                consumer = document.toObject(UsersInfo.class);
-                                onStateChange(null);
+                                qrSuccessViewModel.consumerUserInfo.setValue(document.toObject(UsersInfo.class));
                                 Log.d("Transaction Consumer", "DocumentSnapshot data: " + document.getData());
                             } else {
                                 Log.d("Transaction Consumer", "No such document");
@@ -99,13 +115,12 @@ public class QRSuccess extends AppCompatActivity implements OnStateChangeListene
                         }
                     });
 
-                    transaction.getFoodRef().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    qrSuccessViewModel.foodItemTransaction.getValue().getFoodRef().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                foodRef = document.toObject(FoodItemInfo.class);
-                                onStateChange(null);
+                                qrSuccessViewModel.foodItemInfo.setValue(document.toObject(FoodItemInfo.class));
                                 Log.d("Transaction Food", "DocumentSnapshot data: " + document.getData());
                             } else {
                                 Log.d("Transaction Food", "No such document");
@@ -115,20 +130,6 @@ public class QRSuccess extends AppCompatActivity implements OnStateChangeListene
                 }
             }
         });
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-
-    }
-
-    @Override
-    public void onStateChange(Object object) {
-        if (this.foodRef != null && this.consumer != null && this.transaction != null) {
-            success_foodNameTextView.setText(foodRef.getName());
-            success_receiverNameTextView.setText(consumer.getName());
-            success_receivedTime.setText(transaction.getFinishDate().toString());
-        }
     }
 }
 

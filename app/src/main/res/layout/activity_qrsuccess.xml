@@ -34,7 +34,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="100dp"
                     android:gravity="center"
-                    android:text="Success"
+                    android:text="Food Donated!"
                     android:textSize="32sp"
                     android:textStyle="bold">
 
@@ -50,7 +50,7 @@
             android:layout_below="@id/success_successHeaderContainer"
             android:background="#ffffff">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:gravity="center_horizontal"
@@ -66,24 +66,32 @@
                     android:layout_gravity="center"
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/success_table"
                     app:shapeAppearanceOverlay="@style/roundedImageView"
                     app:srcCompat="@drawable/foodsample" />
 
                 <TableLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:stretchColumns="1">
+                    android:id="@+id/success_table"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/success_foodImageView"
+                    app:layout_constraintBottom_toBottomOf="parent">
 
                     <TableRow>
 
                         <TextView
-                            android:layout_width="80dp"
+                            android:layout_width="wrap_content"
                             android:background="@drawable/table_border"
                             android:padding="3dip"
                             android:text="Receiver" />
 
                         <TextView
-                            android:id="@+id/success_receiverNameTextView"
+                            android:id="@+id/success_consumerNameTextView"
                             android:gravity="right"
                             android:padding="3dip"
                             android:text="Thai Food Restaurant" />
@@ -92,7 +100,7 @@
                     <TableRow>
 
                         <TextView
-                            android:layout_width="80dp"
+                            android:layout_width="wrap_content"
                             android:background="@drawable/table_border"
                             android:padding="3dip"
                             android:text="Food" />
@@ -107,7 +115,7 @@
                     <TableRow>
 
                         <TextView
-                            android:layout_width="80dp"
+                            android:layout_width="wrap_content"
                             android:background="@drawable/table_border"
                             android:padding="3dip"
                             android:text="Location" />
@@ -123,11 +131,11 @@
                     <TableRow>
 
                         <TextView
-                            android:layout_width="80dp"
+                            android:layout_width="wrap_content"
                             android:background="@drawable/table_border"
                             android:padding="3dip"
                             android:textSize="11sp"
-                            android:text="Time to invalid" />
+                            android:text="Received Time" />
 
 
                         <TextView
@@ -139,7 +147,7 @@
 
                 </TableLayout>
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
