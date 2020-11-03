@@ -8,7 +8,7 @@
     <ImageView
         android:id="@+id/ivAddImage"
         android:layout_width="190dp"
-        android:layout_height="155dp"
+        android:layout_height="20dp"
         android:layout_marginStart="51dp"
         android:layout_marginTop="47dp"
         android:onClick="onAddPhotoClick"
@@ -48,11 +48,11 @@
             app:counterMaxLength="30"
             app:boxBackgroundColor="@color/design_default_color_surface">
 
-            <AutoCompleteTextView
-            android:id="@+id/tvFoodName"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etFoodName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
 
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
@@ -89,8 +89,8 @@
             app:boxBackgroundColor="@color/design_default_color_surface"
             >
 
-            <AutoCompleteTextView
-                android:id="@+id/tvType"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etType"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 />
@@ -128,8 +128,8 @@
             app:helperText="@string/allergen_helper"
             app:boxBackgroundColor="@color/design_default_color_surface">
 
-            <AutoCompleteTextView
-                android:id="@+id/tvAllergen"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etAllergen"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 />
@@ -206,8 +206,9 @@
             android:layout_marginEnd="32dp"
             app:boxBackgroundColor="@color/design_default_color_surface">
 
-            <AutoCompleteTextView
-                android:id="@+id/tvQuantity"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etQuantity"
+                android:inputType="number"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 />
@@ -253,7 +254,7 @@
 
             >
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etDescription"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

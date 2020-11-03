@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:background="#ad593b">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:gravity="center_horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/fooddetail_foodNameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+                    android:text="Baked Pasta"
+                    android:textSize="32sp"
+                    android:textStyle="bold">
+
+                </TextView>
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/fooddetail_foodImageView"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                app:shapeAppearanceOverlay="@style/roundedImageView"
+                app:srcCompat="@drawable/foodsample" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="#e9e9e9"
+                android:gravity="center">
+
+                <TableLayout
+                    android:layout_width="350dp"
+                    android:layout_height="match_parent"
+                    android:stretchColumns="1">
+
+                    <TableRow >
+
+                        <TextView
+                            android:layout_height="43dp"
+                            android:gravity="center"
+                            android:layout_width="120dp"
+                            android:background="@drawable/table_border"
+                            android:padding="3dip"
+                            android:text="Allergen" />
+
+                        <TextView
+                            android:id="@+id/fooddetail_foodallergyTextView"
+                            android:layout_height="match_parent"
+                            android:gravity="right|center_vertical"
+                            android:padding="3dip"
+                            android:textColor="@color/Red"
+                            android:text="milk, cheese, beef" />
+                    </TableRow>
+
+                    <TableRow>
+                        <TextView
+                            android:layout_height="43dp"
+                            android:gravity="center"
+                            android:layout_width="120dp"
+                            android:background="@drawable/table_border"
+                            android:padding="3dip"
+                            android:text="Date On Shelf" />
+
+                        <TextView
+                            android:id="@+id/fooddetail_foodOnDateTextView"
+                            android:layout_height="match_parent"
+                            android:gravity="right|center_vertical"
+                            android:padding="3dip"
+                            android:text="2020-09-10 18:33:20" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="120dp"
+                            android:layout_height="43dp"
+                            android:gravity="center"
+                            android:background="@drawable/table_border"
+                            android:padding="3dip"
+                            android:text="Time to expire" />
+
+                        <TextView
+                            android:id="@+id/fooddetail_foodExpireDateTextView"
+                            android:layout_height="match_parent"
+                            android:gravity="right|center_vertical"
+                            android:padding="3dip"
+                            android:text="2020-09-10 18:33:20" />
+                    </TableRow>
+
+                    <TableRow>
+                        <TextView
+                            android:layout_width="120dp"
+                            android:layout_height="43dp"
+                            android:gravity="center"
+                            android:background="@drawable/table_border"
+                            android:padding="3dip"
+                            android:text="Quantity left" />
+
+                        <TextView
+                            android:id="@+id/fooddetail_foodQuantityTextView"
+                            android:layout_height="match_parent"
+                            android:gravity="right|center_vertical"
+                            android:padding="3dip"
+                            android:text="3" />
+                    </TableRow>
+                    <TableRow>
+                        <TextView
+                            android:layout_width="120dp"
+                            android:layout_height="43dp"
+                            android:gravity="center"
+                            android:background="@drawable/table_border"
+                            android:padding="3dip"
+                            android:text="Donor" />
+
+                        <TextView
+                            android:id="@+id/fooddetail_donorNameTextView"
+                            android:layout_height="match_parent"
+                            android:gravity="right|center_vertical"
+                            android:padding="3dip"
+                            android:text="Piccacio Restaurant"
+                            android:textSize="11sp" />
+                    </TableRow>
+                    <TableRow>
+                        <TextView
+                            android:layout_width="120dp"
+                            android:layout_height="43dp"
+                            android:gravity="center"
+                            android:background="@drawable/table_border"
+                            android:padding="3dip"
+                            android:text="Address" />
+                        <TextView
+                            android:id="@+id/fooddetail_donorAddressTextView"
+                            android:layout_height="match_parent"
+                            android:gravity="right|center_vertical"
+                            android:padding="3dip"
+                            android:text="1/102-108 Hay St, Haymarket NSW 2000"
+                            android:textSize="11sp" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="120dp"
+                            android:layout_height="43dp"
+                            android:gravity="center"
+                            android:background="@drawable/table_border"
+                            android:padding="3dip"
+                            android:text="More Information" />
+
+                        <TextView
+                            android:id="@+id/fooddetail_foodTextDescriptionTextView"
+                            android:layout_height="match_parent"
+                            android:layout_width="200dp"
+                            android:gravity="right|center_vertical"
+                            android:ellipsize="none"
+                            android:padding="3dip"
+                            android:text="This food was made this morning. It should be consumed today." />
+                    </TableRow>
+                </TableLayout>
+
+            </LinearLayout>
+            <Button
+                android:layout_marginTop="10dp"
+                android:layout_width="200dp"
+                android:layout_height="55dp"
+                android:shadowColor="@color/Orange"
+                android:text="Book this food"
+                android:backgroundTint="#ad593b"
+                >
+            </Button>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</ScrollView>

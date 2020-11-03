@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 
 import com.foodfair.R;
+import com.foodfair.model.Badge;
 import com.foodfair.model.FoodItemInfo;
 import com.foodfair.model.UsersInfo;
 import com.foodfair.model.ReviewInfo;
@@ -28,6 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -40,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -102,7 +105,12 @@ public class UserProfileActivity extends AppCompatActivity {
         setContentView(R.layout.user_profile);
         userProfileViewModel = new UserProfileViewModel();
         InitUI();
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//        userId = user.getUid();
         userId = "yXnhEl9OBqgKqHLAPMPV";
+        userProfileViewModel.id.setValue(userId);
+        userProfileViewModel.asConsumerTotalBadgeCount.setValue(aConst.CONSUMER_BADGES.size());
+        userProfileViewModel.asDonorTotalBadgeCount.setValue(aConst.DONOR_BADGES.size());
         viewModelObserverSetup();
     }
 
@@ -141,7 +149,7 @@ public class UserProfileActivity extends AppCompatActivity {
             userProfileViewModel.asDonorTotalReviewedCount.setValue(itemsReviewed.size());
 
             ArrayList<Number> donorBadges =
-                    (ArrayList<Number>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_BADGES));
+                    (ArrayList<Number>) asDonor.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_BADGES));
             userProfileViewModel.asDonorGotBadgeCount.setValue(donorBadges.size());
             userProfileViewModel.asDonorBadges.setValue(donorBadges);
 
@@ -306,7 +314,7 @@ public class UserProfileActivity extends AppCompatActivity {
         });
 
         userProfileViewModel.asConsumerBadges.observe(this, asConsumerBadges -> {
-            createBadgeViews(asConsumerBadges, usersConsumerBadgeTableLayout);
+            createBadgeViews(asConsumerBadges, usersConsumerBadgeTableLayout,true);
         });
 
         // As Donor
@@ -392,7 +400,7 @@ public class UserProfileActivity extends AppCompatActivity {
         });
 
         userProfileViewModel.asDonorBadges.observe(this, asDonorBadges -> {
-            createBadgeViews(asDonorBadges, usersDonorBadgeTableLayout);
+            createBadgeViews(asDonorBadges, usersDonorBadgeTableLayout,false);
         });
     }
 
@@ -402,19 +410,25 @@ public class UserProfileActivity extends AppCompatActivity {
         firebaseRegisterAndLogin();
     }
 
-    private void createBadgeViews(ArrayList<Number> badges, TableLayout tableLayout) {
+    private void createBadgeViews(ArrayList<Number> badges, TableLayout tableLayout, boolean consumer) {
+        HashMap<Long, Badge> badgesHashMap = aConst.DONOR_BADGES;
+        if(consumer){
+            badgesHashMap = aConst.CONSUMER_BADGES;
+        }
         View testView = LayoutInflater.from(this).inflate(R.layout.badg_row, null);
         int childCount = ((ViewGroup) testView).getChildCount();
         int count = badges.size();
         int single = count % childCount;
         int lines = count / childCount;
+        Iterator<Number> iterator = badges.iterator();
         for (int i = 0; i < lines; ++i) {
             View view = LayoutInflater.from(this).inflate(R.layout.badg_row,
                     tableLayout, false);
             tableLayout.addView(view);
             for (int index = 0; index < ((ViewGroup) view).getChildCount(); index++) {
                 CircleImageView imageView = (CircleImageView) ((ViewGroup) view).getChildAt(index);
-                imageView.setImageResource(R.drawable.sample_profile_image);
+                Number num = iterator.next();
+                imageView.setImageResource(badgesHashMap.get(num).resourceId);
             }
         }
 
@@ -428,7 +442,8 @@ public class UserProfileActivity extends AppCompatActivity {
             }
             for (int index = 0; index < single; index++) {
                 CircleImageView imageView = (CircleImageView) ((ViewGroup) view).getChildAt(index);
-                imageView.setImageResource(R.drawable.sample_profile_image);
+                Number num = iterator.next();
+                imageView.setImageResource(badgesHashMap.get(num).resourceId);
                 imageView.setVisibility(VISIBLE);
             }
         }
