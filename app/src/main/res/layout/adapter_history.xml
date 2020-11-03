@@ -111,6 +111,7 @@
                 android:layout_toRightOf="@id/food_photo"
                 android:layout_marginBottom="4dp"
                 android:max="5"
+                android:isIndicator="false"
                 android:rating="3.2" />
 
         </RelativeLayout>

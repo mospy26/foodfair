@@ -1,5 +1,6 @@
 package com.foodfair.ui.foodpages;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -50,6 +51,11 @@ public class FoodDetailActivity extends AppCompatActivity {
 //        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 //        userId = user.getUid();
         foodId = "8g51f4M0j881nqW0v59o";
+        Intent intent = getIntent();
+        String idFromIntent = intent.getStringExtra("foodId");
+        if(idFromIntent != null && !idFromIntent.isEmpty()){
+            foodId = idFromIntent;
+        }
         viewModelObserverSetup();
     }
     @Override

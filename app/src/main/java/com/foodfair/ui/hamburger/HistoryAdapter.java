@@ -18,6 +18,7 @@ import com.foodfair.model.FoodItemInfo;
 import com.foodfair.model.FooditemTransaction;
 import com.foodfair.model.ReviewInfo;
 import com.foodfair.model.UsersInfo;
+import com.foodfair.ui.foodpages.FoodDetailActivity;
 import com.foodfair.ui.profiles.UserProfileActivity;
 import com.foodfair.utilities.Utility;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -75,12 +76,15 @@ public class HistoryAdapter extends FirestoreAdapter<HistoryAdapter.ViewHolder> 
         public ViewHolder(AdapterHistoryBinding binding, Context context, boolean isAsDonor){
             super(binding.getRoot());
             this.binding = binding;
+            this.context = context;
             if(isAsDonor){
                 binding.reviewLayout.setVisibility(View.GONE);
                 binding.toFrom.setText("To");
+                binding.restaurantItemRating.setIsIndicator(true);
             } else {
                 binding.reviewLayout.setVisibility(View.VISIBLE);
                 binding.toFrom.setText("From");
+                binding.restaurantItemRating.setIsIndicator(false);
             }
             binding.toFromPhoto.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -115,6 +119,14 @@ public class HistoryAdapter extends FirestoreAdapter<HistoryAdapter.ViewHolder> 
                             binding.quantity.setText("Quantity: " + foodItemInfo.getCount());
                             binding.donationDate.setText(
                                     Utility.timeStampToDateString(transaction.getFinishDate()));
+                            binding.foodPhoto.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(context, FoodDetailActivity.class);
+                                    intent.putExtra("foodId", foodRef.getId());
+                                    context.startActivity(intent);
+                                }
+                            });
                         } else {
                             // TODO: Error messages or something
                         }
@@ -151,6 +163,7 @@ public class HistoryAdapter extends FirestoreAdapter<HistoryAdapter.ViewHolder> 
                         reviewInfo.setToUser(transaction.getDonor());
                         reviewInfo.setTransactionRef(snapshot.getReference());
                         reviewInfo.setTextReview(binding.reviewText.getText().toString());
+                        reviewInfo.setRating(new Double(binding.restaurantItemRating.getRating()));
                         binding.reviewText.setText("");
 
 
@@ -170,14 +183,7 @@ public class HistoryAdapter extends FirestoreAdapter<HistoryAdapter.ViewHolder> 
 
                     }
                 });
-
-
-                binding.restaurantItemRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-                    @Override
-                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                        Log.d(TAG,"Rating bar: " + rating);
-                    }
-                });
+                ;
             } else {
                 binding.cv.setVisibility(View.GONE);
             }
