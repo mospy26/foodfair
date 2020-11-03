@@ -47,12 +47,14 @@
                         android:background="@drawable/background_setting_menu_border">
 
                         <ImageView
+                            android:id="@+id/profile_image"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:src="@drawable/crying_cat"
                             android:layout_weight="1"/>
 
                         <TextView
+                            android:id="@+id/profile_info"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
@@ -103,9 +105,9 @@
                             android:text="@string/setting_all"
                             android:textColor="@android:color/black"
                             android:layout_marginVertical="8dp"
-                            android:textAlignment="textEnd"
-                            android:ellipsize="end"
-                            android:singleLine="true"/>
+                            android:textAlignment="textEnd"/>
+                            <!--android:ellipsize="end"
+                            android:singleLine="true"/>-->
 
                         <ImageView
                             android:layout_width="0dp"

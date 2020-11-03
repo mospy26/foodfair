@@ -4,8 +4,8 @@ import com.google.firebase.firestore.DocumentReference;
 
 public class Ranking {
 
-    public static final String FIELD_AVERAGE_RATING = "average-rating";
-    public static final String FIELD_DONATION_COUNT = "donation-count";
+    public static final String FIELD_AVERAGE_RATING = "averageRating";
+    public static final String FIELD_DONATION_COUNT = "donationCount";
     public static final String FIELD_DONOR = "donor";
     public static final String FIELD_POSITION = "position";
 

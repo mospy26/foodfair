@@ -47,7 +47,7 @@ public class LeaderboardFragment extends Fragment implements
         mQueryMonthly = mFirestore.collection(("leaderboard"))
                 .document("period 1")
                 .collection("ranking")
-                .orderBy("position", Query.Direction.DESCENDING)
+                .orderBy("position", Query.Direction.ASCENDING)
                 .limit(10);
 
         mAdapterMonthly = new LeaderboardAdapter(mQueryMonthly, this){

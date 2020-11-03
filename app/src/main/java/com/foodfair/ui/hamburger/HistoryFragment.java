@@ -64,6 +64,7 @@ public class HistoryFragment extends Fragment implements
 
         mAdapterConsumer = new HistoryAdapter(mQueryConsumer, this, false);
 
+        mBinding.historyList.setHasFixedSize(true);
         mBinding.historyList.setAdapter(mAdapterDonor);
         mBinding.historyList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -71,7 +72,7 @@ public class HistoryFragment extends Fragment implements
             @Override
             public void onClick(View v) {
                 if(isAsDonor){
-                    mBinding.textHistory.setText("Consumer History");
+                    mBinding.textHistory.setText("Consumption History");
                     mBinding.historyList.setAdapter(mAdapterConsumer);
                     mBinding.historyList.setLayoutManager(new LinearLayoutManager(getActivity()));
                     isAsDonor = false;

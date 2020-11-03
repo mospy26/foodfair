@@ -93,6 +93,7 @@ public class Utility {
             format = "dd-MMM-yyyy";
         }
         SimpleDateFormat sfd = new SimpleDateFormat(format);
+        if(timestamp == null) return null;
         return sfd.format(timestamp.toDate());
     }
 
