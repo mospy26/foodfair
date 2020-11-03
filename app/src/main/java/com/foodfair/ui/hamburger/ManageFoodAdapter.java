@@ -9,8 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.foodfair.databinding.AdapterBookingBinding;
-import com.foodfair.databinding.AdapterHistoryBinding;
-import com.foodfair.databinding.FragmentManageFoodBinding;
 import com.foodfair.model.FoodItemInfo;
 import com.foodfair.model.FooditemTransaction;
 import com.foodfair.model.UsersInfo;
@@ -89,7 +87,7 @@ public class ManageFoodAdapter extends FirestoreAdapter<ManageFoodAdapter.ViewHo
             Resources resources = itemView.getResources();
 
             // Only list status = booked
-            if(transaction.getStatus() == 1L){
+            if(transaction.getStatus() == 0){
                 binding.cvFood.setVisibility(View.VISIBLE);
                 binding.cvUser.setVisibility(View.VISIBLE);
 
@@ -122,7 +120,6 @@ public class ManageFoodAdapter extends FirestoreAdapter<ManageFoodAdapter.ViewHo
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         FoodItemInfo foodItemInfo = documentSnapshot.toObject(FoodItemInfo.class);
-                        binding.foodNameUser.setText(foodItemInfo.getName());
                         Picasso.get().load(foodItemInfo.getImageDescription().get(0))
                                 .into(binding.foodPhoto);
                         binding.foodNameFood.setText(foodItemInfo.getName());

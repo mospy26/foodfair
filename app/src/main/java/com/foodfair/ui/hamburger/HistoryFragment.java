@@ -64,6 +64,7 @@ public class HistoryFragment extends Fragment implements
 
         mAdapterConsumer = new HistoryAdapter(mQueryConsumer, this, false);
 
+        mBinding.historyList.setHasFixedSize(true);
         mBinding.historyList.setAdapter(mAdapterDonor);
         mBinding.historyList.setLayoutManager(new LinearLayoutManager(getActivity()));
 

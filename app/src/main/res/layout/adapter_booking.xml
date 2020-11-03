@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
     android:padding="16dp" android:orientation="vertical"
     >
 
@@ -18,32 +18,16 @@
                 android:layout_height="40dp"
                 android:id="@+id/profile_image"
                 android:layout_margin="8dp"
-                android:layout_weight="0.2"
+                android:layout_weight="0.1"
                 android:scaleType="fitXY"/>
 
-            <LinearLayout
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.6"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:id="@+id/user_request_info"
-                    android:layout_weight="0.5"
-                    android:gravity="center_vertical"
-                    android:text="Loading information"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:id="@+id/food_name_user"
-                    android:layout_weight="0.5"
-                    android:gravity="center_vertical"
-                    android:text="Loading information"/>
-
-            </LinearLayout>
+                android:id="@+id/user_request_info"
+                android:layout_weight="0.5"
+                android:gravity="center_vertical"
+                android:text="Loading information"/>
 
             <LinearLayout
                 android:layout_width="0dp"

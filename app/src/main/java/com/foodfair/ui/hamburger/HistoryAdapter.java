@@ -3,24 +3,35 @@ package com.foodfair.ui.hamburger;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.foodfair.R;
 import com.foodfair.databinding.AdapterHistoryBinding;
 import com.foodfair.model.FoodItemInfo;
 import com.foodfair.model.FooditemTransaction;
+import com.foodfair.model.ReviewInfo;
 import com.foodfair.model.UsersInfo;
 import com.foodfair.ui.profiles.UserProfileActivity;
 import com.foodfair.utilities.Utility;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.squareup.picasso.Picasso;
+
+import java.util.Date;
 
 public class HistoryAdapter extends FirestoreAdapter<HistoryAdapter.ViewHolder> {
 
@@ -59,6 +70,7 @@ public class HistoryAdapter extends FirestoreAdapter<HistoryAdapter.ViewHolder> 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
         }
+        private FirebaseFirestore mFirestore;
 
         public ViewHolder(AdapterHistoryBinding binding, Context context, boolean isAsDonor){
             super(binding.getRoot());
@@ -77,6 +89,9 @@ public class HistoryAdapter extends FirestoreAdapter<HistoryAdapter.ViewHolder> 
                     context.startActivity(intent);
                 }
             });
+            // Firestore
+            mFirestore = FirebaseFirestore.getInstance();
+
         }
 
         public void bind(DocumentSnapshot snapshot, OnHistorySelectedListener listener,
@@ -85,7 +100,7 @@ public class HistoryAdapter extends FirestoreAdapter<HistoryAdapter.ViewHolder> 
             Resources resources = itemView.getResources();
 
             // Only list status = success
-            if(transaction.getStatus() == 3){
+            if(transaction.getStatus() == 2){
                 binding.cv.setVisibility(View.VISIBLE);
                 DocumentReference foodRef = transaction.getFoodRef();
                 foodRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -122,6 +137,45 @@ public class HistoryAdapter extends FirestoreAdapter<HistoryAdapter.ViewHolder> 
                                     .load(usersInfo.getProfileImage())
                                     .into(binding.toFromPhoto);
                         }
+                    }
+                });
+
+                binding.reviewSubmitBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // submit new review
+                        ReviewInfo reviewInfo = new ReviewInfo();
+                        reviewInfo.setDate(new Timestamp(new Date()));
+                        reviewInfo.setFoodRef(transaction.getFoodRef());
+                        reviewInfo.setFromUser(transaction.getConsumer());
+                        reviewInfo.setToUser(transaction.getDonor());
+                        reviewInfo.setTransactionRef(snapshot.getReference());
+                        reviewInfo.setTextReview(binding.reviewText.getText().toString());
+                        binding.reviewText.setText("");
+
+
+                        if(transaction.getCdReview() != null){
+                            transaction.getCdReview().set(reviewInfo);
+                        } else {
+                            CollectionReference reviewCollection = mFirestore.collection("reviewInfo");
+                            String id = reviewCollection.document().getId();
+                            reviewCollection.document(id).set(reviewInfo).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    // update review reference to transaction collection
+                                    snapshot.getReference().update("cdReview", reviewCollection.document(id));
+                                }
+                            });
+                        }
+
+                    }
+                });
+
+
+                binding.restaurantItemRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                    @Override
+                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                        Log.d(TAG,"Rating bar: " + rating);
                     }
                 });
             } else {
