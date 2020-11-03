@@ -25,6 +25,7 @@ import com.foodfair.model.FooditemTransaction;
 import com.foodfair.model.User;
 import com.foodfair.model.UsersInfo;
 import com.foodfair.ui.qr_success.QRSuccess;
+import com.foodfair.utilities.Cache;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -50,6 +51,7 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
     private UsersInfo consumer;
     private FoodItemInfo foodRef;
     private String transactionId;
+    private Cache cache;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,8 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
         } else {
             init();
         }
+
+        cache = Cache.getInstance(getApplicationContext());
     }
 
     @Override
@@ -162,6 +166,10 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
                             }
                         });
                         Log.d("Transaction", "DocumentSnapshot data: " + document.getData());
+
+                        cache.add(transactionId, transaction);
+                        cache.add(transaction.getFoodRef().getId(), foodRef);
+                        cache.add(transaction.getConsumer().getId(), consumer);
                     } else {
                         Log.d("Transaction", "No such document");
                         spawnNotExistsDialog();
@@ -189,6 +197,7 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
                     public void onClick(DialogInterface dialog, int which) {
                         approveTransactionAndSave(transaction);
                         Intent i = new Intent(QRScanner.this, QRSuccess.class);
+                        i.putExtra("transactionId", transactionId);
                         startActivity(i);
                     }
                 })

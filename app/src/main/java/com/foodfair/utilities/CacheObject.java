@@ -1,11 +1,12 @@
 package com.foodfair.utilities;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class CacheObject {
+public class CacheObject implements Serializable {
     private Object data;
     private Date date;
-    private long ttl;
+    private int ttl;
 
 
     public Object getData() {
@@ -24,11 +25,11 @@ public class CacheObject {
         this.date = date;
     }
 
-    public long getTtl() {
+    public int getTtl() {
         return ttl;
     }
 
-    public void setTtl(long ttl) {
+    public void setTtl(int ttl) {
         this.ttl = ttl;
     }
 }
