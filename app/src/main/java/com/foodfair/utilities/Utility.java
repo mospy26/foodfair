@@ -11,8 +11,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Utility {
     /**
@@ -96,5 +98,38 @@ public class Utility {
         if(timestamp == null) return null;
         return sfd.format(timestamp.toDate());
     }
+
+    /**
+     *  get current time in a string format
+     */
+
+    public static String getCurrentTimeStr() { return getCurrentTimeStr(null); }
+
+    public static String getCurrentTimeStr(String pattern) {
+        if(pattern == null || pattern.isEmpty()){
+            pattern = "yyyyMMdd_HHmmss";
+        }
+        return new SimpleDateFormat(pattern, Locale.getDefault()).format(new Date());
+    }
+
+
+    /**
+     *  Convert the dateTimeString into timestamp
+     */
+    public static Timestamp parseDateTime(String dateTimeStr, String pattern) {
+
+        SimpleDateFormat inputFormat = new SimpleDateFormat(pattern);
+        Date d = null;
+        try {
+            //convert string to date
+            d = inputFormat.parse(dateTimeStr);
+        } catch (ParseException e) {
+            System.out.println("Date Format Not Supported");
+            e.printStackTrace();
+        }
+        return new Timestamp(d);
+
+    }
+
 
 }

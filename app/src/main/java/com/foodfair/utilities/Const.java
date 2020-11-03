@@ -56,6 +56,9 @@ public class Const {
         put("Cancelled", 1L);
         put("Success", 2L);
     }};
+
+    public final Long ALIVE_RECORD = 7200L;
+    public final String DATE_TIME_PATTERN = "yyyyMMdd_HHmmss";
     public static Const getInstance(){
         return instance;
     }

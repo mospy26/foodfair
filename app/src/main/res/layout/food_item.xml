@@ -197,6 +197,7 @@
                 android:shadowColor="@color/Orange"
                 android:text="Book this food"
                 android:backgroundTint="#ad593b"
+                android:onClick="onBookClick"
                 >
             </Button>
         </LinearLayout>
