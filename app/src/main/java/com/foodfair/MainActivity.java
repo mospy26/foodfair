@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private FirebaseAuth firebaseAuth;
     private SharedPreferences sharedPreferences;
-    private Cache cache = Cache.getInstance();
 
 
         @Override
