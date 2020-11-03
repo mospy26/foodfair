@@ -6,7 +6,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class FoodPosting implements Serializable {
+@Deprecated
+public class FoodPosting {
 
     public Object[] postedBy = new Object[1];
     public List<User> requestedBy;

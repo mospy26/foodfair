@@ -25,10 +25,12 @@ import com.foodfair.model.FooditemTransaction;
 import com.foodfair.model.User;
 import com.foodfair.model.UsersInfo;
 import com.foodfair.ui.qr_success.QRSuccess;
+import com.foodfair.utilities.Cache;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -37,6 +39,7 @@ import com.google.gson.Gson;
 import com.google.zxing.Result;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Adopted from https://github.com/yuriy-budiyev/code-scanner
@@ -50,6 +53,7 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
     private UsersInfo consumer;
     private FoodItemInfo foodRef;
     private String transactionId;
+    private Cache cache;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,8 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
         } else {
             init();
         }
+
+        cache = Cache.getInstance(getApplicationContext());
     }
 
     @Override
@@ -188,7 +194,11 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         approveTransactionAndSave(transaction);
+                        cache.add(transactionId, transaction);
+                        cache.add(transaction.getFoodRef().getId(), foodRef);
+                        cache.add(transaction.getConsumer().getId(), consumer);
                         Intent i = new Intent(QRScanner.this, QRSuccess.class);
+                        i.putExtra("transactionId", transactionId);
                         startActivity(i);
                     }
                 })
@@ -241,7 +251,22 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
     public void approveTransactionAndSave(FooditemTransaction transaction) {
 
         CollectionReference transactions = FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_TRANSACTION));
+        transaction.setFinishDate(Timestamp.now());
         transactions.document(this.transactionId).update("status", 2) // TODO replace with SUCCESS status
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Transaction update", "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("Transaction update", "Error writing document", e);
+                    }
+                });
+
+        transactions.document(this.transactionId).update("finishDate", new Date(System.currentTimeMillis())) // TODO replace with SUCCESS status
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

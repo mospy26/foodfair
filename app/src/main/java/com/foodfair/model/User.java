@@ -6,6 +6,7 @@ import android.location.Location;
 import java.io.Serializable;
 import java.util.List;
 
+@Deprecated
 public class User implements Serializable {
 
 

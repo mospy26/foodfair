@@ -5,7 +5,8 @@ import com.google.firebase.firestore.DocumentReference;
 
 import java.io.Serializable;
 
-public class FoodRecieved implements Serializable {
+@Deprecated
+public class FoodRecieved {
     private DocumentReference receiver;
     private Timestamp receivedDate;
     private DocumentReference foodRef;
