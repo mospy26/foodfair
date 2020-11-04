@@ -28,4 +28,20 @@
         <item name="android:background">@color/black_overlay</item>
     </style>
 
+    <style name="TableLeftCell">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">43dp</item>
+        <item name="android:background">@drawable/table_border</item>
+        <item name="android:padding">3dip</item>
+        <item name="android:gravity">center</item>
+        <item name="android:ellipsize">none</item>
+    </style>
+
+    <style name="TableRightCell">
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:padding">3dip</item>
+        <item name="android:gravity">right|center_vertical</item>
+        <item name="android:ellipsize">none</item>
+    </style>
 </resources>
