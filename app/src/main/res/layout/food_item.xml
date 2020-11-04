@@ -117,6 +117,7 @@
 
                         <TextView
                             style="@style/TableRightCell"
+                            android:id="@+id/fooddetail_donorNameTextView"
                             android:text="Piccacio Restaurant"
                             />
                     </TableRow>
