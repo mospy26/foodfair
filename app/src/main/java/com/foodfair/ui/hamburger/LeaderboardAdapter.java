@@ -19,6 +19,8 @@ import com.foodfair.model.Ranking;
 import com.foodfair.model.UsersInfo;
 import com.foodfair.ui.profiles.UserProfileActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -102,7 +104,10 @@ public class LeaderboardAdapter extends FirestoreAdapter<LeaderboardAdapter.View
                         listener.onLeaderboardSelected(snapshot);
                     }
                     Intent intent =  new Intent(context, UserProfileActivity.class);
-                    // TODO: get user id information and send before starting
+                    // get user id information and send before starting
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    String userId = user.getUid();
+                    intent.putExtra("userId", userId);
                     context.startActivity(intent);
                 }
             });

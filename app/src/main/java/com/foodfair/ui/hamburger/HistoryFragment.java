@@ -13,6 +13,8 @@ import com.foodfair.R;
 import com.foodfair.databinding.FragmentHistoryBinding;
 import com.foodfair.model.FooditemTransaction;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -45,8 +47,10 @@ public class HistoryFragment extends Fragment implements
         // Firestore
         mFirestore = FirebaseFirestore.getInstance();
 
-        // TODO: Change to legit user id
-        String userId = "yXnhEl9OBqgKqHLAPMPV";
+        // Change to legit user id
+        // String userId = "yXnhEl9OBqgKqHLAPMPV";
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = user.getUid();
 
         DocumentReference userCriteria = mFirestore.collection(
                 getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO))

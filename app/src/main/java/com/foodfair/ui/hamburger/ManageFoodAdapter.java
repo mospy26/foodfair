@@ -12,9 +12,11 @@ import com.foodfair.databinding.AdapterBookingBinding;
 import com.foodfair.model.FoodItemInfo;
 import com.foodfair.model.FooditemTransaction;
 import com.foodfair.model.UsersInfo;
+import com.foodfair.utilities.Const;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.squareup.picasso.Picasso;
 
@@ -49,6 +51,7 @@ public class ManageFoodAdapter extends FirestoreAdapter<ManageFoodAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private AdapterBookingBinding binding;
+        private FirebaseFirestore mFirestore;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -66,19 +69,7 @@ public class ManageFoodAdapter extends FirestoreAdapter<ManageFoodAdapter.ViewHo
                 binding.confirmText.setVisibility(View.VISIBLE);
             }
 
-            binding.bookingConfirmBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // TODO: Update firebase - transaction success
-                }
-            });
-
-            binding.bookingDeclineBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // TODO: Update firebase - remove transaction
-                }
-            });
+            mFirestore = FirebaseFirestore.getInstance();
         }
 
         public void bind(DocumentSnapshot snapshot, OnManageFoodSelectedListener listener,
@@ -124,6 +115,24 @@ public class ManageFoodAdapter extends FirestoreAdapter<ManageFoodAdapter.ViewHo
                                 .into(binding.foodPhoto);
                         binding.foodNameFood.setText(foodItemInfo.getName());
                         binding.quantity.setText("Quantity: " + foodItemInfo.getCount());
+                    }
+                });
+
+                binding.bookingConfirmBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Update firebase - transaction success
+                        snapshot.getReference().update(FooditemTransaction.FIELD_STATUS,
+                                Const.getInstance().TRANSACTION_STATUS.get("Success"));
+                    }
+                });
+
+                binding.bookingDeclineBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Update firebase - remove transaction
+                        snapshot.getReference().update(FooditemTransaction.FIELD_STATUS,
+                                Const.getInstance().TRANSACTION_STATUS.get("Cancelled"));
                     }
                 });
 
