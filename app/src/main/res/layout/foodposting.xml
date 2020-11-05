@@ -8,7 +8,7 @@
     android:layout_margin="20dp"
     android:elevation="300dp"
     android:focusableInTouchMode="true"
-    app:cardBackgroundColor="#F0A868"
+    app:cardBackgroundColor="#FFE8C2"
     android:background="?android:attr/selectableItemBackground"
     app:cardCornerRadius="5dp"
     android:foreground="?android:attr/selectableItemBackground"
