@@ -134,7 +134,7 @@ public class BookSuccessActivity extends AppCompatActivity {
         bookSuccessViewModel.mDeadlineTimeStampToPickup.setValue(fooditemTransaction.getAliveRecord());
         bookSuccessViewModel.mQRCodeContent.setValue(transactionId);
         bookSuccessViewModel.mTransactionStartDate.setValue(fooditemTransaction.getOpenDate());
-        bookSuccessViewModel.mTransactionLiveSeconds.setValue(fooditemTransaction.getAliveRecord().intValue());
+        bookSuccessViewModel.mTransactionLiveSeconds.setValue(fooditemTransaction.getAliveRecord().longValue());
         bookSuccessViewModel.mDeadlineTimeStampToPickup.setValue(fooditemTransaction.getOpenDate().toDate().getTime()/1000 + fooditemTransaction.getAliveRecord().intValue());
 
         DocumentReference donorRef = fooditemTransaction.getDonor();

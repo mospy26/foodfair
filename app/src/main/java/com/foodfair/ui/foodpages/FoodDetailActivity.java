@@ -2,9 +2,12 @@ package com.foodfair.ui.foodpages;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,9 +19,12 @@ import com.foodfair.model.FoodItemInfo;
 import com.foodfair.model.FooditemTransaction;
 import com.foodfair.model.ReviewInfo;
 import com.foodfair.model.UsersInfo;
+import com.foodfair.ui.book_success.BookSuccessActivity;
+import com.foodfair.ui.book_success.BookSuccessViewModel;
 import com.foodfair.ui.profiles.UserProfileViewModel;
 import com.foodfair.utilities.Const;
 import com.foodfair.utilities.Utility;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -39,6 +45,7 @@ import java.util.HashMap;
 public class FoodDetailActivity extends AppCompatActivity {
 
 
+    private final int BOOK_SUCCESS_REQ_CODE = 1121;
     // !!!!!! Assume we have user ID!!!
     private static final String UID = "yXnhEl9OBqgKqHLAPMPV";
     private static final String TAG = MapViewActivity.class.getSimpleName();
@@ -58,6 +65,7 @@ public class FoodDetailActivity extends AppCompatActivity {
     TextView foodTextDescriptionTextView;
     String mDonorID;
     String mFoodItemID;
+    Timestamp mOpenDate;
 
     private FirebaseFirestore mFirestore;
 
@@ -106,7 +114,8 @@ public class FoodDetailActivity extends AppCompatActivity {
         }
     }
     private void fetchDBInfo(String userId) {
-        mFirestore.collection(getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_INFO)).document(foodId).get().addOnCompleteListener(task -> {
+        mFirestore.collection(getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_INFO))
+                .document(foodId).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
@@ -127,11 +136,11 @@ public class FoodDetailActivity extends AppCompatActivity {
         foodDetailModel.currentFoodDetailInfo.setValue(foodItemInfo);
         DocumentReference donor = foodItemInfo.getDonorRef();
         donor.get().addOnCompleteListener(task -> {
-           if (task.isSuccessful()){
-               mDonorID = task.getResult().getId();
-               UsersInfo donorInfo = task.getResult().toObject(UsersInfo.class);
-               foodDetailModel.donorUserInfo.setValue(donorInfo);
-           }
+            if (task.isSuccessful()){
+                mDonorID = task.getResult().getId();
+                UsersInfo donorInfo = task.getResult().toObject(UsersInfo.class);
+                foodDetailModel.donorUserInfo.setValue(donorInfo);
+            }
         });
     }
 
@@ -181,8 +190,17 @@ public class FoodDetailActivity extends AppCompatActivity {
                 foodExpireDateTextView.setText(expireDateText);
             }
         });
+        foodDetailModel.foodDateOn.observe(this, foodDateOn -> {
+            if (foodDateOn != null) {
+                Date date = foodDateOn.toDate();
+                String onDateText = simpleDateFormat.format(date);
+                foodOnDateTextView.setText(onDateText);
+            }
+        });
+
+
         foodDetailModel.foodQuantity.observe(this, foodQuantity->{
-            foodNameTextView.setText(Long.toString(foodQuantity));
+            foodQuantityTextView.setText(Long.toString(foodQuantity));
         });
         foodDetailModel.donorName.observe(this, donorName->{
             foodDonorNameTextView.setText(donorName);
@@ -222,18 +240,18 @@ public class FoodDetailActivity extends AppCompatActivity {
         DocumentReference donorRef = mFirestore.document(userTableStr + "/" + mDonorID);
         DocumentReference consumerRef = mFirestore.document(userTableStr + "/" + UID);
         DocumentReference foodRef = mFirestore.document(foodTableStr + "/" + mFoodItemID);
-        Timestamp openDate = Utility.parseDateTime(Utility.getCurrentTimeStr(), aConst.DATE_TIME_PATTERN);
+        mOpenDate = Utility.parseDateTime(Utility.getCurrentTimeStr(), aConst.DATE_TIME_PATTERN);
 
         populateFoodItemTransaction(aConst.ALIVE_RECORD, null, consumerRef, null,
-                donorRef, null, foodRef, openDate, bookStatus, foodItemTransaction);
+                donorRef, null, foodRef, mOpenDate, bookStatus, foodItemTransaction);
 
         postFoodTransactionToFirebase(foodItemTransaction);
     }
 
     public void populateFoodItemTransaction(Long aliveRecord, DocumentReference cdReview,
-            DocumentReference consumer, DocumentReference dcReview, DocumentReference donor,
-            Timestamp finishDate, DocumentReference foodRef, Timestamp openDate, Long status,
-            FooditemTransaction foodItemTransaction) {
+                                            DocumentReference consumer, DocumentReference dcReview, DocumentReference donor,
+                                            Timestamp finishDate, DocumentReference foodRef, Timestamp openDate, Long status,
+                                            FooditemTransaction foodItemTransaction) {
 
         foodItemTransaction.setAliveRecord(aliveRecord);
         foodItemTransaction.setCdReview(cdReview);
@@ -252,19 +270,61 @@ public class FoodDetailActivity extends AppCompatActivity {
 
         String foodTransStr = getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_TRANSACTION);
         CollectionReference transCollect = mFirestore.collection(foodTransStr);
-        transCollect.document().set(foodItemTransaction)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+        transCollect.add(foodItemTransaction)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
+                    public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot successfully written!");
+                        returnBookSuccessPage(documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(FoodDetailActivity.this,
+                                        "Unable to Book this food at the moment", Toast.LENGTH_LONG).show();
+                            }
+                        });
+
                     }
                 });
+    }
+
+
+
+    public void returnBookSuccessPage(String transactionId) {
+
+        UsersInfo donorInfo = foodDetailModel.donorUserInfo.getValue();
+        FoodItemInfo foodInfo = foodDetailModel.currentFoodDetailInfo.getValue();
+        String donorAddr = donorInfo.getLocation();
+        String donorName = donorInfo.getName();
+        String foodName = foodInfo.getName();
+        double lat = (double) donorInfo.getAsDonor().get("lat");
+        double lon = (double) donorInfo.getAsDonor().get("lon");
+        LatLng geoloc = new LatLng(lat, lon);
+        String foodUrl = foodInfo.getImageDescription().get(0);
+        Timestamp transactionStartDate = mOpenDate;
+        Long transactionLiveSec = aConst.ALIVE_RECORD;
+
+        BookSuccessViewModel bookSuccessViewModel = new BookSuccessViewModel(donorName, foodName,
+                donorAddr, transactionStartDate, transactionLiveSec, geoloc, transactionId, foodUrl);
+
+
+        Intent intent = new Intent(FoodDetailActivity.this,
+                BookSuccessActivity.class);
+        if (intent != null) {
+
+            intent.putExtra("transactionId", transactionId);
+
+            // Bring up the second activity
+            startActivityForResult(intent, BOOK_SUCCESS_REQ_CODE);
+        }
+
+
+
     }
 
 }

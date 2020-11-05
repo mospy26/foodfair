@@ -26,7 +26,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="80dp"
                     android:gravity="center"
-                    android:text="Baked Pasta"
                     android:textSize="32sp"
                     android:textStyle="bold">
 
@@ -50,7 +49,7 @@
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
                 app:shapeAppearanceOverlay="@style/roundedImageView"
-                app:srcCompat="@drawable/foodsample" />
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
