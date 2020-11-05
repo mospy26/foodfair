@@ -20,7 +20,7 @@ public class UsersInfo /*implements Parcelable*/ {
     private Long gender;
     private Timestamp joinDate;
     private Timestamp lastLogin;
-    private GeoPoint location;
+    private String location;
     private String name;
     private String passwordHash;
     private Long preference;
@@ -99,11 +99,11 @@ public class UsersInfo /*implements Parcelable*/ {
         this.lastLogin = lastLogin;
     }
 
-    public GeoPoint getLocation() {
+    public String getLocation() {
         return location;
     }
 
-    public void setLocation(GeoPoint location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 
