@@ -52,7 +52,7 @@ public class SetUp extends AppCompatActivity {
         setContentView(R.layout.setup__signup);
         cache = Cache.getInstance(this);
 
-        sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("foodfair", MODE_PRIVATE);
         preferredMeat = findViewById(R.id.SetUpPreferredMeat);
         allergen = findViewById(R.id.SetUpAllergen);
         map = findViewById(R.id.SetUpMap);
@@ -62,8 +62,10 @@ public class SetUp extends AppCompatActivity {
         }
         else {
             user = (UsersInfo) cache.get("user").getData();
+            getUserID();
             setupPreferred();
             setUpAllergen();
+            setUpMap();
         }
     }
 
@@ -72,10 +74,7 @@ public class SetUp extends AppCompatActivity {
         userID = firebaseUser.getUid();
 
         if (userID == null) {
-            userID = sharedPreferences.getString("firebasekey", null);
-            if (userID == null) {
-                // TODO go to login
-            }
+            getUserID();
         }
 
         FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO)).document(userID).get().addOnCompleteListener(task -> {
@@ -89,6 +88,15 @@ public class SetUp extends AppCompatActivity {
                 setUpMap();
             }
         });
+    }
+
+    private void getUserID() {
+        userID = sharedPreferences.getString("firebasekey", null);
+        if (userID == null) {
+            Intent i = new Intent(SetUp.this, Login.class);
+            startActivity(i);
+            finish();
+        }
     }
 
     private void setupPreferred() {
@@ -295,6 +303,7 @@ public class SetUp extends AppCompatActivity {
     }
 
     private void updateUserAllergy(UsersInfo user) {
+        Log.e("WTH", userID + "");
         FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO)).document(userID).update("allergy", user.getAllergy())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

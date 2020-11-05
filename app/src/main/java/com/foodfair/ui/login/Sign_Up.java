@@ -243,7 +243,12 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
             public void onSuccess(Void aVoid) {
                 Log.d("Sign Up", "Successfully Stored user information");
                 cache.add("user", user);
-                Intent intent = new Intent(context, Login.class);
+                // store it globally for access
+                sharedPreferences = getSharedPreferences("foodfair", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("firebasekey", userId);
+                editor.commit();
+                Intent intent = new Intent(context, SetUp.class);
                 startActivity(intent);
                 return;
             }
