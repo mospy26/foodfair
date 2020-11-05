@@ -6,25 +6,21 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.MutableLiveData;
 
 import com.foodfair.R;
 import com.foodfair.model.FoodItemInfo;
-import com.foodfair.model.ReviewInfo;
 import com.foodfair.model.UsersInfo;
-import com.foodfair.ui.profiles.UserProfileViewModel;
 import com.foodfair.utilities.Const;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 public class FoodDetailActivity extends AppCompatActivity {
     String foodId;
@@ -47,7 +43,7 @@ public class FoodDetailActivity extends AppCompatActivity {
         setContentView(R.layout.food_item);
         foodDetailModel = new FoodDetailModel();
         InitUI();
-//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 //        userId = user.getUid();
         foodId = "8g51f4M0j881nqW0v59o";
         viewModelObserverSetup();

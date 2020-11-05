@@ -1,7 +1,7 @@
 package com.foodfair;
 
-import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -9,13 +9,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class FoodPostingHolder extends RecyclerView.ViewHolder {
 
-     TextView foodTitle;
-     TextView foodDesc;
+    public TextView foodTitle;
+    public TextView foodPostedBy;
+    public TextView foodPostedDate;
+    public ImageView imageToDisplay;
+
 
     public FoodPostingHolder(@NonNull View itemView) {
         super(itemView);
-        foodTitle = itemView.findViewById(R.id.foodName);
-        foodDesc = itemView.findViewById(R.id.foodDetail);
+        foodTitle = itemView.findViewById(R.id.food_name_home);
+        foodPostedBy = itemView.findViewById(R.id.userPosted);
+        foodPostedDate = itemView.findViewById(R.id.postedDate);
+        imageToDisplay = itemView.findViewById(R.id.foodImage);
     }
 
 
