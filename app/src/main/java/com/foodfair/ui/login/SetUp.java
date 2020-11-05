@@ -292,8 +292,8 @@ public class SetUp extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (user.getLocation() == null || user.getLocation().equals("") ||
-                        user.getAllergy() == null || user.getPreference() == null) {
-                    Toast.makeText(SetUp.this, "Please enter details before proceeding", Toast.LENGTH_LONG).show();
+                        user.getAllergy() == null || user.getAllergy().size() == 0 || user.getPreference() == null) {
+                    Toast.makeText(SetUp.this, "Please enter all details before proceeding", Toast.LENGTH_LONG).show();
                 }
                 else {
                     Intent i = new Intent(SetUp.this, MainActivity.class);

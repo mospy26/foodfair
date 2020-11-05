@@ -142,7 +142,7 @@ public class Login extends AppCompatActivity {
                 }
                 if (!started) {
                     if (user.getLocation() == null || user.getLocation().equals("") ||
-                            user.getAllergy() == null || user.getPreference() == null) {
+                            user.getAllergy() == null || user.getAllergy().size() == 0 || user.getPreference() == null) {
                         Intent i = new Intent(Login.this, SetUp.class);
                         startActivity(i);
                         finish();
