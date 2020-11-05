@@ -15,7 +15,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:contentDescription="TODO"
-            android:src="@drawable/sample_profile_image" >
+            android:src="@drawable/ic_menu_profile" >
         </ImageView>
         <TextView
             android:id="@+id/leaderboard_rank"
