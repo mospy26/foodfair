@@ -46,93 +46,94 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/success_foodDescriptionContainer"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="wrap_content"
             android:layout_below="@id/success_successHeaderContainer"
             android:background="#ffffff">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:gravity="center_horizontal"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                android:orientation="horizontal">
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/success_foodImageView"
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
-                    android:layout_gravity="center"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitXY"
-                    app:shapeAppearanceOverlay="@style/roundedImageView"
-                    app:srcCompat="@drawable/foodsample" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/success_foodImageView"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:layout_gravity="center"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        app:shapeAppearanceOverlay="@style/roundedImageView"
+                         />
+                </LinearLayout>
 
                 <TableLayout
-                    android:layout_width="320dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
                     android:layout_height="match_parent"
                     android:stretchColumns="1">
 
                     <TableRow>
 
                         <TextView
-                            android:layout_width="80dp"
+                            style="@style/TableLeftCell"
                             android:background="@drawable/table_border"
-                            android:padding="3dip"
                             android:text="Donor" />
 
                         <TextView
+                            style="@style/TableRightCell"
                             android:id="@+id/success_donorNameTextView"
-                            android:gravity="right"
-                            android:padding="3dip"
-                            android:text="Thai Food Restaurant" />
+                            android:text="Loading" />
                     </TableRow>
 
                     <TableRow>
 
                         <TextView
-                            android:layout_width="80dp"
                             android:background="@drawable/table_border"
-                            android:padding="3dip"
+                            style="@style/TableLeftCell"
                             android:text="Food" />
 
                         <TextView
                             android:id="@+id/success_foodNameTextView"
-                            android:gravity="right"
-                            android:padding="3dip"
-                            android:text="Delicious pasta combo" />
+                            style="@style/TableRightCell"
+                            android:text="Loading" />
                     </TableRow>
 
                     <TableRow>
 
                         <TextView
-                            android:layout_width="80dp"
+                            style="@style/TableLeftCell"
                             android:background="@drawable/table_border"
-                            android:padding="3dip"
                             android:text="Location" />
 
                         <TextView
                             android:id="@+id/success_pickupLocationTextView"
-                            android:gravity="right"
-                            android:padding="3dip"
-                            android:text="1/102-108 Hay St, Haymarket NSW 2000"
+                            style="@style/TableRightCell"
+                            android:text="Loading"
                             android:textSize="11sp" />
                     </TableRow>
 
                     <TableRow>
 
                         <TextView
-                            android:layout_width="80dp"
+                            style="@style/TableLeftCell"
                             android:background="@drawable/table_border"
-                            android:padding="3dip"
-                            android:textSize="11sp"
-                            android:text="Time to invalid" />
+                            android:text="Time to invalid"
+                          />
 
 
                         <TextView
                             android:id="@+id/success_countdownTextView"
-                            android:gravity="right"
-                            android:padding="3dip"
-                            android:text="1:30:22" />
+                            style="@style/TableRightCell"
+                            android:text="Loading" />
                     </TableRow>
 
                 </TableLayout>
@@ -208,7 +209,7 @@
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY"
                     app:shapeAppearanceOverlay="@style/roundedImageView"
-                    app:srcCompat="@drawable/foodsample" />
+                     />
 
                 <TextView
                     android:layout_width="148dp"
@@ -224,7 +225,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="60dp"
             android:layout_below="@id/success_qrCodeDescriptionContainer"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="30dp"
@@ -234,7 +235,7 @@
                 android:id="@+id/success_backButton"
                 android:layout_width="300dp"
                 android:layout_height="match_parent"
-                android:background="#8dac44"
+                android:background="@color/milkGreen"
                 android:text="Back"
                 android:textAllCaps="false"
                 android:textSize="26sp"></Button>
