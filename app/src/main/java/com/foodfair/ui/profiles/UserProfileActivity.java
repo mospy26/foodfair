@@ -241,7 +241,7 @@ public class UserProfileActivity extends AppCompatActivity {
         });
 
         userProfileViewModel.location.observe(this, location -> {
-            locationTextView.setText(location);
+            locationTextView.setText(location.toString());
         });
 
         userProfileViewModel.joinDate.observe(this, joinDate -> {

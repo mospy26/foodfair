@@ -1,8 +1,5 @@
-package com.foodfair.utilities;
+package com.foodfair.ui.login;
 
-import android.content.Context;
-import android.location.Location;
-import android.location.LocationManager;
 import android.util.Log;
 
 import com.foodfair.model.User;

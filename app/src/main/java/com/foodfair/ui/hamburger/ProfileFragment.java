@@ -124,7 +124,7 @@ public class ProfileFragment extends Fragment {
             profileViewModel.bio.setValue(currentUserInfo.getBio());
             profileViewModel.allergy.setValue((ArrayList<Long>) currentUserInfo.getAllergy());
             profileViewModel.preference.setValue(currentUserInfo.getPreference());
-            profileViewModel.location.setValue(currentUserInfo.getLocation());
+            profileViewModel.location.setValue(currentUserInfo.getLocation().toString());
             profileViewModel.joinDate.setValue(currentUserInfo.getJoinDate());
             profileViewModel.lastLoginDate.setValue(currentUserInfo.getLastLogin());
 

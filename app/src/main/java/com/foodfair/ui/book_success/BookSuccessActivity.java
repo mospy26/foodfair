@@ -148,7 +148,7 @@ public class BookSuccessActivity extends AppCompatActivity {
                 Double lon =
                         (Double)asDonor.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_LON));
                 bookSuccessViewModel.mLocationLatLng.setValue(new LatLng(lat,lon));
-                bookSuccessViewModel.mPickupLocation.setValue(donor.getLocation());
+                bookSuccessViewModel.mPickupLocation.setValue(donor.getLocation().toString());
             }
             DocumentReference foodRef = fooditemTransaction.getFoodRef();
             foodRef.get().addOnCompleteListener(foodTask->{

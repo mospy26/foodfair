@@ -145,7 +145,7 @@ public class FoodDetailActivity extends AppCompatActivity {
     private void viewModelObserverSetup() {
         foodDetailModel.donorUserInfo.observe(this,donorUserInfo->{
             foodDetailModel.donorName.setValue(donorUserInfo.getName());
-            foodDetailModel.donorAddress.setValue(donorUserInfo.getLocation());
+            foodDetailModel.donorAddress.setValue(donorUserInfo.getLocation().toString());
         });
         foodDetailModel.currentFoodDetailInfo.observe(this, currentFoodDetailInfo->{
             foodDetailModel.foodName.setValue(currentFoodDetailInfo.getName());
@@ -297,7 +297,7 @@ public class FoodDetailActivity extends AppCompatActivity {
 
         UsersInfo donorInfo = foodDetailModel.donorUserInfo.getValue();
         FoodItemInfo foodInfo = foodDetailModel.currentFoodDetailInfo.getValue();
-        String donorAddr = donorInfo.getLocation();
+        String donorAddr = donorInfo.getLocation().toString();
         String donorName = donorInfo.getName();
         String foodName = foodInfo.getName();
         double lat = (double) donorInfo.getAsDonor().get("lat");
