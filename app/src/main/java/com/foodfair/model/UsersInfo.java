@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,7 @@ public class UsersInfo /*implements Parcelable*/ {
     private Long gender;
     private Timestamp joinDate;
     private Timestamp lastLogin;
-    private String location;
+    private GeoPoint location;
     private String name;
     private String passwordHash;
     private Long preference;
@@ -98,11 +99,11 @@ public class UsersInfo /*implements Parcelable*/ {
         this.lastLogin = lastLogin;
     }
 
-    public String getLocation() {
+    public GeoPoint getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(GeoPoint location) {
         this.location = location;
     }
 
