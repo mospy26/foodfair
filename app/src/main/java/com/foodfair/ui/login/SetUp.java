@@ -14,12 +14,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.foodfair.MainActivity;
 import com.foodfair.R;
 import com.foodfair.model.UsersInfo;
 import com.foodfair.utilities.Cache;
 import com.foodfair.utilities.Const;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -45,6 +47,7 @@ public class SetUp extends AppCompatActivity {
     String userID;
     Cache cache;
     String returnedCoordinates;
+    FloatingActionButton next;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,6 +59,7 @@ public class SetUp extends AppCompatActivity {
         preferredMeat = findViewById(R.id.SetUpPreferredMeat);
         allergen = findViewById(R.id.SetUpAllergen);
         map = findViewById(R.id.SetUpMap);
+        next = findViewById(R.id.SetUpDoneNext);
 
         if (cache.get("user") == null) {
             fetchUser();
@@ -86,6 +90,7 @@ public class SetUp extends AppCompatActivity {
                 setupPreferred();
                 setUpAllergen();
                 setUpMap();
+                setUpNext();
             }
         });
     }
@@ -163,10 +168,6 @@ public class SetUp extends AppCompatActivity {
                                             getString(R.string.setting_all));
                                 }
                                 editor.apply();
-                            Toast toast = Toast.makeText(this,
-                                    "TODO: Update search result", Toast.LENGTH_SHORT);
-//                            toast.show();
-                                // userRef.update("1");
                                 ArrayList<Long> pref = new ArrayList<>();
                                 for (String value : checkedItemStrings) {
                                     pref.addAll(Const.getInstance().FOOD_TYPE_DETAIL
@@ -175,7 +176,7 @@ public class SetUp extends AppCompatActivity {
                                         .filter(entry -> value.equals(entry.getValue()))
                                         .map(Map.Entry::getKey).collect(Collectors.toList()));
                                     if (pref.size() != 1) {
-                                        Toast.makeText(getBaseContext(), "Please choose only one preference", Toast.LENGTH_LONG);
+                                        Toast.makeText(getBaseContext(), "Please choose only one preference", Toast.LENGTH_LONG).show();
                                     }
                                 }
                                 user.setPreference(pref.get(0));
@@ -282,6 +283,23 @@ public class SetUp extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(SetUp.this, SetUpMap.class);
                 startActivityForResult(i, 0);
+            }
+        });
+    }
+
+    private void setUpNext() {
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (user.getLocation() == null || user.getLocation().equals("") ||
+                        user.getAllergy() == null || user.getPreference() == null) {
+                    Toast.makeText(SetUp.this, "Please enter details before proceeding", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Intent i = new Intent(SetUp.this, MainActivity.class);
+                    startActivity(i);
+                    finish();
+                }
             }
         });
     }
