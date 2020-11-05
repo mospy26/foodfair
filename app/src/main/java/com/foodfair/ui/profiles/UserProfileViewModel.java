@@ -11,6 +11,7 @@ import com.foodfair.model.ReviewInfo;
 import com.foodfair.model.UsersInfo;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.sql.Array;
 import java.sql.Time;
@@ -38,7 +39,7 @@ public class UserProfileViewModel extends ViewModel {
     MutableLiveData<String> bio = new MutableLiveData<>();
     MutableLiveData<ArrayList<Long>> allergy = new MutableLiveData<>();
     MutableLiveData<Long> preference = new MutableLiveData<>();
-    MutableLiveData<String> location = new MutableLiveData<>();
+    MutableLiveData<GeoPoint> location = new MutableLiveData<>();
     MutableLiveData<Timestamp> joinDate = new MutableLiveData<>();
     MutableLiveData<Timestamp> lastLoginDate = new MutableLiveData<>();
     // As Consumer
