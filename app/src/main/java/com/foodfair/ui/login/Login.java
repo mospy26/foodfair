@@ -111,6 +111,7 @@ public class Login extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                e.printStackTrace();
                 Log.d(TAG, "createUserWithEmail:failed");
                 Toast.makeText(context, "Invalid login, please try again", Toast.LENGTH_LONG).show();
             }

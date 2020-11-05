@@ -54,10 +54,9 @@ public class SignUpHandler {
 
                     }
                 });
-
-
             }
-
+        }).addOnFailureListener(e->{
+            e.printStackTrace();
         });
     }
 
