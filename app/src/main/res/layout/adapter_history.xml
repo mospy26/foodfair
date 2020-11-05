@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
     android:padding="16dp"
     >
 
@@ -76,20 +76,43 @@
                 android:visibility="gone">
 
                 <EditText
+                    android:id="@+id/review_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.7"
                     android:layout_gravity="center"
-                    android:text="Review goes here"/>
+                    android:hint="Update review here"/>
                 <Button
+                    android:id="@+id/review_submit_btn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.3"
                     android:text="Submit Review"
                     android:layout_gravity="center"/>
 
-
             </LinearLayout>
+
+<!--            <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                android:id="@+id/restaurantItemRating"
+                style="@style/Widget.MaterialRatingBar.RatingBar.Indicator.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/review_layout"
+                android:layout_below="@id/donation_date"
+                android:layout_toRightOf="@id/food_photo"
+                android:layout_marginBottom="4dp" />-->
+            <RatingBar
+                android:id="@+id/restaurantItemRating"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/review_layout"
+                android:layout_below="@id/donation_date"
+                android:layout_toRightOf="@id/food_photo"
+                android:layout_marginBottom="4dp"
+                android:max="5"
+                android:isIndicator="false"
+                android:rating="3.2" />
 
         </RelativeLayout>
 

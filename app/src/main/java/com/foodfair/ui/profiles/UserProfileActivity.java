@@ -415,6 +415,7 @@ public class UserProfileActivity extends AppCompatActivity {
         if(consumer){
             badgesHashMap = aConst.CONSUMER_BADGES;
         }
+        tableLayout.removeAllViews();
         View testView = LayoutInflater.from(this).inflate(R.layout.badg_row, null);
         int childCount = ((ViewGroup) testView).getChildCount();
         int count = badges.size();

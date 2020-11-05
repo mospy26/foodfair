@@ -50,6 +50,15 @@ public class Const {
         put(200L, new Badge(200L,"Donate for the first time.", R.drawable.donate_1));
         put(201L, new Badge(201L,"Donate for more than 5 times.", R.drawable.donate_5));
     }};
+
+    public final HashMap<String, Long> TRANSACTION_STATUS = new HashMap<String, Long>(){{
+        put("Booked", 0L);
+        put("Cancelled", 1L);
+        put("Success", 2L);
+    }};
+
+    public final Long ALIVE_RECORD = 7200L;
+    public final String DATE_TIME_PATTERN = "yyyyMMdd_HHmmss";
     public static Const getInstance(){
         return instance;
     }

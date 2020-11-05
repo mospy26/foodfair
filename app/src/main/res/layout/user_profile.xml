@@ -13,7 +13,7 @@
             android:id="@+id/success_successHeaderContainer"
             android:layout_width="match_parent"
             android:layout_height="120dp"
-            android:background="#ad593b">
+            android:background="@color/milkGreen">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -58,18 +58,18 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/userProfile_nameTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="Daniel Grangler"
-                    android:id="@+id/userProfile_nameTextView"
                     android:textSize="25dp" />
 
                 <ImageView
-                    android:layout_marginBottom="5dp"
                     android:id="@+id/userProfile_genderImageView"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
+                    android:layout_marginBottom="5dp"
                     android:src="@drawable/icons8_female_96"></ImageView>
             </LinearLayout>
 
@@ -78,10 +78,11 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal">
+
                 <TextView
+                    android:id="@+id/userProfile_userIdTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/userProfile_userIdTextView"
                     android:text="\@daniG632"
                     android:textSize="15dp" />
             </LinearLayout>
@@ -101,106 +102,86 @@
                     <TableRow>
 
                         <TextView
-                            android:layout_width="80dp"
-                            android:background="@drawable/table_border"
-                            android:padding="3dip"
+                            style="@style/TableLeftCell"
                             android:text="Age" />
 
                         <TextView
                             android:id="@+id/userProfile_ageTextView"
-                            android:gravity="right"
-                            android:padding="3dip"
+                            style="@style/TableRightCell"
                             android:text="32" />
                     </TableRow>
 
                     <TableRow>
 
                         <TextView
-                            android:layout_width="80dp"
-                            android:background="@drawable/table_border"
-                            android:padding="3dip"
+                            style="@style/TableLeftCell"
                             android:text="Bio" />
 
                         <TextView
                             android:id="@+id/userProfile_bioTextView"
-                            android:gravity="right"
-                            android:padding="3dip"
+                            style="@style/TableRightCell"
                             android:text="I am a lazy fat guy." />
                     </TableRow>
 
                     <TableRow>
 
                         <TextView
-                            android:layout_width="80dp"
-                            android:background="@drawable/table_border"
-                            android:padding="3dip"
+                            style="@style/TableLeftCell"
                             android:text="Allergy" />
 
                         <TextView
                             android:id="@+id/userProfile_allergyTextView"
-                            android:gravity="right"
-                            android:padding="3dip"
+                            style="@style/TableRightCell"
                             android:text="shallot, onion, and etc" />
                     </TableRow>
 
                     <TableRow>
 
                         <TextView
-                            android:layout_width="80dp"
-                            android:background="@drawable/table_border"
-                            android:padding="3dip"
+                            style="@style/TableLeftCell"
                             android:text="Preference" />
 
                         <TextView
                             android:id="@+id/userProfile_preferenceTextView"
-                            android:gravity="right"
-                            android:padding="3dip"
+                            style="@style/TableRightCell"
                             android:text="Ramen" />
                     </TableRow>
 
                     <TableRow>
 
                         <TextView
-                            android:layout_width="80dp"
-                            android:background="@drawable/table_border"
-                            android:padding="3dip"
+                            style="@style/TableLeftCell"
                             android:text="Location" />
 
                         <TextView
                             android:id="@+id/userProfile_locationTextView"
-                            android:gravity="right"
-                            android:padding="3dip"
-                            android:text="1/102-108 Hay St, Haymarket NSW 2000"
+                            style="@style/TableRightCell"
+                            android:text="1/102-108 Hay St, Haymarket NSW 20000000000000"
                             android:textSize="11sp" />
                     </TableRow>
 
                     <TableRow>
 
                         <TextView
-                            android:layout_width="80dp"
-                            android:background="@drawable/table_border"
-                            android:padding="3dip"
+                            style="@style/TableLeftCell"
                             android:text="Join Date" />
 
                         <TextView
                             android:id="@+id/userProfile_joinDateTextView"
-                            android:gravity="right"
-                            android:padding="3dip"
+                            style="@style/TableRightCell"
                             android:text="07/03/2020 1:30:22" />
                     </TableRow>
 
                     <TableRow>
+
                         <TextView
-                            android:layout_width="80dp"
-                            android:background="@drawable/table_border"
-                            android:padding="3dip"
+                            style="@style/TableLeftCell"
                             android:text="Last Login" />
 
 
                         <TextView
                             android:id="@+id/userProfile_lastLoginDateTextView"
-                            android:gravity="right"
-                            android:padding="3dip"
+                            style="@style/TableRightCell"
                             android:text="07/03/2020 1:30:22" />
                     </TableRow>
 
@@ -281,57 +262,47 @@
                         <TableRow>
 
                             <TextView
-                                android:layout_width="80dp"
-                                android:background="@drawable/table_border"
-                                android:padding="3dip"
+                                style="@style/TableLeftCell"
                                 android:text="Donor" />
 
                             <TextView
                                 android:id="@+id/userProfile_reviewsDonorNameTextView"
-                                android:gravity="right"
-                                android:padding="3dip"
+                                style="@style/TableRightCell"
                                 android:text="Grill" />
                         </TableRow>
 
                         <TableRow>
 
                             <TextView
-                                android:layout_width="80dp"
-                                android:background="@drawable/table_border"
-                                android:padding="3dip"
+                                style="@style/TableLeftCell"
                                 android:text="Item Name" />
 
                             <TextView
                                 android:id="@+id/userProfile_reviewsFoodNameTextView"
-                                android:gravity="right"
-                                android:padding="3dip"
+                                style="@style/TableRightCell"
                                 android:text="3 level Beef Burger" />
                         </TableRow>
 
                         <TableRow>
 
                             <TextView
-                                android:layout_width="80dp"
-                                android:background="@drawable/table_border"
-                                android:padding="3dip"
+                                style="@style/TableLeftCell"
                                 android:text="Date" />
 
                             <TextView
                                 android:id="@+id/userProfile_reviewsDateTextView"
-                                android:gravity="right"
-                                android:padding="3dip"
+                                style="@style/TableRightCell"
                                 android:text="07/03/2020 1:30:22" />
                         </TableRow>
 
                         <TableRow>
 
                             <TextView
-                                android:layout_width="80dp"
-                                android:background="@drawable/table_border"
-                                android:padding="3dip"
+                                style="@style/TableLeftCell"
                                 android:text="Rate" />
 
                             <RelativeLayout
+                                style="@style/TableRightCell"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent">
 
@@ -353,15 +324,12 @@
                         <TableRow android:layout_height="wrap_content">
 
                             <TextView
-                                android:layout_width="80dp"
+                                style="@style/TableLeftCell"
                                 android:layout_height="match_parent"
-                                android:background="@drawable/table_border"
-                                android:gravity="center_vertical"
-                                android:padding="3dip"
                                 android:text="Description" />
 
                             <LinearLayout
-                                android:layout_width="match_parent"
+                                style="@style/TableRightCell"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
@@ -369,15 +337,15 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:gravity="center">
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
 
                                     <com.google.android.material.imageview.ShapeableImageView
                                         android:id="@+id/userProfile_reviewsImageReviewShapeableImageView4"
-                                        android:layout_marginLeft="10dp"
                                         android:layout_width="40dp"
                                         android:layout_height="40dp"
                                         android:layout_gravity="center"
+                                        android:layout_marginLeft="10dp"
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
@@ -385,20 +353,21 @@
 
                                     <com.google.android.material.imageview.ShapeableImageView
                                         android:id="@+id/userProfile_reviewsImageReviewShapeableImageView3"
-                                        android:layout_marginLeft="10dp"
                                         android:layout_width="40dp"
                                         android:layout_height="40dp"
                                         android:layout_gravity="center"
+                                        android:layout_marginLeft="10dp"
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
                                         app:srcCompat="@drawable/foodsample" />
+
                                     <com.google.android.material.imageview.ShapeableImageView
                                         android:id="@+id/userProfile_reviewsImageReviewShapeableImageView2"
-                                        android:layout_marginLeft="10dp"
                                         android:layout_width="40dp"
                                         android:layout_height="40dp"
                                         android:layout_gravity="center"
+                                        android:layout_marginLeft="10dp"
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
@@ -406,10 +375,10 @@
 
                                     <com.google.android.material.imageview.ShapeableImageView
                                         android:id="@+id/userProfile_reviewsImageReviewShapeableImageView1"
-                                        android:layout_marginLeft="10dp"
                                         android:layout_width="40dp"
                                         android:layout_height="40dp"
                                         android:layout_gravity="center"
+                                        android:layout_marginLeft="10dp"
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
@@ -425,20 +394,22 @@
                                     android:layout_height="wrap_content"
                                     android:gravity="right"
                                     android:padding="3dip"
-                                    android:text="1/102-108 Hay St, Haymarket NSW 2000"
+                                    android:text="1/102-108 Hay St, Haymarket NSW 20000000000000"
                                     android:textSize="11sp" />
                             </LinearLayout>
 
                         </TableRow>
+
                         <Button
-                            android:visibility="gone"
                             android:layout_width="fill_parent"
                             android:layout_height="match_parent"
-                            android:text="View More" />
+                            android:text="View More"
+                            android:visibility="gone" />
 
                     </TableLayout>
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -494,110 +465,111 @@
 
 
                     android:gravity="center">
+
                     <LinearLayout
 
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:gravity="center"
-                        >
+                        android:orientation="horizontal">
+
                         <TableLayout
                             android:id="@+id/userProfile_usersConsumerBadgeTableLayout"
                             android:layout_width="320dp"
                             android:layout_height="match_parent"
 
                             >
-<!--                             <TableRow-->
-<!--                                 android:layout_marginTop="10dp" android:layout_marginBottom="10dp">-->
-<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                                    android:layout_width="45dp"-->
-<!--                                    android:layout_height="45dp"-->
-<!--                                    android:src="@drawable/foodsample"-->
-<!--                                    app:civ_border_color="#FF000000"-->
-<!--                                    app:civ_border_width="1dp"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    />-->
-<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                                    android:layout_width="45dp"-->
-<!--                                    android:layout_height="45dp"-->
-<!--                                    android:src="@drawable/foodsample"-->
-<!--                                    app:civ_border_color="#FF000000"-->
-<!--                                    app:civ_border_width="1dp"-->
-<!--                                    android:layout_weight="1"-->
+                            <!--                             <TableRow-->
+                            <!--                                 android:layout_marginTop="10dp" android:layout_marginBottom="10dp">-->
+                            <!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                            <!--                                    android:layout_width="45dp"-->
+                            <!--                                    android:layout_height="45dp"-->
+                            <!--                                    android:src="@drawable/foodsample"-->
+                            <!--                                    app:civ_border_color="#FF000000"-->
+                            <!--                                    app:civ_border_width="1dp"-->
+                            <!--                                    android:layout_weight="1"-->
+                            <!--                                    />-->
+                            <!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                            <!--                                    android:layout_width="45dp"-->
+                            <!--                                    android:layout_height="45dp"-->
+                            <!--                                    android:src="@drawable/foodsample"-->
+                            <!--                                    app:civ_border_color="#FF000000"-->
+                            <!--                                    app:civ_border_width="1dp"-->
+                            <!--                                    android:layout_weight="1"-->
 
-<!--                                    />-->
-<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                                    android:layout_width="45dp"-->
-<!--                                    android:layout_height="45dp"-->
-<!--                                    android:src="@drawable/foodsample"-->
-<!--                                    app:civ_border_color="#FF000000"-->
-<!--                                    app:civ_border_width="1dp"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    />-->
-<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                                    android:layout_width="45dp"-->
-<!--                                    android:layout_height="45dp"-->
-<!--                                    android:src="@drawable/foodsample"-->
-<!--                                    app:civ_border_color="#FF000000"-->
-<!--                                    app:civ_border_width="1dp"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    />-->
-<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                                    android:layout_width="45dp"-->
-<!--                                    android:layout_height="45dp"-->
-<!--                                    android:src="@drawable/foodsample"-->
-<!--                                    app:civ_border_color="#FF000000"-->
-<!--                                    app:civ_border_width="1dp"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    />-->
-
-
-<!--                            </TableRow>-->
-<!--                            <TableRow android:layout_marginTop="10dp" android:layout_marginBottom="10dp">-->
-<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                                    android:layout_width="45dp"-->
-<!--                                    android:layout_height="45dp"-->
-<!--                                    android:src="@drawable/foodsample"-->
-<!--                                    app:civ_border_color="#FF000000"-->
-<!--                                    app:civ_border_width="1dp"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    />-->
-<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                                    android:layout_width="45dp"-->
-<!--                                    android:layout_height="45dp"-->
-<!--                                    android:src="@drawable/foodsample"-->
-<!--                                    app:civ_border_color="#FF000000"-->
-<!--                                    app:civ_border_width="1dp"-->
-<!--                                    android:layout_weight="1"-->
-
-<!--                                    />-->
-<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                                    android:layout_width="45dp"-->
-<!--                                    android:layout_height="45dp"-->
-<!--                                    android:src="@drawable/foodsample"-->
-<!--                                    app:civ_border_color="#FF000000"-->
-<!--                                    app:civ_border_width="1dp"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    />-->
-<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                                    android:layout_width="45dp"-->
-<!--                                    android:layout_height="45dp"-->
-<!--                                    android:src="@drawable/foodsample"-->
-<!--                                    app:civ_border_color="#FF000000"-->
-<!--                                    app:civ_border_width="1dp"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    />-->
-<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                                    android:layout_width="45dp"-->
-<!--                                    android:layout_height="45dp"-->
-<!--                                    android:src="@drawable/foodsample"-->
-<!--                                    app:civ_border_color="#FF000000"-->
-<!--                                    app:civ_border_width="1dp"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    />-->
+                            <!--                                    />-->
+                            <!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                            <!--                                    android:layout_width="45dp"-->
+                            <!--                                    android:layout_height="45dp"-->
+                            <!--                                    android:src="@drawable/foodsample"-->
+                            <!--                                    app:civ_border_color="#FF000000"-->
+                            <!--                                    app:civ_border_width="1dp"-->
+                            <!--                                    android:layout_weight="1"-->
+                            <!--                                    />-->
+                            <!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                            <!--                                    android:layout_width="45dp"-->
+                            <!--                                    android:layout_height="45dp"-->
+                            <!--                                    android:src="@drawable/foodsample"-->
+                            <!--                                    app:civ_border_color="#FF000000"-->
+                            <!--                                    app:civ_border_width="1dp"-->
+                            <!--                                    android:layout_weight="1"-->
+                            <!--                                    />-->
+                            <!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                            <!--                                    android:layout_width="45dp"-->
+                            <!--                                    android:layout_height="45dp"-->
+                            <!--                                    android:src="@drawable/foodsample"-->
+                            <!--                                    app:civ_border_color="#FF000000"-->
+                            <!--                                    app:civ_border_width="1dp"-->
+                            <!--                                    android:layout_weight="1"-->
+                            <!--                                    />-->
 
 
-<!--                            </TableRow>-->
+                            <!--                            </TableRow>-->
+                            <!--                            <TableRow android:layout_marginTop="10dp" android:layout_marginBottom="10dp">-->
+                            <!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                            <!--                                    android:layout_width="45dp"-->
+                            <!--                                    android:layout_height="45dp"-->
+                            <!--                                    android:src="@drawable/foodsample"-->
+                            <!--                                    app:civ_border_color="#FF000000"-->
+                            <!--                                    app:civ_border_width="1dp"-->
+                            <!--                                    android:layout_weight="1"-->
+                            <!--                                    />-->
+                            <!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                            <!--                                    android:layout_width="45dp"-->
+                            <!--                                    android:layout_height="45dp"-->
+                            <!--                                    android:src="@drawable/foodsample"-->
+                            <!--                                    app:civ_border_color="#FF000000"-->
+                            <!--                                    app:civ_border_width="1dp"-->
+                            <!--                                    android:layout_weight="1"-->
+
+                            <!--                                    />-->
+                            <!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                            <!--                                    android:layout_width="45dp"-->
+                            <!--                                    android:layout_height="45dp"-->
+                            <!--                                    android:src="@drawable/foodsample"-->
+                            <!--                                    app:civ_border_color="#FF000000"-->
+                            <!--                                    app:civ_border_width="1dp"-->
+                            <!--                                    android:layout_weight="1"-->
+                            <!--                                    />-->
+                            <!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                            <!--                                    android:layout_width="45dp"-->
+                            <!--                                    android:layout_height="45dp"-->
+                            <!--                                    android:src="@drawable/foodsample"-->
+                            <!--                                    app:civ_border_color="#FF000000"-->
+                            <!--                                    app:civ_border_width="1dp"-->
+                            <!--                                    android:layout_weight="1"-->
+                            <!--                                    />-->
+                            <!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                            <!--                                    android:layout_width="45dp"-->
+                            <!--                                    android:layout_height="45dp"-->
+                            <!--                                    android:src="@drawable/foodsample"-->
+                            <!--                                    app:civ_border_color="#FF000000"-->
+                            <!--                                    app:civ_border_width="1dp"-->
+                            <!--                                    android:layout_weight="1"-->
+                            <!--                                    />-->
+
+
+                            <!--                            </TableRow>-->
 
 
                         </TableLayout>
@@ -675,44 +647,40 @@
                         android:layout_width="320dp"
                         android:layout_height="match_parent"
                         android:stretchColumns="1">
+
                         <TableRow>
 
                             <TextView
-                                android:layout_width="80dp"
-                                android:background="@drawable/table_border"
-                                android:padding="3dip"
+                                style="@style/TableLeftCell"
                                 android:text="Item Name" />
 
                             <TextView
                                 android:id="@+id/userProfile_donorOnShelfFoodNameTextView"
-                                android:gravity="right"
-                                android:padding="3dip"
+                                style="@style/TableRightCell"
                                 android:text="3 level Beef Burger" />
                         </TableRow>
 
                         <TableRow>
+
                             <TextView
-                                android:layout_width="80dp"
-                                android:background="@drawable/table_border"
-                                android:padding="3dip"
+                                style="@style/TableLeftCell"
                                 android:text="Date On" />
 
                             <TextView
                                 android:id="@+id/userProfile_donorOnShelfDateOnTextView"
-                                android:gravity="right"
-                                android:padding="3dip"
+                                style="@style/TableRightCell"
                                 android:text="07/03/2020 1:30:22" />
                         </TableRow>
+
                         <TableRow>
+
                             <TextView
-                                android:layout_width="80dp"
-                                android:background="@drawable/table_border"
-                                android:padding="3dip"
+                                style="@style/TableLeftCell"
                                 android:text="Date Expire" />
+
                             <TextView
                                 android:id="@+id/userProfile_donorOnShelfDateExpireTextView"
-                                android:gravity="right"
-                                android:padding="3dip"
+                                style="@style/TableRightCell"
                                 android:text="07/03/2020 1:30:22" />
                         </TableRow>
 
@@ -720,15 +688,12 @@
                         <TableRow android:layout_height="wrap_content">
 
                             <TextView
-                                android:layout_width="80dp"
+                                style="@style/TableLeftCell"
                                 android:layout_height="match_parent"
-                                android:background="@drawable/table_border"
-                                android:gravity="center_vertical"
-                                android:padding="3dip"
                                 android:text="Description" />
 
                             <LinearLayout
-                                android:layout_width="match_parent"
+                                style="@style/TableRightCell"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
@@ -736,15 +701,15 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:gravity="center">
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
 
                                     <com.google.android.material.imageview.ShapeableImageView
                                         android:id="@+id/userProfile_donorOnShelfFoodImageImageView4"
-                                        android:layout_marginLeft="10dp"
                                         android:layout_width="40dp"
                                         android:layout_height="40dp"
                                         android:layout_gravity="center"
+                                        android:layout_marginLeft="10dp"
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
@@ -752,20 +717,21 @@
 
                                     <com.google.android.material.imageview.ShapeableImageView
                                         android:id="@+id/userProfile_donorOnShelfFoodImageImageView3"
-                                        android:layout_marginLeft="10dp"
                                         android:layout_width="40dp"
                                         android:layout_height="40dp"
                                         android:layout_gravity="center"
+                                        android:layout_marginLeft="10dp"
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
                                         app:srcCompat="@drawable/foodsample" />
+
                                     <com.google.android.material.imageview.ShapeableImageView
                                         android:id="@+id/userProfile_donorOnShelfFoodImageImageView2"
-                                        android:layout_marginLeft="10dp"
                                         android:layout_width="40dp"
                                         android:layout_height="40dp"
                                         android:layout_gravity="center"
+                                        android:layout_marginLeft="10dp"
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
@@ -773,10 +739,10 @@
 
                                     <com.google.android.material.imageview.ShapeableImageView
                                         android:id="@+id/userProfile_donorOnShelfFoodImageImageView1"
-                                        android:layout_marginLeft="10dp"
                                         android:layout_width="40dp"
                                         android:layout_height="40dp"
                                         android:layout_gravity="center"
+                                        android:layout_marginLeft="10dp"
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
@@ -790,20 +756,22 @@
                                     android:layout_height="wrap_content"
                                     android:gravity="right"
                                     android:padding="3dip"
-                                    android:text="1/102-108 Hay St, Haymarket NSW 2000"
+                                    android:text="1/102-108 Hay St, Haymaaymarket NSW 20000000000000rket NSW 2000"
                                     android:textSize="11sp" />
                             </LinearLayout>
 
                         </TableRow>
+
                         <Button
-                            android:visibility="gone"
                             android:layout_width="fill_parent"
                             android:layout_height="match_parent"
-                            android:text="View More" />
+                            android:text="View More"
+                            android:visibility="gone" />
 
                     </TableLayout>
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -855,57 +823,54 @@
                         android:layout_width="320dp"
                         android:layout_height="match_parent"
                         android:stretchColumns="1">
+
                         <TableRow>
 
                             <TextView
-                                android:layout_width="80dp"
-                                android:background="@drawable/table_border"
-                                android:padding="3dip"
+                                style="@style/TableLeftCell"
                                 android:text="Consumer" />
 
                             <TextView
                                 android:id="@+id/userProfile_donorReviewedItemConsumerTextView"
-                                android:gravity="right"
-                                android:padding="3dip"
+                                style="@style/TableRightCell"
                                 android:text="Tom" />
                         </TableRow>
+
                         <TableRow>
 
                             <TextView
-                                android:layout_width="80dp"
-                                android:background="@drawable/table_border"
-                                android:padding="3dip"
+                                style="@style/TableLeftCell"
                                 android:text="Item Name" />
 
                             <TextView
                                 android:id="@+id/userProfile_donorReviewedItemFoodNameTextView"
-                                android:gravity="right"
-                                android:padding="3dip"
+                                style="@style/TableRightCell"
                                 android:text="3 level Beef Burger" />
                         </TableRow>
+
                         <TableRow>
+
                             <TextView
-                                android:layout_width="80dp"
-                                android:background="@drawable/table_border"
-                                android:padding="3dip"
+                                style="@style/TableLeftCell"
                                 android:text="Date" />
 
                             <TextView
                                 android:id="@+id/userProfile_donorReviewedItemReviewedDateTextView"
-                                android:gravity="right"
-                                android:padding="3dip"
+                                style="@style/TableRightCell"
                                 android:text="07/03/2020 1:30:22" />
                         </TableRow>
+
                         <TableRow>
+
                             <TextView
-                                android:layout_width="80dp"
-                                android:background="@drawable/table_border"
-                                android:padding="3dip"
+                                style="@style/TableLeftCell"
                                 android:text="Rate" />
 
                             <RelativeLayout
+                                style="@style/TableRightCell"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent">
+                                android:layout_height="match_parent"
+                                >
 
                                 <RatingBar
                                     android:id="@+id/userProfile_donorReviewedItemRatingBar"
@@ -926,15 +891,12 @@
                         <TableRow android:layout_height="wrap_content">
 
                             <TextView
-                                android:layout_width="80dp"
+                                style="@style/TableLeftCell"
                                 android:layout_height="match_parent"
-                                android:background="@drawable/table_border"
-                                android:gravity="center_vertical"
-                                android:padding="3dip"
                                 android:text="Description" />
 
                             <LinearLayout
-                                android:layout_width="match_parent"
+                                style="@style/TableRightCell"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
@@ -942,15 +904,15 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:gravity="center">
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
 
                                     <com.google.android.material.imageview.ShapeableImageView
                                         android:id="@+id/userProfile_donorReviewedItemFoodImageImageView4"
-                                        android:layout_marginLeft="10dp"
                                         android:layout_width="40dp"
                                         android:layout_height="40dp"
                                         android:layout_gravity="center"
+                                        android:layout_marginLeft="10dp"
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
@@ -958,20 +920,21 @@
 
                                     <com.google.android.material.imageview.ShapeableImageView
                                         android:id="@+id/userProfile_donorReviewedItemFoodImageImageView3"
-                                        android:layout_marginLeft="10dp"
                                         android:layout_width="40dp"
                                         android:layout_height="40dp"
                                         android:layout_gravity="center"
+                                        android:layout_marginLeft="10dp"
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
                                         app:srcCompat="@drawable/foodsample" />
+
                                     <com.google.android.material.imageview.ShapeableImageView
                                         android:id="@+id/userProfile_donorReviewedItemFoodImageImageView2"
-                                        android:layout_marginLeft="10dp"
                                         android:layout_width="40dp"
                                         android:layout_height="40dp"
                                         android:layout_gravity="center"
+                                        android:layout_marginLeft="10dp"
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
@@ -979,10 +942,10 @@
 
                                     <com.google.android.material.imageview.ShapeableImageView
                                         android:id="@+id/userProfile_donorReviewedItemFoodImageImageView1"
-                                        android:layout_marginLeft="10dp"
                                         android:layout_width="40dp"
                                         android:layout_height="40dp"
                                         android:layout_gravity="center"
+                                        android:layout_marginLeft="10dp"
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
@@ -998,20 +961,22 @@
                                     android:layout_height="wrap_content"
                                     android:gravity="right"
                                     android:padding="3dip"
-                                    android:text="1/102-108 Hay St, Haymarket NSW 2000"
+                                    android:text="1/102-108 Hay St, Haymarket NSW 2000aymarket NSW 20000000000000"
                                     android:textSize="11sp" />
                             </LinearLayout>
 
                         </TableRow>
+
                         <Button
-                            android:visibility="gone"
                             android:layout_width="fill_parent"
                             android:layout_height="match_parent"
-                            android:text="View More" />
+                            android:text="View More"
+                            android:visibility="gone" />
 
                     </TableLayout>
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -1067,109 +1032,110 @@
 
 
                     android:gravity="center">
+
                     <LinearLayout
 
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:gravity="center"
-                        >
+                        android:orientation="horizontal">
+
                         <TableLayout
                             android:id="@+id/userProfile_usersDonorBadgeTableLayout"
                             android:layout_width="320dp"
                             android:layout_height="match_parent"
 
                             >
-<!--                            <TableRow android:layout_marginTop="10dp" android:layout_marginBottom="10dp">-->
-<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                                    android:layout_width="45dp"-->
-<!--                                    android:layout_height="45dp"-->
-<!--                                    android:src="@drawable/foodsample"-->
-<!--                                    app:civ_border_color="#FF000000"-->
-<!--                                    app:civ_border_width="1dp"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    />-->
-<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                                    android:layout_width="45dp"-->
-<!--                                    android:layout_height="45dp"-->
-<!--                                    android:src="@drawable/foodsample"-->
-<!--                                    app:civ_border_color="#FF000000"-->
-<!--                                    app:civ_border_width="1dp"-->
-<!--                                    android:layout_weight="1"-->
+                            <!--                            <TableRow android:layout_marginTop="10dp" android:layout_marginBottom="10dp">-->
+                            <!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                            <!--                                    android:layout_width="45dp"-->
+                            <!--                                    android:layout_height="45dp"-->
+                            <!--                                    android:src="@drawable/foodsample"-->
+                            <!--                                    app:civ_border_color="#FF000000"-->
+                            <!--                                    app:civ_border_width="1dp"-->
+                            <!--                                    android:layout_weight="1"-->
+                            <!--                                    />-->
+                            <!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                            <!--                                    android:layout_width="45dp"-->
+                            <!--                                    android:layout_height="45dp"-->
+                            <!--                                    android:src="@drawable/foodsample"-->
+                            <!--                                    app:civ_border_color="#FF000000"-->
+                            <!--                                    app:civ_border_width="1dp"-->
+                            <!--                                    android:layout_weight="1"-->
 
-<!--                                    />-->
-<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                                    android:layout_width="45dp"-->
-<!--                                    android:layout_height="45dp"-->
-<!--                                    android:src="@drawable/foodsample"-->
-<!--                                    app:civ_border_color="#FF000000"-->
-<!--                                    app:civ_border_width="1dp"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    />-->
-<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                                    android:layout_width="45dp"-->
-<!--                                    android:layout_height="45dp"-->
-<!--                                    android:src="@drawable/foodsample"-->
-<!--                                    app:civ_border_color="#FF000000"-->
-<!--                                    app:civ_border_width="1dp"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    />-->
-<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                                    android:layout_width="45dp"-->
-<!--                                    android:layout_height="45dp"-->
-<!--                                    android:src="@drawable/foodsample"-->
-<!--                                    app:civ_border_color="#FF000000"-->
-<!--                                    app:civ_border_width="1dp"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    />-->
-
-
-<!--                            </TableRow>-->
-<!--                            <TableRow android:layout_marginTop="10dp" android:layout_marginBottom="10dp">-->
-<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                                    android:layout_width="45dp"-->
-<!--                                    android:layout_height="45dp"-->
-<!--                                    android:src="@drawable/foodsample"-->
-<!--                                    app:civ_border_color="#FF000000"-->
-<!--                                    app:civ_border_width="1dp"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    />-->
-<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                                    android:layout_width="45dp"-->
-<!--                                    android:layout_height="45dp"-->
-<!--                                    android:src="@drawable/foodsample"-->
-<!--                                    app:civ_border_color="#FF000000"-->
-<!--                                    app:civ_border_width="1dp"-->
-<!--                                    android:layout_weight="1"-->
-
-<!--                                    />-->
-<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                                    android:layout_width="45dp"-->
-<!--                                    android:layout_height="45dp"-->
-<!--                                    android:src="@drawable/foodsample"-->
-<!--                                    app:civ_border_color="#FF000000"-->
-<!--                                    app:civ_border_width="1dp"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    />-->
-<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                                    android:layout_width="45dp"-->
-<!--                                    android:layout_height="45dp"-->
-<!--                                    android:src="@drawable/foodsample"-->
-<!--                                    app:civ_border_color="#FF000000"-->
-<!--                                    app:civ_border_width="1dp"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    />-->
-<!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                                    android:layout_width="45dp"-->
-<!--                                    android:layout_height="45dp"-->
-<!--                                    android:src="@drawable/foodsample"-->
-<!--                                    app:civ_border_color="#FF000000"-->
-<!--                                    app:civ_border_width="1dp"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    />-->
+                            <!--                                    />-->
+                            <!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                            <!--                                    android:layout_width="45dp"-->
+                            <!--                                    android:layout_height="45dp"-->
+                            <!--                                    android:src="@drawable/foodsample"-->
+                            <!--                                    app:civ_border_color="#FF000000"-->
+                            <!--                                    app:civ_border_width="1dp"-->
+                            <!--                                    android:layout_weight="1"-->
+                            <!--                                    />-->
+                            <!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                            <!--                                    android:layout_width="45dp"-->
+                            <!--                                    android:layout_height="45dp"-->
+                            <!--                                    android:src="@drawable/foodsample"-->
+                            <!--                                    app:civ_border_color="#FF000000"-->
+                            <!--                                    app:civ_border_width="1dp"-->
+                            <!--                                    android:layout_weight="1"-->
+                            <!--                                    />-->
+                            <!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                            <!--                                    android:layout_width="45dp"-->
+                            <!--                                    android:layout_height="45dp"-->
+                            <!--                                    android:src="@drawable/foodsample"-->
+                            <!--                                    app:civ_border_color="#FF000000"-->
+                            <!--                                    app:civ_border_width="1dp"-->
+                            <!--                                    android:layout_weight="1"-->
+                            <!--                                    />-->
 
 
-<!--                            </TableRow>-->
+                            <!--                            </TableRow>-->
+                            <!--                            <TableRow android:layout_marginTop="10dp" android:layout_marginBottom="10dp">-->
+                            <!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                            <!--                                    android:layout_width="45dp"-->
+                            <!--                                    android:layout_height="45dp"-->
+                            <!--                                    android:src="@drawable/foodsample"-->
+                            <!--                                    app:civ_border_color="#FF000000"-->
+                            <!--                                    app:civ_border_width="1dp"-->
+                            <!--                                    android:layout_weight="1"-->
+                            <!--                                    />-->
+                            <!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                            <!--                                    android:layout_width="45dp"-->
+                            <!--                                    android:layout_height="45dp"-->
+                            <!--                                    android:src="@drawable/foodsample"-->
+                            <!--                                    app:civ_border_color="#FF000000"-->
+                            <!--                                    app:civ_border_width="1dp"-->
+                            <!--                                    android:layout_weight="1"-->
+
+                            <!--                                    />-->
+                            <!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                            <!--                                    android:layout_width="45dp"-->
+                            <!--                                    android:layout_height="45dp"-->
+                            <!--                                    android:src="@drawable/foodsample"-->
+                            <!--                                    app:civ_border_color="#FF000000"-->
+                            <!--                                    app:civ_border_width="1dp"-->
+                            <!--                                    android:layout_weight="1"-->
+                            <!--                                    />-->
+                            <!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                            <!--                                    android:layout_width="45dp"-->
+                            <!--                                    android:layout_height="45dp"-->
+                            <!--                                    android:src="@drawable/foodsample"-->
+                            <!--                                    app:civ_border_color="#FF000000"-->
+                            <!--                                    app:civ_border_width="1dp"-->
+                            <!--                                    android:layout_weight="1"-->
+                            <!--                                    />-->
+                            <!--                                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                            <!--                                    android:layout_width="45dp"-->
+                            <!--                                    android:layout_height="45dp"-->
+                            <!--                                    android:src="@drawable/foodsample"-->
+                            <!--                                    app:civ_border_color="#FF000000"-->
+                            <!--                                    app:civ_border_width="1dp"-->
+                            <!--                                    android:layout_weight="1"-->
+                            <!--                                    />-->
+
+
+                            <!--                            </TableRow>-->
 
 
                         </TableLayout>

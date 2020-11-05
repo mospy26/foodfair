@@ -2,9 +2,10 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/milkGreen</item>
+        <item name="colorPrimaryDark">@color/milkGreen</item>
         <item name="colorAccent">@color/colorAccent</item>
+<!--        <item name="android:windowTranslucentStatus">true</item>-->
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -28,4 +29,20 @@
         <item name="android:background">@color/black_overlay</item>
     </style>
 
+    <style name="TableLeftCell">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">43dp</item>
+        <item name="android:background">@drawable/table_border</item>
+        <item name="android:padding">3dip</item>
+        <item name="android:gravity">center</item>
+        <item name="android:ellipsize">none</item>
+    </style>
+
+    <style name="TableRightCell">
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:padding">3dip</item>
+        <item name="android:gravity">right|center_vertical</item>
+        <item name="android:ellipsize">none</item>
+    </style>
 </resources>

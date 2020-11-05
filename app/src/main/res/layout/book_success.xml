@@ -13,7 +13,7 @@
             android:id="@+id/success_successHeaderContainer"
             android:layout_width="match_parent"
             android:layout_height="170dp"
-            android:background="#ad593b">
+            android:background="@color/milkGreen">
 
             <LinearLayout
                 android:layout_width="match_parent"

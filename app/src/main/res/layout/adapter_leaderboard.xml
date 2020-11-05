@@ -1,53 +1,57 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
-    android:padding="6dip" >
+    android:layout_height="wrap_content"
+    android:padding="6dip"
+    android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/leaderboard_rank"
+
+
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true"
-        android:text="1"
-        />
-
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="6dip"
-        android:contentDescription="TODO"
-        android:layout_toRightOf="@id/leaderboard_rank"
-        android:src="@drawable/ic_menu_profile" />
-
-    <TextView
-        android:id="@+id/user_name"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/user_bio"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignWithParentIfMissing="true"
-        android:layout_toRightOf="@id/icon"
-        android:gravity="center_vertical"
-        android:text="Loading user name"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/user_bio"
-        android:layout_width="fill_parent"
-        android:layout_height="26dip"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_toRightOf="@id/icon"
-        android:ellipsize="marquee"
-        android:text="Loading user bio"
-        android:textSize="12sp"
-        android:singleLine="true" />
+        >
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:contentDescription="TODO"
+            android:src="@drawable/ic_menu_profile" >
+        </ImageView>
+        <TextView
+            android:id="@+id/leaderboard_rank"
+            android:background="@color/White"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="@color/milkGreen"
+            android:text="1"
+            />
+    </RelativeLayout>
 
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="Loading user name"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/user_bio"
+            android:layout_width="fill_parent"
+            android:layout_height="26dip"
+            android:ellipsize="marquee"
+            android:text="Loading user bio"
+            android:textSize="12sp"
+            android:singleLine="true"
+        />
+    </LinearLayout>
+
+
+
+</LinearLayout>

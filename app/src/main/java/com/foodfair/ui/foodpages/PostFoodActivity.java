@@ -30,6 +30,7 @@ import androidx.core.content.FileProvider;
 
 import com.foodfair.model.FoodItemInfo;
 import com.foodfair.ui.foodpages.MapViewActivity;
+import com.foodfair.utilities.Utility;
 import com.foodfair.utilities.Const;
 import com.foodfair.utilities.MarshmallowPermission;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -68,7 +69,7 @@ import java.util.Set;
 public class PostFoodActivity extends AppCompatActivity {
 
 
-    // !!!!!! Assume we have user ID!!! Mustafa
+    // !!!!!! Assume we have user ID!!!
     private static final String UID = "yXnhEl9OBqgKqHLAPMPV";
 
     // developer-defined request codes
@@ -121,7 +122,6 @@ public class PostFoodActivity extends AppCompatActivity {
         etQuantity = (EditText) findViewById(R.id.etQuantity);
         etType = (EditText) findViewById(R.id.etType);
 
-        // initialise Firebase
         mFirestore = FirebaseFirestore.getInstance();
         mFireStorage = FirebaseStorage.getInstance();
         mStorageRef = mFireStorage.getReference();
@@ -371,8 +371,7 @@ public class PostFoodActivity extends AppCompatActivity {
 
         // get the current timestamp
         Timestamp dateOn;
-        String pattern = "yyyyMMdd_HHmmss";
-        String currentTimeStr = new SimpleDateFormat(pattern, Locale.getDefault()).format(new Date());
+        String currentTimeStr = Utility.getCurrentTimeStr();
 
 
         String foodNameStr = etFoodName.getText().toString().trim().toLowerCase();
@@ -401,8 +400,8 @@ public class PostFoodActivity extends AppCompatActivity {
         if (checkEachField(etList)) {
             // if all fields are filled
 
-            dateExpiry = parseDateTime(dateExpiryStr, "dd/MM/yyyy");
-            dateOn = parseDateTime(currentTimeStr, pattern);
+            dateExpiry = Utility.parseDateTime(dateExpiryStr, "dd/MM/yyyy");
+            dateOn = Utility.parseDateTime(currentTimeStr, aConst.DATE_TIME_PATTERN);
             int quantity = Integer.parseInt(quanStr);
 
             // get donor reference
@@ -469,26 +468,6 @@ public class PostFoodActivity extends AppCompatActivity {
 
     }
 
-
-    /**
-     *  parse date time
-     */
-    public Timestamp parseDateTime(String dateTimeStr, String pattern) {
-
-        SimpleDateFormat inputFormat = new SimpleDateFormat(pattern);
-        Date d = null;
-        try {
-            //convert string to date
-            d = inputFormat.parse(dateTimeStr);
-        } catch (ParseException e) {
-            System.out.println("Date Format Not Supported");
-            e.printStackTrace();
-        }
-        return new Timestamp(d);
-
-    }
-
-
     /**
      *  looks up the Const hashset table to find out the corresponding type integers
      */
@@ -531,9 +510,6 @@ public class PostFoodActivity extends AppCompatActivity {
     }
 
 
-    /**
-     *  looks up the Const hashset table to find out the corresponding allergen integers
-     */
     public void populateFoodItemInfo(ArrayList<Long> allergyInfo, Integer quantity, Timestamp dateExpire,
                                      Timestamp dateOn, DocumentReference donorRef, ArrayList<String> imageDescription,
                                      String name, Integer status, String textDescription, Long type,

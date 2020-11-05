@@ -12,7 +12,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="90dp"
-            android:background="#ad593b">
+            android:background="@color/milkGreen">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -67,124 +67,79 @@
                     <TableRow >
 
                         <TextView
-                            android:layout_height="43dp"
-                            android:gravity="center"
-                            android:layout_width="120dp"
-                            android:background="@drawable/table_border"
-                            android:padding="3dip"
+                            style="@style/TableLeftCell"
                             android:text="Allergen" />
 
                         <TextView
+                            style="@style/TableRightCell"
                             android:id="@+id/fooddetail_foodallergyTextView"
-                            android:layout_height="match_parent"
-                            android:gravity="right|center_vertical"
-                            android:padding="3dip"
                             android:textColor="@color/Red"
-                            android:text="milk, cheese, beef" />
+                            android:text="milk, cheese " />
                     </TableRow>
 
                     <TableRow>
                         <TextView
-                            android:layout_height="43dp"
-                            android:gravity="center"
-                            android:layout_width="120dp"
-                            android:background="@drawable/table_border"
-                            android:padding="3dip"
+                            style="@style/TableLeftCell"
                             android:text="Date On Shelf" />
 
                         <TextView
                             android:id="@+id/fooddetail_foodOnDateTextView"
-                            android:layout_height="match_parent"
-                            android:gravity="right|center_vertical"
-                            android:padding="3dip"
+                            style="@style/TableRightCell"
                             android:text="2020-09-10 18:33:20" />
                     </TableRow>
 
                     <TableRow>
 
                         <TextView
-                            android:layout_width="120dp"
-                            android:layout_height="43dp"
-                            android:gravity="center"
-                            android:background="@drawable/table_border"
-                            android:padding="3dip"
+                            style="@style/TableLeftCell"
                             android:text="Time to expire" />
 
                         <TextView
                             android:id="@+id/fooddetail_foodExpireDateTextView"
-                            android:layout_height="match_parent"
-                            android:gravity="right|center_vertical"
-                            android:padding="3dip"
+                            style="@style/TableRightCell"
                             android:text="2020-09-10 18:33:20" />
                     </TableRow>
 
                     <TableRow>
                         <TextView
-                            android:layout_width="120dp"
-                            android:layout_height="43dp"
-                            android:gravity="center"
-                            android:background="@drawable/table_border"
-                            android:padding="3dip"
+                            style="@style/TableLeftCell"
                             android:text="Quantity left" />
 
                         <TextView
                             android:id="@+id/fooddetail_foodQuantityTextView"
-                            android:layout_height="match_parent"
-                            android:gravity="right|center_vertical"
-                            android:padding="3dip"
+                            style="@style/TableRightCell"
                             android:text="3" />
                     </TableRow>
                     <TableRow>
                         <TextView
-                            android:layout_width="120dp"
-                            android:layout_height="43dp"
-                            android:gravity="center"
-                            android:background="@drawable/table_border"
-                            android:padding="3dip"
+                            style="@style/TableLeftCell"
                             android:text="Donor" />
 
                         <TextView
+                            style="@style/TableRightCell"
                             android:id="@+id/fooddetail_donorNameTextView"
-                            android:layout_height="match_parent"
-                            android:gravity="right|center_vertical"
-                            android:padding="3dip"
                             android:text="Piccacio Restaurant"
-                            android:textSize="11sp" />
+                            />
                     </TableRow>
                     <TableRow>
                         <TextView
-                            android:layout_width="120dp"
-                            android:layout_height="43dp"
-                            android:gravity="center"
-                            android:background="@drawable/table_border"
-                            android:padding="3dip"
+                            style="@style/TableLeftCell"
                             android:text="Address" />
                         <TextView
                             android:id="@+id/fooddetail_donorAddressTextView"
-                            android:layout_height="match_parent"
-                            android:gravity="right|center_vertical"
-                            android:padding="3dip"
+                            style="@style/TableRightCell"
                             android:text="1/102-108 Hay St, Haymarket NSW 2000"
                             android:textSize="11sp" />
                     </TableRow>
 
                     <TableRow>
-
                         <TextView
-                            android:layout_width="120dp"
-                            android:layout_height="43dp"
-                            android:gravity="center"
-                            android:background="@drawable/table_border"
-                            android:padding="3dip"
+                            style="@style/TableLeftCell"
                             android:text="More Information" />
-
                         <TextView
                             android:id="@+id/fooddetail_foodTextDescriptionTextView"
-                            android:layout_height="match_parent"
-                            android:layout_width="200dp"
-                            android:gravity="right|center_vertical"
-                            android:ellipsize="none"
-                            android:padding="3dip"
+                            style="@style/TableRightCell"
+                            android:textSize="11sp"
                             android:text="This food was made this morning. It should be consumed today." />
                     </TableRow>
                 </TableLayout>
@@ -196,7 +151,8 @@
                 android:layout_height="55dp"
                 android:shadowColor="@color/Orange"
                 android:text="Book this food"
-                android:backgroundTint="#ad593b"
+                android:backgroundTint="@color/milkGreen"
+                android:onClick="onBookClick"
                 >
             </Button>
         </LinearLayout>

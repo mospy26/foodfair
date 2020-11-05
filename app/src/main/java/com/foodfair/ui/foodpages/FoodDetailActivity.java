@@ -1,28 +1,48 @@
 package com.foodfair.ui.foodpages;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.MutableLiveData;
 
 import com.foodfair.R;
 import com.foodfair.model.FoodItemInfo;
+import com.foodfair.model.FooditemTransaction;
+import com.foodfair.model.ReviewInfo;
 import com.foodfair.model.UsersInfo;
+import com.foodfair.ui.profiles.UserProfileViewModel;
 import com.foodfair.utilities.Const;
+import com.foodfair.utilities.Utility;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.auth.User;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class FoodDetailActivity extends AppCompatActivity {
+
+
+    // !!!!!! Assume we have user ID!!!
+    private static final String UID = "yXnhEl9OBqgKqHLAPMPV";
+    private static final String TAG = MapViewActivity.class.getSimpleName();
+
     String foodId;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     Const aConst = Const.getInstance();
@@ -36,16 +56,28 @@ public class FoodDetailActivity extends AppCompatActivity {
     TextView foodDonorNameTextView;
     TextView foodDonorAddressTextView;
     TextView foodTextDescriptionTextView;
+    String mDonorID;
+    String mFoodItemID;
+
+    private FirebaseFirestore mFirestore;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mFirestore = FirebaseFirestore.getInstance();
         setContentView(R.layout.food_item);
         foodDetailModel = new FoodDetailModel();
         InitUI();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 //        userId = user.getUid();
         foodId = "8g51f4M0j881nqW0v59o";
+        Intent intent = getIntent();
+        String idFromIntent = intent.getStringExtra("foodId");
+        if(idFromIntent != null && !idFromIntent.isEmpty()){
+            foodId = idFromIntent;
+        }
         viewModelObserverSetup();
     }
     @Override
@@ -74,10 +106,11 @@ public class FoodDetailActivity extends AppCompatActivity {
         }
     }
     private void fetchDBInfo(String userId) {
-        FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_INFO)).document(foodId).get().addOnCompleteListener(task -> {
+        mFirestore.collection(getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_INFO)).document(foodId).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
+                    mFoodItemID = document.getId();
                     FoodItemInfo foodItemInfo = document.toObject(FoodItemInfo.class);
                     setFoodDetailUI(foodItemInfo);
                     Log.d("TAG", "DocumentSnapshot data: " + document.getData());
@@ -95,6 +128,7 @@ public class FoodDetailActivity extends AppCompatActivity {
         DocumentReference donor = foodItemInfo.getDonorRef();
         donor.get().addOnCompleteListener(task -> {
            if (task.isSuccessful()){
+               mDonorID = task.getResult().getId();
                UsersInfo donorInfo = task.getResult().toObject(UsersInfo.class);
                foodDetailModel.donorUserInfo.setValue(donorInfo);
            }
@@ -172,4 +206,65 @@ public class FoodDetailActivity extends AppCompatActivity {
         foodDonorAddressTextView = findViewById(R.id.fooddetail_donorAddressTextView);
         foodTextDescriptionTextView = findViewById(R.id.fooddetail_foodTextDescriptionTextView);
     }
+
+    /**
+     * When book button is clicked, produce a transaction with
+     * consumer, donor, foodref, openDate and status
+     * @param view
+     */
+
+    public void onBookClick(View view){
+
+        FooditemTransaction foodItemTransaction = new FooditemTransaction();
+        Long bookStatus = aConst.TRANSACTION_STATUS.get("Booked");
+        String userTableStr = getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO);
+        String foodTableStr = getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_INFO);
+        DocumentReference donorRef = mFirestore.document(userTableStr + "/" + mDonorID);
+        DocumentReference consumerRef = mFirestore.document(userTableStr + "/" + UID);
+        DocumentReference foodRef = mFirestore.document(foodTableStr + "/" + mFoodItemID);
+        Timestamp openDate = Utility.parseDateTime(Utility.getCurrentTimeStr(), aConst.DATE_TIME_PATTERN);
+
+        populateFoodItemTransaction(aConst.ALIVE_RECORD, null, consumerRef, null,
+                donorRef, null, foodRef, openDate, bookStatus, foodItemTransaction);
+
+        postFoodTransactionToFirebase(foodItemTransaction);
+    }
+
+    public void populateFoodItemTransaction(Long aliveRecord, DocumentReference cdReview,
+            DocumentReference consumer, DocumentReference dcReview, DocumentReference donor,
+            Timestamp finishDate, DocumentReference foodRef, Timestamp openDate, Long status,
+            FooditemTransaction foodItemTransaction) {
+
+        foodItemTransaction.setAliveRecord(aliveRecord);
+        foodItemTransaction.setCdReview(cdReview);
+        foodItemTransaction.setConsumer(consumer);
+        foodItemTransaction.setDcReview(dcReview);
+        foodItemTransaction.setDonor(donor);
+        foodItemTransaction.setFinishDate(finishDate);
+        foodItemTransaction.setFoodRef(foodRef);
+        foodItemTransaction.setOpenDate(openDate);
+        foodItemTransaction.setStatus(status);
+
+    }
+
+
+    public void postFoodTransactionToFirebase(FooditemTransaction foodItemTransaction) {
+
+        String foodTransStr = getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_TRANSACTION);
+        CollectionReference transCollect = mFirestore.collection(foodTransStr);
+        transCollect.document().set(foodItemTransaction)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+    }
+
 }
