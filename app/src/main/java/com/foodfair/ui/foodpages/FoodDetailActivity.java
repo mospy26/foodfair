@@ -78,8 +78,6 @@ public class FoodDetailActivity extends AppCompatActivity {
         setContentView(R.layout.food_item);
         foodDetailModel = new FoodDetailModel();
         InitUI();
-//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//        userId = user.getUid();
         foodId = "8g51f4M0j881nqW0v59o";
         Intent intent = getIntent();
         String idFromIntent = intent.getStringExtra("foodId");

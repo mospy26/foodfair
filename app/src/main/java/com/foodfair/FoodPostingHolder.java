@@ -13,6 +13,7 @@ public class FoodPostingHolder extends RecyclerView.ViewHolder {
     public TextView foodPostedBy;
     public TextView foodPostedDate;
     public ImageView imageToDisplay;
+    public String foodItemId;
 
 
     public FoodPostingHolder(@NonNull View itemView) {

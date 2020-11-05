@@ -17,6 +17,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.foodfair.FoodPostingHolder;
 import com.foodfair.R;
 import com.foodfair.model.FoodItemInfo;
+import com.foodfair.ui.foodpages.FoodDetailActivity;
 import com.foodfair.ui.foodpages.MapViewActivity;
 import com.foodfair.ui.login.Sign_Up;
 import com.foodfair.utilities.Utility;
@@ -77,7 +78,8 @@ public class HomeFragment extends Fragment {
                             if (model.getImageDescription() != null && model.getImageDescription().size() != 0) {
                                 Picasso.get().load(model.getImageDescription().get(0)).into(holder.imageToDisplay);
                             }
-
+                            ;
+                            holder.foodItemId = ((DocumentSnapshot) adapter.getSnapshots().getSnapshot(position)).getId();
                         }
 
 
@@ -89,6 +91,9 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         //Start Food Detail Activity
+                        Intent intent = new Intent(getContext(), FoodDetailActivity.class);
+                        intent.putExtra("foodId",holder.foodItemId);
+                        startActivity(intent);
                     }
                 });
 
