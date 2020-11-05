@@ -17,11 +17,15 @@ import android.widget.Toast;
 
 import com.foodfair.MainActivity;
 import com.foodfair.R;
+import com.foodfair.model.UsersInfo;
+import com.foodfair.utilities.Cache;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
@@ -39,6 +43,10 @@ public class Login extends AppCompatActivity {
     FirebaseUser currentUser;
     private SharedPreferences sharedPreferences;
     private FirebaseAuth firebaseAuth;
+    Cache cache;
+    String userId;
+    UsersInfo user;
+    boolean started = false;
 
 
     @Override
@@ -55,6 +63,7 @@ public class Login extends AppCompatActivity {
         email = findViewById(R.id.loginEmail);
         signIn = findViewById(R.id.sign_in_btn);
         password = findViewById(R.id.loginPassword);
+        cache = Cache.getInstance(this);
 
         explodeNewScene();
         signIn.setOnTouchListener(new View.OnTouchListener() {
@@ -73,12 +82,10 @@ public class Login extends AppCompatActivity {
                     String userId = firebaseUser.getUid();
 
                     // store it globally for access
-                    sharedPreferences = getPreferences(MODE_PRIVATE);
+                    sharedPreferences = getSharedPreferences("foodfair", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("firebasekey", userId);
                     editor.commit();
-                    Intent i = new Intent(Login.this, MainActivity.class);
-                    startActivity(i);
                 }
             }
         };
@@ -106,16 +113,48 @@ public class Login extends AppCompatActivity {
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
-                Log.d(TAG, "createUserWithEmail:success");
+                userId = firebaseAuth.getUid();
+                // store it globally for access
+                sharedPreferences = getSharedPreferences("foodfair", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("firebasekey", userId);
+                editor.commit();
+                fetchUser();
+                Log.d("Sign in", "Success");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 e.printStackTrace();
-                Log.d(TAG, "createUserWithEmail:failed");
+                Log.e("Sign in", "Failed");
                 Toast.makeText(context, "Invalid login, please try again", Toast.LENGTH_LONG).show();
             }
         });
         return;
+    }
+
+    private void fetchUser() {
+        FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO)).document(userId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    user = document.toObject(UsersInfo.class);
+                }
+                if (!started) {
+                    if (user.getLocation() == null || user.getLocation().equals("") ||
+                            user.getAllergy() == null || user.getAllergy().size() == 0 || user.getPreference() == null) {
+                        Intent i = new Intent(Login.this, SetUp.class);
+                        startActivity(i);
+                        finish();
+                        started = true;
+                    } else {
+                        Intent i = new Intent(Login.this, MainActivity.class);
+                        startActivity(i);
+                        finish();
+                        started = true;
+                    }
+                }
+            }
+        });
     }
 }
