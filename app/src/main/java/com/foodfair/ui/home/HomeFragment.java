@@ -19,6 +19,7 @@ import com.foodfair.R;
 import com.foodfair.model.FoodItemInfo;
 import com.foodfair.ui.foodpages.FoodDetailActivity;
 import com.foodfair.ui.foodpages.MapViewActivity;
+import com.foodfair.ui.foodpages.PostFoodActivity;
 import com.foodfair.ui.login.Sign_Up;
 import com.foodfair.utilities.Utility;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -113,6 +114,12 @@ public class HomeFragment extends Fragment {
         FloatingActionButton fab = root.findViewById(R.id.floating_action_button);
         fab.setOnClickListener(view ->{
             Intent intent = new Intent(getContext(), MapViewActivity.class);
+            startActivity(intent);
+        });
+
+        FloatingActionButton postButton = root.findViewById(R.id.post_food_button);
+        postButton.setOnClickListener(view ->{
+            Intent intent = new Intent(getContext(), PostFoodActivity.class);
             startActivity(intent);
         });
     }
