@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.foodfair.R;
 import com.foodfair.model.User;
 import com.foodfair.model.UsersInfo;
+import com.foodfair.utilities.Cache;
 import com.foodfair.utilities.LoadingDialog;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -69,6 +70,7 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
     private Location location;
     private LocationManager locationManager;
     private String userId;
+    private Cache cache;
 
 
     private String nameValue;
@@ -84,6 +86,7 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
         getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign__up);
+        cache = Cache.getInstance(this);
 
         initUI();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -239,6 +242,7 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d("Sign Up", "Successfully Stored user information");
+                cache.add("user", user);
                 Intent intent = new Intent(context, Login.class);
                 startActivity(intent);
                 return;
