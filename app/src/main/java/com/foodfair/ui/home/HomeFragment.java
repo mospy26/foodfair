@@ -1,5 +1,6 @@
 package com.foodfair.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +17,12 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.foodfair.FoodPostingHolder;
 import com.foodfair.R;
 import com.foodfair.model.FoodItemInfo;
+import com.foodfair.ui.foodpages.MapViewActivity;
+import com.foodfair.ui.login.Sign_Up;
 import com.foodfair.utilities.Utility;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -96,8 +100,16 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         recyclerView.setAdapter(adapter);
 
-
+        fabStuff(root);
         return root;
+    }
+
+    private void fabStuff(View root) {
+        FloatingActionButton fab = root.findViewById(R.id.floating_action_button);
+        fab.setOnClickListener(view ->{
+            Intent intent = new Intent(getContext(), MapViewActivity.class);
+            startActivity(intent);
+        });
     }
 
     @Override
