@@ -73,7 +73,7 @@
                             style="@style/TableRightCell"
                             android:id="@+id/fooddetail_foodallergyTextView"
                             android:textColor="@color/Red"
-                            android:text="milk, cheese " />
+                            android:text="Loading" />
                     </TableRow>
 
                     <TableRow>
@@ -84,7 +84,7 @@
                         <TextView
                             android:id="@+id/fooddetail_foodOnDateTextView"
                             style="@style/TableRightCell"
-                            android:text="2020-09-10 18:33:20" />
+                            android:text="Loading" />
                     </TableRow>
 
                     <TableRow>
@@ -96,7 +96,7 @@
                         <TextView
                             android:id="@+id/fooddetail_foodExpireDateTextView"
                             style="@style/TableRightCell"
-                            android:text="2020-09-10 18:33:20" />
+                            android:text="Loading" />
                     </TableRow>
 
                     <TableRow>
@@ -107,7 +107,7 @@
                         <TextView
                             android:id="@+id/fooddetail_foodQuantityTextView"
                             style="@style/TableRightCell"
-                            android:text="3" />
+                            android:text="Loading" />
                     </TableRow>
                     <TableRow>
                         <TextView
@@ -117,7 +117,7 @@
                         <TextView
                             style="@style/TableRightCell"
                             android:id="@+id/fooddetail_donorNameTextView"
-                            android:text="Piccacio Restaurant"
+                            android:text="Loading"
                             />
                     </TableRow>
                     <TableRow>
@@ -127,7 +127,7 @@
                         <TextView
                             android:id="@+id/fooddetail_donorAddressTextView"
                             style="@style/TableRightCell"
-                            android:text="1/102-108 Hay St, Haymarket NSW 2000"
+                            android:text="Loading"
                             android:textSize="11sp" />
                     </TableRow>
 
@@ -139,7 +139,7 @@
                             android:id="@+id/fooddetail_foodTextDescriptionTextView"
                             style="@style/TableRightCell"
                             android:textSize="11sp"
-                            android:text="This food was made this morning. It should be consumed today." />
+                            android:text="Loading" />
                     </TableRow>
                 </TableLayout>
 

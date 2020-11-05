@@ -47,7 +47,7 @@
                 android:id="@+id/userProfile_profileCircleImageView"
                 android:layout_width="96dp"
                 android:layout_height="96dp"
-                android:src="@drawable/sample_profile_image"
+                android:src="@drawable/ic_menu_profile"
                 app:civ_border_color="#FF000000"
                 app:civ_border_width="1dp" />
 
@@ -62,7 +62,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Daniel Grangler"
+                    android:text="Loading"
                     android:textSize="25dp" />
 
                 <ImageView
@@ -83,7 +83,7 @@
                     android:id="@+id/userProfile_userIdTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="\@daniG632"
+                    android:text="Loading"
                     android:textSize="15dp" />
             </LinearLayout>
 
@@ -98,9 +98,7 @@
                     android:layout_width="320dp"
                     android:layout_height="match_parent"
                     android:stretchColumns="1">
-
                     <TableRow>
-
                         <TextView
                             style="@style/TableLeftCell"
                             android:text="Age" />
@@ -108,7 +106,7 @@
                         <TextView
                             android:id="@+id/userProfile_ageTextView"
                             style="@style/TableRightCell"
-                            android:text="32" />
+                            android:text="Loading" />
                     </TableRow>
 
                     <TableRow>
@@ -120,7 +118,7 @@
                         <TextView
                             android:id="@+id/userProfile_bioTextView"
                             style="@style/TableRightCell"
-                            android:text="I am a lazy fat guy." />
+                            android:text="Loading" />
                     </TableRow>
 
                     <TableRow>
@@ -132,7 +130,7 @@
                         <TextView
                             android:id="@+id/userProfile_allergyTextView"
                             style="@style/TableRightCell"
-                            android:text="shallot, onion, and etc" />
+                            android:text="Loading" />
                     </TableRow>
 
                     <TableRow>
@@ -144,7 +142,7 @@
                         <TextView
                             android:id="@+id/userProfile_preferenceTextView"
                             style="@style/TableRightCell"
-                            android:text="Ramen" />
+                            android:text="Loading" />
                     </TableRow>
 
                     <TableRow>
@@ -156,7 +154,7 @@
                         <TextView
                             android:id="@+id/userProfile_locationTextView"
                             style="@style/TableRightCell"
-                            android:text="1/102-108 Hay St, Haymarket NSW 20000000000000"
+                            android:text="Loading"
                             android:textSize="11sp" />
                     </TableRow>
 
@@ -169,7 +167,7 @@
                         <TextView
                             android:id="@+id/userProfile_joinDateTextView"
                             style="@style/TableRightCell"
-                            android:text="07/03/2020 1:30:22" />
+                            android:text="Loading" />
                     </TableRow>
 
                     <TableRow>
@@ -182,7 +180,7 @@
                         <TextView
                             android:id="@+id/userProfile_lastLoginDateTextView"
                             style="@style/TableRightCell"
-                            android:text="07/03/2020 1:30:22" />
+                            android:text="Loading" />
                     </TableRow>
 
                 </TableLayout>
@@ -235,7 +233,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="5dp"
-                            android:text="35"
+                            android:text="Loading"
                             android:textSize="14sp"></TextView>
 
                         <TextView
@@ -268,7 +266,7 @@
                             <TextView
                                 android:id="@+id/userProfile_reviewsDonorNameTextView"
                                 style="@style/TableRightCell"
-                                android:text="Grill" />
+                                android:text="Loading" />
                         </TableRow>
 
                         <TableRow>
@@ -280,7 +278,7 @@
                             <TextView
                                 android:id="@+id/userProfile_reviewsFoodNameTextView"
                                 style="@style/TableRightCell"
-                                android:text="3 level Beef Burger" />
+                                android:text="Loading" />
                         </TableRow>
 
                         <TableRow>
@@ -292,7 +290,7 @@
                             <TextView
                                 android:id="@+id/userProfile_reviewsDateTextView"
                                 style="@style/TableRightCell"
-                                android:text="07/03/2020 1:30:22" />
+                                android:text="Loading" />
                         </TableRow>
 
                         <TableRow>
@@ -349,7 +347,7 @@
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
-                                        app:srcCompat="@drawable/foodsample" />
+                                        app:srcCompat="@drawable/quantum_ic_clear_grey600_24" />
 
                                     <com.google.android.material.imageview.ShapeableImageView
                                         android:id="@+id/userProfile_reviewsImageReviewShapeableImageView3"
@@ -360,7 +358,7 @@
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
-                                        app:srcCompat="@drawable/foodsample" />
+                                        app:srcCompat="@drawable/quantum_ic_clear_grey600_24" />
 
                                     <com.google.android.material.imageview.ShapeableImageView
                                         android:id="@+id/userProfile_reviewsImageReviewShapeableImageView2"
@@ -371,7 +369,7 @@
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
-                                        app:srcCompat="@drawable/foodsample" />
+                                        app:srcCompat="@drawable/quantum_ic_clear_grey600_24" />
 
                                     <com.google.android.material.imageview.ShapeableImageView
                                         android:id="@+id/userProfile_reviewsImageReviewShapeableImageView1"
@@ -382,7 +380,7 @@
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
-                                        app:srcCompat="@drawable/foodsample" />
+                                        app:srcCompat="@drawable/quantum_ic_clear_grey600_24" />
 
 
                                 </LinearLayout>
@@ -394,7 +392,7 @@
                                     android:layout_height="wrap_content"
                                     android:gravity="right"
                                     android:padding="3dip"
-                                    android:text="1/102-108 Hay St, Haymarket NSW 20000000000000"
+                                    android:text="Loading"
                                     android:textSize="11sp" />
                             </LinearLayout>
 
@@ -438,7 +436,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="5dp"
-                            android:text="5"
+                            android:text="loading"
                             android:textSize="14sp"></TextView>
 
                         <TextView
@@ -453,7 +451,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="25dp"
-                            android:text="35"
+                            android:text="loading"
                             android:textSize="14sp"></TextView>
                     </LinearLayout>
                 </RelativeLayout>
@@ -624,7 +622,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="5dp"
-                            android:text="35"
+                            android:text="loading"
                             android:textSize="14sp"></TextView>
 
                         <TextView
@@ -657,7 +655,7 @@
                             <TextView
                                 android:id="@+id/userProfile_donorOnShelfFoodNameTextView"
                                 style="@style/TableRightCell"
-                                android:text="3 level Beef Burger" />
+                                android:text="Loading" />
                         </TableRow>
 
                         <TableRow>
@@ -669,7 +667,7 @@
                             <TextView
                                 android:id="@+id/userProfile_donorOnShelfDateOnTextView"
                                 style="@style/TableRightCell"
-                                android:text="07/03/2020 1:30:22" />
+                                android:text="Loading" />
                         </TableRow>
 
                         <TableRow>
@@ -681,7 +679,7 @@
                             <TextView
                                 android:id="@+id/userProfile_donorOnShelfDateExpireTextView"
                                 style="@style/TableRightCell"
-                                android:text="07/03/2020 1:30:22" />
+                                android:text="Loading" />
                         </TableRow>
 
 
@@ -713,7 +711,7 @@
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
-                                        app:srcCompat="@drawable/foodsample" />
+                                        app:srcCompat="@drawable/quantum_ic_clear_grey600_24" />
 
                                     <com.google.android.material.imageview.ShapeableImageView
                                         android:id="@+id/userProfile_donorOnShelfFoodImageImageView3"
@@ -724,7 +722,7 @@
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
-                                        app:srcCompat="@drawable/foodsample" />
+                                        app:srcCompat="@drawable/quantum_ic_clear_grey600_24" />
 
                                     <com.google.android.material.imageview.ShapeableImageView
                                         android:id="@+id/userProfile_donorOnShelfFoodImageImageView2"
@@ -735,7 +733,7 @@
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
-                                        app:srcCompat="@drawable/foodsample" />
+                                        app:srcCompat="@drawable/quantum_ic_clear_grey600_24" />
 
                                     <com.google.android.material.imageview.ShapeableImageView
                                         android:id="@+id/userProfile_donorOnShelfFoodImageImageView1"
@@ -746,7 +744,7 @@
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
-                                        app:srcCompat="@drawable/foodsample" />
+                                        app:srcCompat="@drawable/quantum_ic_clear_grey600_24" />
                                 </LinearLayout>
 
 
@@ -756,7 +754,7 @@
                                     android:layout_height="wrap_content"
                                     android:gravity="right"
                                     android:padding="3dip"
-                                    android:text="1/102-108 Hay St, Haymaaymarket NSW 20000000000000rket NSW 2000"
+                                    android:text="Loading"
                                     android:textSize="11sp" />
                             </LinearLayout>
 
@@ -800,7 +798,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="5dp"
-                            android:text="35"
+                            android:text="Loading"
                             android:textSize="14sp"></TextView>
 
                         <TextView
@@ -833,7 +831,7 @@
                             <TextView
                                 android:id="@+id/userProfile_donorReviewedItemConsumerTextView"
                                 style="@style/TableRightCell"
-                                android:text="Tom" />
+                                android:text="Loading" />
                         </TableRow>
 
                         <TableRow>
@@ -845,7 +843,7 @@
                             <TextView
                                 android:id="@+id/userProfile_donorReviewedItemFoodNameTextView"
                                 style="@style/TableRightCell"
-                                android:text="3 level Beef Burger" />
+                                android:text="Loading" />
                         </TableRow>
 
                         <TableRow>
@@ -857,7 +855,7 @@
                             <TextView
                                 android:id="@+id/userProfile_donorReviewedItemReviewedDateTextView"
                                 style="@style/TableRightCell"
-                                android:text="07/03/2020 1:30:22" />
+                                android:text="Loading" />
                         </TableRow>
 
                         <TableRow>
@@ -916,7 +914,7 @@
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
-                                        app:srcCompat="@drawable/foodsample" />
+                                        app:srcCompat="@drawable/quantum_ic_clear_grey600_24" />
 
                                     <com.google.android.material.imageview.ShapeableImageView
                                         android:id="@+id/userProfile_donorReviewedItemFoodImageImageView3"
@@ -927,7 +925,7 @@
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
-                                        app:srcCompat="@drawable/foodsample" />
+                                        app:srcCompat="@drawable/quantum_ic_clear_grey600_24" />
 
                                     <com.google.android.material.imageview.ShapeableImageView
                                         android:id="@+id/userProfile_donorReviewedItemFoodImageImageView2"
@@ -938,7 +936,7 @@
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
-                                        app:srcCompat="@drawable/foodsample" />
+                                        app:srcCompat="@drawable/quantum_ic_clear_grey600_24" />
 
                                     <com.google.android.material.imageview.ShapeableImageView
                                         android:id="@+id/userProfile_donorReviewedItemFoodImageImageView1"
@@ -949,7 +947,7 @@
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitXY"
                                         app:shapeAppearanceOverlay="@style/roundedImageView"
-                                        app:srcCompat="@drawable/foodsample" />
+                                        app:srcCompat="@drawable/quantum_ic_clear_grey600_24" />
 
 
                                 </LinearLayout>
@@ -961,7 +959,7 @@
                                     android:layout_height="wrap_content"
                                     android:gravity="right"
                                     android:padding="3dip"
-                                    android:text="1/102-108 Hay St, Haymarket NSW 2000aymarket NSW 20000000000000"
+                                    android:text="Loading"
                                     android:textSize="11sp" />
                             </LinearLayout>
 
@@ -1005,7 +1003,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="5dp"
-                            android:text="5"
+                            android:text="Loading"
                             android:textSize="14sp"></TextView>
 
                         <TextView
@@ -1020,7 +1018,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="25dp"
-                            android:text="35"
+                            android:text="Loading"
                             android:textSize="14sp"></TextView>
                     </LinearLayout>
                 </RelativeLayout>
