@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/posting"
-    android:layout_width="370dp"
+    android:layout_width="match_parent"
     android:layout_height="300dp"
     android:layout_margin="20dp"
     android:elevation="300dp"
@@ -34,30 +34,30 @@
 
         <TextView
             android:id="@+id/userPosted"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/museo"
             android:text="Posted By:"
             android:typeface="normal"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/postedDate"
             app:layout_constraintHorizontal_bias="0.055"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/foodImage"
             app:layout_constraintVertical_bias="0.943" />
 
         <TextView
             android:id="@+id/postedDate"
-            android:layout_width="176dp"
-            android:layout_height="18dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:fontFamily="@font/museo"
             android:text="Date:"
             android:typeface="normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/userPosted"
+            app:layout_constraintTop_toBottomOf="@id/foodImage"
             app:layout_constraintVertical_bias="0.943" />
 
         <ImageView
