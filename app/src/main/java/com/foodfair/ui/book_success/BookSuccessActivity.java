@@ -73,8 +73,10 @@ public class BookSuccessActivity extends AppCompatActivity {
         InitUI();
         InitListener();
 
-        String transactionId = "HYcbU5p0vJKAJXI5AOCF";
-        this.transactionId = transactionId;
+
+        this.transactionId = getIntent().getStringExtra("transactionId");
+//        String transactionId = "HYcbU5p0vJKAJXI5AOCF";
+//        this.transactionId = transactionId;
         if (modelInstances.containsKey(transactionId)) {
             mBookSuccessViewModel = modelInstances.get(transactionId);
             viewModelObserverSetup();
