@@ -216,6 +216,7 @@ public class PostFoodActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 ivAddImage.setVisibility(View.GONE);
                 Uri photoUri = data.getData();
+                mFile = new File(photoUri.getPath());
                 // Do something with the photo based on Uri
                 try {
                     mTakenImage = MediaStore.Images.Media.getBitmap(
