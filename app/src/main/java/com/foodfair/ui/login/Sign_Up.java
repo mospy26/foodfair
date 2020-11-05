@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -28,7 +29,9 @@ import com.foodfair.R;
 import com.foodfair.model.User;
 import com.foodfair.model.UsersInfo;
 import com.foodfair.utilities.LoadingDialog;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserInfo;
@@ -37,6 +40,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,6 +81,7 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign__up);
 
@@ -85,32 +90,7 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
         db = FirebaseFirestore.getInstance();
 
         signUpBtn = findViewById(R.id.SignUpBtn);
-
-        signUpBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                String validate = validateData();
-                if (validate != null) {
-                    Toast.makeText(Sign_Up.this, validate, Toast.LENGTH_LONG);
-                }
-                
-                createUserAccount(email.getText().toString(), password.getText().toString());
-                loadingDialog.startLoadingAnimationg();
-
-                Handler h = new Handler();
-                h.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadingDialog.dismissDialog();
-                    }
-                }, 2000);
-
-                Intent intent = new Intent(context, Login.class);
-                startActivity(intent);
-
-            }
-        });
+        askLocationPerms();
     }
 
     private String validateData() {
@@ -122,15 +102,15 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
         }
 
         String emaiValue = email.getText().toString().trim();
-
-        if (Patterns.EMAIL_ADDRESS.matcher(emaiValue).matches()) {
-            return "Email cannot be empty";
-        }
+//
+//        if (Patterns.EMAIL_ADDRESS.matcher(emaiValue).matches()) {
+//            return "Email cannot be empty";
+//        }
 
         String passwordValue = password.getText().toString().trim();
         String confirmPasswordValue = confirmPassword.getText().toString().trim();
 
-        if (passwordValue != confirmPasswordValue) {
+        if (!passwordValue.equals(confirmPasswordValue)) {
             password.setText("");
             confirmPassword.setText("");
             passwordValue = null;
@@ -139,8 +119,9 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
         }
 
         String bioValue = bio.getText().toString().trim();
-        // TODO get gender etc and check
+        String genderValue = gender.getSelectedItem().toString();
 
+        return null;
     }
 
     private void initUI() {
@@ -159,8 +140,6 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
         ArrayAdapter statusAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, STATUS);
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         status.setAdapter(statusAdapter);
-
-
     }
 
     public void createUserAccount(String email, String password) {
@@ -174,23 +153,63 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("firebasekey", userId);
                 Log.d("Sign Up", "Sign Up Successful");
+                onLocationChanged(Sign_Up.this.location);
+                saveLocation();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG);
+                Log.e("Sign Up", "Sign Up Failed");
+                Log.e("Sign Up", e.getMessage());
             }
         });
+    }
 
+    private void setSignUpBtn() {
+        signUpBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                String validate = validateData();
+                if (validate != null) {
+                    Toast.makeText(getApplicationContext(), validate, Toast.LENGTH_LONG);
+                    return false;
+                }
+                createUserAccount(email.getText().toString(), password.getText().toString());
+//                loadingDialog.startLoadingAnimationg();
+//
+//                Handler h = new Handler();
+//                h.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        loadingDialog.dismissDialog();
+//                    }
+//                }, 2000);
+                return true;
+            }
+        });
+    }
+
+    private void askLocationPerms() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 2);
-            return;
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 2);
+        }
+        else {
+            setSignUpBtn();
         }
     }
 
     @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        locationManager = (LocationManager)
-                getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        if (requestCode == 1 || requestCode == 2) {
+            locationManager = (LocationManager)
+                    getSystemService(Context.LOCATION_SERVICE);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+            setSignUpBtn();
+        }
     }
 
     @Override
@@ -206,15 +225,29 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
     }
 
     private void saveLocation() {
-        DocumentReference documentReference = db.collection("UsersInfo").document(userId);
-//        Map<String, Object> users = new HashMap<>();
+        DocumentReference documentReference = db.collection("usersInfo").document(userId);
         UsersInfo user = new UsersInfo();
-        user.setLocation(new GeoPoint(location.getLatitude(), location.getLongitude()));
-//        users.put("User", user);
+//        user.setLocation(new GeoPoint(location.getLatitude(), location.getLongitude()));
+        user.setGender((long) Arrays.asList(GENDERS).indexOf(gender.getSelectedItem().toString()));
+        user.setBio(bio.getText().toString());
+        user.setEmail(email.getText().toString());
+        Timestamp rightNow = Timestamp.now();
+        user.setLastLogin(rightNow);
+        user.setJoinDate(rightNow);
+        user.setName(name.getText().toString());
         documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d("Sign Up", "Successfully Stored user information");
+                Intent intent = new Intent(context, Login.class);
+                startActivity(intent);
+                return;
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("Sign Up", "Cannot save user info");
+                Log.e("Sign Up", e.getMessage());
             }
         });
     }
