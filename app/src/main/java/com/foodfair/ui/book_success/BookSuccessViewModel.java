@@ -24,7 +24,7 @@ public class BookSuccessViewModel extends ViewModel {
     MutableLiveData<String> mQRCodeContent = new MutableLiveData<>();
     MutableLiveData<String> mFoodUrl = new MutableLiveData<>();
     MutableLiveData<Timestamp> mTransactionStartDate = new MutableLiveData<>();
-    MutableLiveData<Integer> mTransactionLiveSeconds = new MutableLiveData<>();
+    MutableLiveData<Long> mTransactionLiveSeconds = new MutableLiveData<>();
     MutableLiveData<Long> mDeadlineTimeStampToPickup = new MutableLiveData<>();
 
     // for testing
@@ -46,7 +46,7 @@ public class BookSuccessViewModel extends ViewModel {
     }
     public BookSuccessViewModel(String donorName, String foodName, String pickupLocationText,
                                 Timestamp transactionStartDate,
-                                int transactionAliveSeconds, LatLng latLng, String transactionId, String foodUrl){
+                                Long transactionAliveSeconds, LatLng latLng, String transactionId, String foodUrl){
         mDonorName.setValue(donorName);
         mFoodName.setValue(foodName);
         mPickupLocation.setValue(pickupLocationText);

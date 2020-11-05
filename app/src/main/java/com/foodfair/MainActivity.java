@@ -53,10 +53,11 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if(item.getItemId() == R.id.nav_user_profile) {
-                    Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
-                    startActivity(intent);
-                } else if(item.getItemId() == R.id.nav_qr_scanner) {
+//                if(item.getItemId() == R.id.nav_user_profile) {
+//                    Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+//                    startActivity(intent);
+//                } else
+                if(item.getItemId() == R.id.nav_qr_scanner) {
                     Intent intent = new Intent(getApplicationContext(), QRScanner.class);
                     // Could be startActivityForResult or something
                     startActivity(intent);

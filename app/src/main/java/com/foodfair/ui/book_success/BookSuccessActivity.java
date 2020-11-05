@@ -73,8 +73,10 @@ public class BookSuccessActivity extends AppCompatActivity {
         InitUI();
         InitListener();
 
-        String transactionId = "HYcbU5p0vJKAJXI5AOCF";
-        this.transactionId = transactionId;
+
+        this.transactionId = getIntent().getStringExtra("transactionId");
+//        String transactionId = "HYcbU5p0vJKAJXI5AOCF";
+//        this.transactionId = transactionId;
         if (modelInstances.containsKey(transactionId)) {
             mBookSuccessViewModel = modelInstances.get(transactionId);
             viewModelObserverSetup();
@@ -132,7 +134,7 @@ public class BookSuccessActivity extends AppCompatActivity {
         bookSuccessViewModel.mDeadlineTimeStampToPickup.setValue(fooditemTransaction.getAliveRecord());
         bookSuccessViewModel.mQRCodeContent.setValue(transactionId);
         bookSuccessViewModel.mTransactionStartDate.setValue(fooditemTransaction.getOpenDate());
-        bookSuccessViewModel.mTransactionLiveSeconds.setValue(fooditemTransaction.getAliveRecord().intValue());
+        bookSuccessViewModel.mTransactionLiveSeconds.setValue(fooditemTransaction.getAliveRecord().longValue());
         bookSuccessViewModel.mDeadlineTimeStampToPickup.setValue(fooditemTransaction.getOpenDate().toDate().getTime()/1000 + fooditemTransaction.getAliveRecord().intValue());
 
         DocumentReference donorRef = fooditemTransaction.getDonor();
