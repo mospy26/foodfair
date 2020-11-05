@@ -80,6 +80,14 @@ public class HomeFragment extends Fragment {
                     }
                 });
 
+
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        System.out.println(model.getName());
+                    }
+                });
+
             }
         };
 
