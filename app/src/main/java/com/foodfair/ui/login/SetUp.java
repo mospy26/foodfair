@@ -34,6 +34,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -296,7 +297,6 @@ public class SetUp extends AppCompatActivity {
                 if (user.getLocation() == null || user.getLocation().equals("") ||
                         user.getAllergy() == null || user.getAllergy().size() == 0 || user.getPreference() == null) {
                     Toast.makeText(getBaseContext(), "Please enter all data before moving on", Toast.LENGTH_LONG).show();
-                    Log.e("Not working", "nooooooo");
                 }
                 else {
                     Intent i = new Intent(SetUp.this, MainActivity.class);
@@ -369,6 +369,35 @@ public class SetUp extends AppCompatActivity {
                         Log.e("User location update", "Error writing document", e);
                     }
                 });
+
+        if (user.getStatus() != null && user.getStatus() != 2) {
+            HashMap<String, Object> locationData = new HashMap<>();
+            try {
+                JSONObject parsed = new JSONObject(user.getLocation());
+                Object lat = parsed.getString("lat");
+                Object lon = parsed.getString("long");
+                locationData.put("lat", lat);
+                locationData.put("lon", lon);
+                locationData.put("badges", new ArrayList<>());
+                locationData.put("itemsOnShelf", new ArrayList<>());
+                locationData.put("itemsReviewed", new ArrayList<>());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO)).document(userID).update("asDonor", locationData)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("User Donor details update", "DocumentSnapshot successfully written!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e("User Donor details update", "Error writing document", e);
+                        }
+                    });
+        }
     }
 
 

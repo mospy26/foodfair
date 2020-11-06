@@ -238,6 +238,7 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
         user.setLastLogin(rightNow);
         user.setJoinDate(rightNow);
         user.setName(name.getText().toString());
+        user.setStatus((long) Arrays.asList(STATUS).indexOf(status.getSelectedItem().toString()));
         documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
