@@ -19,6 +19,7 @@ import com.foodfair.model.Badge;
 import com.foodfair.model.FoodItemInfo;
 import com.foodfair.model.ReviewInfo;
 import com.foodfair.model.UsersInfo;
+import com.foodfair.utilities.Cache;
 import com.foodfair.utilities.Const;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,6 +36,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -58,18 +60,12 @@ public class ProfileFragment extends Fragment {
         root = inflater.inflate(R.layout.user_profile, container, false);
         InitUI();
         viewModelObserverSetup();
-//        final TextView textView = root.findViewById(R.id.text_profile);
-//        profileViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
         return root;
     }
 
     View root;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    Cache cache = Cache.getInstance(getContext());
     Const aConst = Const.getInstance();
     public String userId;
     public CircleImageView profileCircleImageView;
@@ -426,7 +422,6 @@ public class ProfileFragment extends Fragment {
     public void onStart() {
         super.onStart();
         fetchDBInfo(userId);
-//        firebaseRegisterAndLogin();
     }
 
     private void createBadgeViews(ArrayList<Number> badges, TableLayout tableLayout, boolean consumer) {
@@ -533,46 +528,93 @@ public class ProfileFragment extends Fragment {
 
     }
 
-
-    /**
-     * Firebase register and login jobs
-     */
-    private void firebaseRegisterAndLogin() {
-        String email = getResources().getString(R.string.firebase_email);
-        String password = getResources().getString(R.string.firebase_password);
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        if (auth.isSignInWithEmailLink(email)) {
-            fetchDBInfo(userId);
-        } else {
-            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+    private void fetchDBInfo(String userId) {
+        UsersInfo usersInfoCached = (UsersInfo) cache.getStoredObject(userId);
+        if (usersInfoCached == null){
+            FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO)).document(userId).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    // Sign in success, update UI with the signed-in user's information
-                    fetchDBInfo(userId);
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        UsersInfo usersInfo = document.toObject(UsersInfo.class);
+                        cache.add(userId,usersInfo);
+                        setUserProfileUI(usersInfo);
+                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        Log.d("TAG", "No such document");
+                    }
                 } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w("TAG", "signInWithEmail:failure", task.getException());
+                    int k = 1;
                 }
             });
+        }else{
+            setUserProfileUI(usersInfoCached);
         }
     }
-
-    private void fetchDBInfo(String userId) {
-        FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO)).document(userId).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    UsersInfo usersInfo = document.toObject(UsersInfo.class);
-                    setUserProfileUI(usersInfo);
-                    Log.d("TAG", "DocumentSnapshot data: " + document.getData());
-                } else {
-                    Log.d("TAG", "No such document");
+    private void setConsumerReviewFoodInfoUI(ReviewInfo reviewInfo){
+        DocumentReference food = reviewInfo.getFoodRef();
+        String foodId = food.getId();
+        FoodItemInfo foodItemInfoCached = (FoodItemInfo) cache.getStoredObject(foodId);
+        if (foodItemInfoCached == null){
+            food.get().addOnCompleteListener(foodTask -> {
+                if (foodTask.isSuccessful()) {
+                    FoodItemInfo foodItemInfo =foodTask.getResult().toObject(FoodItemInfo.class);
+                    cache.add(foodId,foodItemInfo);
+                    profileViewModel.consumerReviewFoodInfo.setValue(foodItemInfo);
                 }
-            } else {
-                int k = 1;
-            }
-        });
+            });
+        }else {
+            profileViewModel.consumerReviewFoodInfo.setValue(foodItemInfoCached);
+        }
     }
-
+    private void setDonorReviewFoodInfoUI(ReviewInfo reviewInfo) {
+        DocumentReference documentReference = reviewInfo.getFoodRef();
+        String foodId = documentReference.getId();
+        FoodItemInfo foodItemInfoCached = (FoodItemInfo)cache.getStoredObject(foodId);
+        if (foodItemInfoCached == null){
+            documentReference.get().addOnCompleteListener(foodTask -> {
+                if (foodTask.isSuccessful()) {
+                    FoodItemInfo foodItemInfo = foodTask.getResult().toObject(FoodItemInfo.class);
+                    cache.add(foodId,foodItemInfo);
+                    profileViewModel.donorReviewedFoodInfo.setValue(foodItemInfo);
+                }
+            });
+        }else {
+            profileViewModel.donorReviewedFoodInfo.setValue(foodItemInfoCached);
+        }
+    }
+    private void setDonorReviewUserInfoUI(ReviewInfo reviewInfo){
+        DocumentReference userRef = reviewInfo.getFromUser();
+        String userId = userRef.getId();
+        UsersInfo usersInfoCached = (UsersInfo)cache.getStoredObject(userId);
+        if (usersInfoCached == null){
+            userRef.get().addOnCompleteListener(userTask -> {
+                if (userTask.isSuccessful()) {
+                    UsersInfo usersInfo = userTask.getResult().toObject(UsersInfo.class);
+                    cache.add(userId,usersInfo);
+                    profileViewModel.donorReviewedUserInfo.setValue(usersInfo);
+                }
+            });
+        }else{
+            profileViewModel.donorReviewedUserInfo.setValue(usersInfoCached);
+        }
+    }
+    private void setConsumerReviewDonorUserInfoUI(ReviewInfo reviewInfo){
+        DocumentReference donor =
+                reviewInfo.getToUser();
+        String donorId = donor.getId();
+        UsersInfo donorInfoCached = (UsersInfo) cache.getStoredObject(donorId);
+        if (donorInfoCached == null){
+            donor.get().addOnCompleteListener(donorTask -> {
+                if (donorTask.isSuccessful()) {
+                    UsersInfo donorInfo = donorTask.getResult().toObject(UsersInfo.class);
+                    cache.add(donorId,donorInfo);
+                    profileViewModel.consumerReviewDonorUserInfo.setValue(donorInfo);
+                }
+            });
+        }else{
+            profileViewModel.consumerReviewDonorUserInfo.setValue(donorInfoCached);
+        }
+    }
     private void setUserProfileUI(UsersInfo usersInfo) {
         profileViewModel.currentUserInfo.setValue(usersInfo);
         // -- as Consumer --
@@ -583,26 +625,24 @@ public class ProfileFragment extends Fragment {
                     (ArrayList<DocumentReference>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS));
             if (reviews.size() > 0) {
                 DocumentReference lastReviewRef = reviews.get(reviews.size() - 1);
-                lastReviewRef.get().addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        // In review document
-                        ReviewInfo reviewInfo = task.getResult().toObject(ReviewInfo.class);
-                        profileViewModel.consumerReviewInfo.setValue(reviewInfo);
-                        DocumentReference food = reviewInfo.getFoodRef();
-                        food.get().addOnCompleteListener(foodTask -> {
-                            if (foodTask.isSuccessful()) {
-                                profileViewModel.consumerReviewFoodInfo.setValue(foodTask.getResult().toObject(FoodItemInfo.class));
-                            }
-                        });
-                        DocumentReference donor =
-                                reviewInfo.getToUser();
-                        donor.get().addOnCompleteListener(donorTask -> {
-                            if (donorTask.isSuccessful()) {
-                                profileViewModel.consumerReviewDonorUserInfo.setValue(donorTask.getResult().toObject(UsersInfo.class));
-                            }
-                        });
-                    }
-                });
+                String reviewId = lastReviewRef.getId();
+                ReviewInfo reviewInfoCached = (ReviewInfo)cache.getStoredObject(reviewId);
+                if (reviewInfoCached == null){
+                    lastReviewRef.get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            // In review document
+                            ReviewInfo reviewInfo = task.getResult().toObject(ReviewInfo.class);
+                            cache.add(reviewId,reviewInfo);
+                            profileViewModel.consumerReviewInfo.setValue(reviewInfo);
+                            setConsumerReviewFoodInfoUI(reviewInfo);
+                            setConsumerReviewDonorUserInfoUI(reviewInfo);
+                        }
+                    });
+                }else{
+                    profileViewModel.consumerReviewInfo.setValue(reviewInfoCached);
+                    setConsumerReviewFoodInfoUI(reviewInfoCached);
+                    setConsumerReviewDonorUserInfoUI(reviewInfoCached);
+                }
             }
         }
 
@@ -615,11 +655,19 @@ public class ProfileFragment extends Fragment {
                     (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_ON_SHELF));
             if (itemsOnShelf.size() > 0) {
                 DocumentReference docRef = itemsOnShelf.get(itemsOnShelf.size() - 1);
-                docRef.get().addOnCompleteListener(foodTask -> {
-                    if (foodTask.isSuccessful()) {
-                        profileViewModel.donorOnShelfFoodInfo.setValue(foodTask.getResult().toObject(FoodItemInfo.class));
-                    }
-                });
+                String itemId = docRef.getId();
+                FoodItemInfo itemInfoCached = (FoodItemInfo) cache.getStoredObject(itemId);
+                if (itemInfoCached == null){
+                    docRef.get().addOnCompleteListener(foodTask -> {
+                        if (foodTask.isSuccessful()) {
+                            FoodItemInfo foodItemInfo = foodTask.getResult().toObject(FoodItemInfo.class);
+                            cache.add(itemId,foodItemInfo);
+                            profileViewModel.donorOnShelfFoodInfo.setValue(foodItemInfo);
+                        }
+                    });
+                }else {
+                    profileViewModel.donorOnShelfFoodInfo.setValue(itemInfoCached);
+                }
             }
 
             // reviewed
@@ -627,22 +675,30 @@ public class ProfileFragment extends Fragment {
                     (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_REVIEWED));
             if (itemsReviewed.size() > 0) {
                 DocumentReference docRef = itemsReviewed.get(itemsReviewed.size() - 1);
-                docRef.get().addOnCompleteListener(reviewedItemTask -> {
-                    if (reviewedItemTask.isSuccessful()) {
-                        profileViewModel.donorReviewedInfo.setValue(reviewedItemTask.getResult().toObject(ReviewInfo.class));
-                        profileViewModel.donorReviewedInfo.getValue().getFromUser().get().addOnCompleteListener(userTask -> {
-                            if (userTask.isSuccessful()) {
-                                profileViewModel.donorReviewedUserInfo.setValue(userTask.getResult().toObject(UsersInfo.class));
-                            }
-                        });
-                        profileViewModel.donorReviewedInfo.getValue().getFoodRef().get().addOnCompleteListener(foodTask -> {
-                            if (foodTask.isSuccessful()) {
-                                profileViewModel.donorReviewedFoodInfo.setValue(foodTask.getResult().toObject(FoodItemInfo.class));
-                            }
-                        });
-                    }
-                });
+                String itemId = docRef.getId();
+                ReviewInfo reviewInfoCached = (ReviewInfo) cache.getStoredObject(itemId);
+                if (reviewInfoCached == null){
+                    docRef.get().addOnCompleteListener(reviewedItemTask -> {
+                        if (reviewedItemTask.isSuccessful()) {
+                            ReviewInfo reviewInfo = reviewedItemTask.getResult().toObject(ReviewInfo.class);
+                            cache.add(itemId,reviewInfo);
+                            profileViewModel.donorReviewedInfo.setValue(reviewInfo);
+
+                            setDonorReviewUserInfoUI(reviewInfoCached);
+                            setDonorReviewFoodInfoUI(reviewInfoCached);
+
+
+                        }
+                    });
+                }else {
+                    profileViewModel.donorReviewedInfo.setValue(reviewInfoCached);
+                    setDonorReviewUserInfoUI(reviewInfoCached);
+                    setDonorReviewFoodInfoUI(reviewInfoCached);
+                }
+
             }
         }
     }
+
+
 }

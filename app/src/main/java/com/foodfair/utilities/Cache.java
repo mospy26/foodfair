@@ -64,6 +64,12 @@ public class Cache {
         return cache.getOrDefault(key, null);
     }
 
+    public Object getStoredObject(String key){
+        CacheObject cacheObject = cache.getOrDefault(key, null);
+        if (cacheObject == null) return null;
+        return cacheObject.getData();
+    }
+
     private void persist(String key) {
         if (!cacheDir.exists()) {
             cacheDir.mkdir();
