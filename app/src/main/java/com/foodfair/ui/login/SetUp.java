@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -70,6 +71,7 @@ public class SetUp extends AppCompatActivity {
             setupPreferred();
             setUpAllergen();
             setUpMap();
+            setUpNext();
         }
     }
 
@@ -293,13 +295,30 @@ public class SetUp extends AppCompatActivity {
             public void onClick(View view) {
                 if (user.getLocation() == null || user.getLocation().equals("") ||
                         user.getAllergy() == null || user.getAllergy().size() == 0 || user.getPreference() == null) {
-                    Toast.makeText(SetUp.this, "Please enter all details before proceeding", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), "Please enter all data before moving on", Toast.LENGTH_LONG).show();
+                    Log.e("Not working", "nooooooo");
                 }
                 else {
                     Intent i = new Intent(SetUp.this, MainActivity.class);
                     startActivity(i);
                     finish();
                 }
+            }
+        });
+
+        next.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (user.getLocation() == null || user.getLocation().equals("") ||
+                        user.getAllergy() == null || user.getAllergy().size() == 0 || user.getPreference() == null) {
+                    Toast.makeText(getBaseContext(), "Please enter all data before moving on", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Intent i = new Intent(SetUp.this, MainActivity.class);
+                    startActivity(i);
+                    finish();
+                }
+                return true;
             }
         });
     }
@@ -321,7 +340,6 @@ public class SetUp extends AppCompatActivity {
     }
 
     private void updateUserAllergy(UsersInfo user) {
-        Log.e("WTH", userID + "");
         FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO)).document(userID).update("allergy", user.getAllergy())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
