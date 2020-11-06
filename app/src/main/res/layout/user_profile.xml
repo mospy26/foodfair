@@ -189,6 +189,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/userProfile_wholeAsConsumer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -578,6 +579,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/userProfile_wholeAsDonor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"

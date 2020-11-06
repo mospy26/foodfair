@@ -49,9 +49,8 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         profileViewModel = new ProfileViewModel();
-//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//        userId = user.getUid();
-        userId = "yXnhEl9OBqgKqHLAPMPV";
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        userId = user.getUid();
         profileViewModel.id.setValue(userId);
         profileViewModel.asConsumerTotalBadgeCount.setValue(aConst.CONSUMER_BADGES.size());
         profileViewModel.asDonorTotalBadgeCount.setValue(aConst.DONOR_BADGES.size());
@@ -68,6 +67,7 @@ public class ProfileFragment extends Fragment {
 //        });
         return root;
     }
+
     View root;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     Const aConst = Const.getInstance();
@@ -114,6 +114,9 @@ public class ProfileFragment extends Fragment {
     public ArrayList<ShapeableImageView> donorReviewedItemImageShapeableImageViews = new ArrayList<>();
     public TextView donorReviewedItemTextDescriptionTextView;
 
+    public LinearLayout wholeAsConsumer;
+    public LinearLayout wholeAsDonor;
+
 
     private void viewModelObserverSetup() {
         profileViewModel.currentUserInfo.observe(getViewLifecycleOwner(), currentUserInfo -> {
@@ -130,30 +133,38 @@ public class ProfileFragment extends Fragment {
             profileViewModel.lastLoginDate.setValue(currentUserInfo.getLastLogin());
 
             // as consumer
-            Map<String,Object> asConsumer = currentUserInfo.getAsConsumer();
-            ArrayList<DocumentReference> reviews =
-                    (ArrayList<DocumentReference>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS));
-            profileViewModel.asConsumerTotalReviewCount.setValue(reviews.size());
-
-            ArrayList<Number> consumerBadges =
-                    (ArrayList<Number>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_BADGES));
-            profileViewModel.asConsumerGotBadgeCount.setValue(consumerBadges.size());
-            profileViewModel.asConsumerBadges.setValue(consumerBadges);
+            Map<String, Object> asConsumer = currentUserInfo.getAsConsumer();
+            if (asConsumer == null) {
+                wholeAsConsumer.setVisibility(View.GONE);
+            } else {
+                wholeAsConsumer.setVisibility(VISIBLE);
+                ArrayList<DocumentReference> reviews =
+                        (ArrayList<DocumentReference>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS));
+                profileViewModel.asConsumerTotalReviewCount.setValue(reviews.size());
+                ArrayList<Number> consumerBadges =
+                        (ArrayList<Number>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_BADGES));
+                profileViewModel.asConsumerGotBadgeCount.setValue(consumerBadges.size());
+                profileViewModel.asConsumerBadges.setValue(consumerBadges);
+            }
 
             // as donor
             HashMap<String, Object> asDonor = (HashMap<String, Object>) currentUserInfo.getAsDonor();
-            ArrayList<DocumentReference> itemsOnShelf =
-                    (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_ON_SHELF));
-            profileViewModel.asDonorTotalOnShelfCount.setValue(itemsOnShelf.size());
-            ArrayList<DocumentReference> itemsReviewed =
-                    (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_REVIEWED));
-            profileViewModel.asDonorTotalReviewedCount.setValue(itemsReviewed.size());
+            if (asDonor == null) {
+                wholeAsDonor.setVisibility(View.GONE);
+            } else {
+                wholeAsDonor.setVisibility(VISIBLE);
+                ArrayList<DocumentReference> itemsOnShelf =
+                        (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_ON_SHELF));
+                profileViewModel.asDonorTotalOnShelfCount.setValue(itemsOnShelf.size());
+                ArrayList<DocumentReference> itemsReviewed =
+                        (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_REVIEWED));
+                profileViewModel.asDonorTotalReviewedCount.setValue(itemsReviewed.size());
 
-            ArrayList<Number> donorBadges =
-                    (ArrayList<Number>) asDonor.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_BADGES));
-            profileViewModel.asDonorGotBadgeCount.setValue(donorBadges.size());
-            profileViewModel.asDonorBadges.setValue(donorBadges);
-
+                ArrayList<Number> donorBadges =
+                        (ArrayList<Number>) asDonor.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_BADGES));
+                profileViewModel.asDonorGotBadgeCount.setValue(donorBadges.size());
+                profileViewModel.asDonorBadges.setValue(donorBadges);
+            }
         });
         profileViewModel.consumerReviewInfo.observe(getViewLifecycleOwner(), consumerReviewInfo -> {
             profileViewModel.asConsumerReviewDate.setValue(consumerReviewInfo.getDate());
@@ -189,7 +200,9 @@ public class ProfileFragment extends Fragment {
 
         // ---------
         profileViewModel.profileImageUrl.observe(getViewLifecycleOwner(), profileImageUrl -> {
-            Picasso.get().load(profileImageUrl).into(profileCircleImageView);
+            if (profileImageUrl != null){
+                Picasso.get().load(profileImageUrl).into(profileCircleImageView);
+            }
         });
         profileViewModel.name.observe(getViewLifecycleOwner(), name -> {
             nameTextView.setText(name);
@@ -209,11 +222,15 @@ public class ProfileFragment extends Fragment {
         });
 
         profileViewModel.birthday.observe(getViewLifecycleOwner(), birthday -> {
-            Date dateBirthday = birthday.toDate();
-            Date now = new Date();
-            long diffInMillies = now.getTime() - dateBirthday.getTime();
-            long year = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS) / 365;
-            ageTextView.setText(Long.toString(year));
+            if (birthday == null) {
+                ageTextView.setText("Not Provided.");
+            } else {
+                Date dateBirthday = birthday.toDate();
+                Date now = new Date();
+                long diffInMillies = now.getTime() - dateBirthday.getTime();
+                long year = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS) / 365;
+                ageTextView.setText(Long.toString(year));
+            }
         });
 
         profileViewModel.bio.observe(getViewLifecycleOwner(), bio -> {
@@ -315,7 +332,7 @@ public class ProfileFragment extends Fragment {
         });
 
         profileViewModel.asConsumerBadges.observe(getViewLifecycleOwner(), asConsumerBadges -> {
-            createBadgeViews(asConsumerBadges, usersConsumerBadgeTableLayout,true);
+            createBadgeViews(asConsumerBadges, usersConsumerBadgeTableLayout, true);
         });
 
         // As Donor
@@ -356,9 +373,9 @@ public class ProfileFragment extends Fragment {
         // Reviewed
         profileViewModel.asDonorTotalReviewedCount.observe(getViewLifecycleOwner(), asDonorTotalReviewedCount -> {
             donorReviewedItemCountTextView.setText(Integer.toString(asDonorTotalReviewedCount));
-            if (asDonorTotalReviewedCount.equals(0)){
+            if (asDonorTotalReviewedCount.equals(0)) {
                 donorReviewedItemLinearLayout.setVisibility(View.GONE);
-            }else {
+            } else {
                 donorReviewedItemLinearLayout.setVisibility(VISIBLE);
             }
         });
@@ -401,7 +418,7 @@ public class ProfileFragment extends Fragment {
         });
 
         profileViewModel.asDonorBadges.observe(getViewLifecycleOwner(), asDonorBadges -> {
-            createBadgeViews(asDonorBadges, usersDonorBadgeTableLayout,false);
+            createBadgeViews(asDonorBadges, usersDonorBadgeTableLayout, false);
         });
     }
 
@@ -414,7 +431,7 @@ public class ProfileFragment extends Fragment {
 
     private void createBadgeViews(ArrayList<Number> badges, TableLayout tableLayout, boolean consumer) {
         HashMap<Long, Badge> badgesHashMap = aConst.DONOR_BADGES;
-        if(consumer){
+        if (consumer) {
             badgesHashMap = aConst.CONSUMER_BADGES;
         }
         tableLayout.removeAllViews();
@@ -451,9 +468,11 @@ public class ProfileFragment extends Fragment {
             }
         }
     }
-    <T extends View> T findViewById(int id){
-        return (T)(root.findViewById(id));
+
+    <T extends View> T findViewById(int id) {
+        return (T) (root.findViewById(id));
     }
+
     private void InitUI() {
         profileCircleImageView = findViewById(R.id.userProfile_profileCircleImageView);
         nameTextView = findViewById(R.id.userProfile_nameTextView);
@@ -509,6 +528,9 @@ public class ProfileFragment extends Fragment {
         donorReviewedItemTextDescriptionTextView =
                 findViewById(R.id.userProfile_donorReviewedItemTextDescriptionTextView);
 
+        wholeAsConsumer = findViewById(R.id.userProfile_wholeAsConsumer);
+        wholeAsDonor = findViewById(R.id.userProfile_wholeAsDonor);
+
     }
 
 
@@ -523,14 +545,14 @@ public class ProfileFragment extends Fragment {
             fetchDBInfo(userId);
         } else {
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            fetchDBInfo(userId);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("TAG", "signInWithEmail:failure", task.getException());
-                        }
-                    });
+                if (task.isSuccessful()) {
+                    // Sign in success, update UI with the signed-in user's information
+                    fetchDBInfo(userId);
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w("TAG", "signInWithEmail:failure", task.getException());
+                }
+            });
         }
     }
 
@@ -555,67 +577,72 @@ public class ProfileFragment extends Fragment {
         profileViewModel.currentUserInfo.setValue(usersInfo);
         // -- as Consumer --
         HashMap<String, Object> asConsumer = (HashMap<String, Object>) usersInfo.getAsConsumer();
-        // review count
-        ArrayList<DocumentReference> reviews =
-                (ArrayList<DocumentReference>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS));
-        if (reviews.size() > 0) {
-            DocumentReference lastReviewRef = reviews.get(reviews.size() - 1);
-            lastReviewRef.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    // In review document
-                    ReviewInfo reviewInfo = task.getResult().toObject(ReviewInfo.class);
-                    profileViewModel.consumerReviewInfo.setValue(reviewInfo);
-                    DocumentReference food = reviewInfo.getFoodRef();
-                    food.get().addOnCompleteListener(foodTask -> {
-                        if (foodTask.isSuccessful()) {
-                            profileViewModel.consumerReviewFoodInfo.setValue(foodTask.getResult().toObject(FoodItemInfo.class));
-                        }
-                    });
-                    DocumentReference donor =
-                            reviewInfo.getToUser();
-                    donor.get().addOnCompleteListener(donorTask -> {
-                        if (donorTask.isSuccessful()) {
-                            profileViewModel.consumerReviewDonorUserInfo.setValue(donorTask.getResult().toObject(UsersInfo.class));
-                        }
-                    });
-                }
-            });
+        if (asConsumer != null) {
+            // review count
+            ArrayList<DocumentReference> reviews =
+                    (ArrayList<DocumentReference>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS));
+            if (reviews.size() > 0) {
+                DocumentReference lastReviewRef = reviews.get(reviews.size() - 1);
+                lastReviewRef.get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // In review document
+                        ReviewInfo reviewInfo = task.getResult().toObject(ReviewInfo.class);
+                        profileViewModel.consumerReviewInfo.setValue(reviewInfo);
+                        DocumentReference food = reviewInfo.getFoodRef();
+                        food.get().addOnCompleteListener(foodTask -> {
+                            if (foodTask.isSuccessful()) {
+                                profileViewModel.consumerReviewFoodInfo.setValue(foodTask.getResult().toObject(FoodItemInfo.class));
+                            }
+                        });
+                        DocumentReference donor =
+                                reviewInfo.getToUser();
+                        donor.get().addOnCompleteListener(donorTask -> {
+                            if (donorTask.isSuccessful()) {
+                                profileViewModel.consumerReviewDonorUserInfo.setValue(donorTask.getResult().toObject(UsersInfo.class));
+                            }
+                        });
+                    }
+                });
+            }
         }
+
 
         // -- as Donor --
         HashMap<String, Object> asDonor = (HashMap<String, Object>) usersInfo.getAsDonor();
-        // on shelf
-        ArrayList<DocumentReference> itemsOnShelf =
-                (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_ON_SHELF));
-        if (itemsOnShelf.size() > 0) {
-            DocumentReference docRef = itemsOnShelf.get(itemsOnShelf.size() - 1);
-            docRef.get().addOnCompleteListener(foodTask -> {
-                if (foodTask.isSuccessful()) {
-                    profileViewModel.donorOnShelfFoodInfo.setValue(foodTask.getResult().toObject(FoodItemInfo.class));
-                }
-            });
-        }
+        if (asDonor != null) {
+            // on shelf
+            ArrayList<DocumentReference> itemsOnShelf =
+                    (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_ON_SHELF));
+            if (itemsOnShelf.size() > 0) {
+                DocumentReference docRef = itemsOnShelf.get(itemsOnShelf.size() - 1);
+                docRef.get().addOnCompleteListener(foodTask -> {
+                    if (foodTask.isSuccessful()) {
+                        profileViewModel.donorOnShelfFoodInfo.setValue(foodTask.getResult().toObject(FoodItemInfo.class));
+                    }
+                });
+            }
 
-        // reviewed
-        ArrayList<DocumentReference> itemsReviewed =
-                (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_REVIEWED));
-        if (itemsReviewed.size() > 0) {
-            DocumentReference docRef = itemsReviewed.get(itemsReviewed.size() - 1);
-            docRef.get().addOnCompleteListener(reviewedItemTask -> {
-                if (reviewedItemTask.isSuccessful()) {
-                    profileViewModel.donorReviewedInfo.setValue(reviewedItemTask.getResult().toObject(ReviewInfo.class));
-                    profileViewModel.donorReviewedInfo.getValue().getFromUser().get().addOnCompleteListener(userTask -> {
-                        if (userTask.isSuccessful()) {
-                            profileViewModel.donorReviewedUserInfo.setValue(userTask.getResult().toObject(UsersInfo.class));
-                        }
-                    });
-                    profileViewModel.donorReviewedInfo.getValue().getFoodRef().get().addOnCompleteListener(foodTask -> {
-                        if (foodTask.isSuccessful()) {
-                            profileViewModel.donorReviewedFoodInfo.setValue(foodTask.getResult().toObject(FoodItemInfo.class));
-                        }
-                    });
-                }
-            });
+            // reviewed
+            ArrayList<DocumentReference> itemsReviewed =
+                    (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_REVIEWED));
+            if (itemsReviewed.size() > 0) {
+                DocumentReference docRef = itemsReviewed.get(itemsReviewed.size() - 1);
+                docRef.get().addOnCompleteListener(reviewedItemTask -> {
+                    if (reviewedItemTask.isSuccessful()) {
+                        profileViewModel.donorReviewedInfo.setValue(reviewedItemTask.getResult().toObject(ReviewInfo.class));
+                        profileViewModel.donorReviewedInfo.getValue().getFromUser().get().addOnCompleteListener(userTask -> {
+                            if (userTask.isSuccessful()) {
+                                profileViewModel.donorReviewedUserInfo.setValue(userTask.getResult().toObject(UsersInfo.class));
+                            }
+                        });
+                        profileViewModel.donorReviewedInfo.getValue().getFoodRef().get().addOnCompleteListener(foodTask -> {
+                            if (foodTask.isSuccessful()) {
+                                profileViewModel.donorReviewedFoodInfo.setValue(foodTask.getResult().toObject(FoodItemInfo.class));
+                            }
+                        });
+                    }
+                });
+            }
         }
     }
 }
