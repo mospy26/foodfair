@@ -98,7 +98,7 @@ public class SettingFragment extends Fragment {
         profilePhoto = root.findViewById(R.id.profile_image);
         profileInfo = root.findViewById(R.id.profile_info);
 
-        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences("foodfair", Context.MODE_PRIVATE);
 
         if(sharedPreferences != null){
 

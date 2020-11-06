@@ -19,11 +19,12 @@
         </ImageView>
         <TextView
             android:id="@+id/leaderboard_rank"
-            android:background="@color/White"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textColor="@color/milkGreen"
             android:text="1"
+            android:gravity="center_vertical"
+            android:layout_above="@id/icon"
             />
     </RelativeLayout>
 
@@ -39,7 +40,8 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text="Loading user name"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:layout_marginStart="8dp"/>
 
         <TextView
             android:id="@+id/user_bio"
@@ -48,7 +50,7 @@
             android:ellipsize="marquee"
             android:text="Loading user bio"
             android:textSize="12sp"
-            android:singleLine="true"
+            android:layout_marginStart="8dp"
         />
     </LinearLayout>
 

@@ -21,7 +21,7 @@
         android:scaleType="fitXY"
         app:srcCompat="@drawable/logo_centered" />
 
-    <TextView
+    <!--<TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
@@ -32,5 +32,5 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/nav_header_subtitle" />
+        android:text="@string/nav_header_subtitle" />-->
 </LinearLayout>
