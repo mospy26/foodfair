@@ -146,7 +146,9 @@ public class FoodDetailActivity extends AppCompatActivity {
     private void viewModelObserverSetup() {
         foodDetailModel.donorUserInfo.observe(this,donorUserInfo->{
             foodDetailModel.donorName.setValue(donorUserInfo.getName());
-            foodDetailModel.donorAddress.setValue(donorUserInfo.getLocation().toString());
+            if (donorUserInfo.getLocation() != null){
+                foodDetailModel.donorAddress.setValue(donorUserInfo.getLocation().toString());
+            }
         });
         foodDetailModel.currentFoodDetailInfo.observe(this, currentFoodDetailInfo->{
             foodDetailModel.foodName.setValue(currentFoodDetailInfo.getName());
