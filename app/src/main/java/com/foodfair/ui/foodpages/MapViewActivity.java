@@ -111,7 +111,7 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
 
         // Firestore register and login
         mAuth = FirebaseAuth.getInstance();
-        firebaseRegisterAndLogin(mFirebaseEmail, mFirebasePassword);
+//        firebaseRegisterAndLogin(mFirebaseEmail, mFirebasePassword);
 
 
     }

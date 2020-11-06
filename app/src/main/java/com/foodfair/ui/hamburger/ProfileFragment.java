@@ -408,7 +408,8 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        firebaseRegisterAndLogin();
+        fetchDBInfo(userId);
+//        firebaseRegisterAndLogin();
     }
 
     private void createBadgeViews(ArrayList<Number> badges, TableLayout tableLayout, boolean consumer) {

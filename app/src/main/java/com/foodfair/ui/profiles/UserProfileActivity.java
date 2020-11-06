@@ -407,7 +407,8 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        firebaseRegisterAndLogin();
+        fetchDBInfo(userId);
+//        firebaseRegisterAndLogin();
     }
 
     private void createBadgeViews(ArrayList<Number> badges, TableLayout tableLayout, boolean consumer) {

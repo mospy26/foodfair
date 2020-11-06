@@ -93,23 +93,24 @@ public class BookSuccessActivity extends AppCompatActivity {
     }
 
     private void firebaseRegisterAndLogin() {
-        String email = getResources().getString(R.string.firebase_email);
-        String password = getResources().getString(R.string.firebase_password);
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        if (auth.isSignInWithEmailLink(email)) {
-            fetchDBInfo(transactionId);
-        } else {
-            auth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, task -> {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            fetchDBInfo(transactionId);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("TAG", "signInWithEmail:failure", task.getException());
-                        }
-                    });
-        }
+        fetchDBInfo(transactionId);
+//        String email = getResources().getString(R.string.firebase_email);
+//        String password = getResources().getString(R.string.firebase_password);
+//        FirebaseAuth auth = FirebaseAuth.getInstance();
+//        if (auth.isSignInWithEmailLink(email)) {
+//            fetchDBInfo(transactionId);
+//        } else {
+//            auth.signInWithEmailAndPassword(email, password)
+//                    .addOnCompleteListener(this, task -> {
+//                        if (task.isSuccessful()) {
+//                            // Sign in success, update UI with the signed-in user's information
+//                            fetchDBInfo(transactionId);
+//                        } else {
+//                            // If sign in fails, display a message to the user.
+//                            Log.w("TAG", "signInWithEmail:failure", task.getException());
+//                        }
+//                    });
+//        }
     }
 
     private void fetchDBInfo(String transactionId) {

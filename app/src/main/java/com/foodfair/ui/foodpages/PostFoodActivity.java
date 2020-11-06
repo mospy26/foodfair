@@ -129,7 +129,7 @@ public class PostFoodActivity extends AppCompatActivity {
 
         // Firestore register and login
         mAuth = FirebaseAuth.getInstance();
-        firebaseRegisterAndLogin(mFirebaseEmail, mFirebasePassword);
+//        firebaseRegisterAndLogin(mFirebaseEmail, mFirebasePassword);
 
     }
 
