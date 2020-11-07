@@ -2,6 +2,8 @@ package com.foodfair.network;
 
 import com.foodfair.task.MessageUtil;
 import com.foodfair.task.UiHandler;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 
 import org.java_websocket.client.WebSocketClient;
@@ -31,15 +33,17 @@ public class FoodFairWSClient extends WebSocketClient {
         super(serverUri, draft);
     }
 
-    private FoodFairWSClient(URI serverURI) {
+    public FoodFairWSClient(URI serverURI) {
         super(serverURI);
     }
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {
         Gson g = new Gson();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         // Register current user id to ws server
-        send(g.toJson(new Register("b")));
+        send(g.toJson(new Register(user.getUid())));
+
 //         Tell the server what(specific package) you want to talk to whom(another id)
 //        for (int i = 0; i < 3; i++) {
 //            send(g.toJson(new BookFood("123456","123456","888888").buildToMessage("b","b")));

@@ -19,6 +19,8 @@ import com.foodfair.model.FoodItemInfo;
 import com.foodfair.model.FooditemTransaction;
 import com.foodfair.model.ReviewInfo;
 import com.foodfair.model.UsersInfo;
+import com.foodfair.network.BookFood;
+import com.foodfair.network.FoodFairWSClient;
 import com.foodfair.ui.book_success.BookSuccessActivity;
 import com.foodfair.ui.book_success.BookSuccessViewModel;
 import com.foodfair.utilities.Const;
@@ -35,6 +37,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.auth.User;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -233,24 +236,29 @@ public class FoodDetailActivity extends AppCompatActivity {
      */
 
     public void onBookClick(View view){
+        Gson g = new Gson();
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FoodFairWSClient.globalCon.send(g.toJson(new BookFood(uid,
+                "HhRYXDm1BnhZfPljl4lFbKYe6x53",
+                "some transactionID").buildToMessage("HhRYXDm1BnhZfPljl4lFbKYe6x53",uid)));
 
-        FooditemTransaction foodItemTransaction = new FooditemTransaction();
-        Long bookStatus = aConst.TRANSACTION_STATUS.get("Booked");
-        String userTableStr = getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO);
-        String foodTableStr = getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_INFO);
-        DocumentReference donorRef = mFirestore.document(userTableStr + "/" + mDonorID);
-        DocumentReference consumerRef = mFirestore.document(userTableStr + "/" + UID);
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if(firebaseUser != null){
-            consumerRef = mFirestore.document(userTableStr + "/" + firebaseUser.getUid());
-        }
-        DocumentReference foodRef = mFirestore.document(foodTableStr + "/" + mFoodItemID);
-        mOpenDate = Utility.parseDateTime(Utility.getCurrentTimeStr(), aConst.DATE_TIME_PATTERN);
-
-        populateFoodItemTransaction(aConst.ALIVE_RECORD, null, consumerRef, null,
-                donorRef, null, foodRef, mOpenDate, bookStatus, foodItemTransaction);
-
-        postFoodTransactionToFirebase(foodItemTransaction);
+//        FooditemTransaction foodItemTransaction = new FooditemTransaction();
+//        Long bookStatus = aConst.TRANSACTION_STATUS.get("Booked");
+//        String userTableStr = getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO);
+//        String foodTableStr = getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_INFO);
+//        DocumentReference donorRef = mFirestore.document(userTableStr + "/" + mDonorID);
+//        DocumentReference consumerRef = mFirestore.document(userTableStr + "/" + UID);
+//        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+//        if(firebaseUser != null){
+//            consumerRef = mFirestore.document(userTableStr + "/" + firebaseUser.getUid());
+//        }
+//        DocumentReference foodRef = mFirestore.document(foodTableStr + "/" + mFoodItemID);
+//        mOpenDate = Utility.parseDateTime(Utility.getCurrentTimeStr(), aConst.DATE_TIME_PATTERN);
+//
+//        populateFoodItemTransaction(aConst.ALIVE_RECORD, null, consumerRef, null,
+//                donorRef, null, foodRef, mOpenDate, bookStatus, foodItemTransaction);
+//
+//        postFoodTransactionToFirebase(foodItemTransaction);
     }
 
     public void populateFoodItemTransaction(Long aliveRecord, DocumentReference cdReview,

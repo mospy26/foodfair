@@ -1,6 +1,9 @@
 package com.foodfair.task;
 
 import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -15,15 +18,16 @@ import static com.foodfair.task.MessageUtil.MESSAGE_BODY;
 public class UiHandler extends Handler {
 
     static UiHandler instance = null;
-
+    Context context;
     public UiHandler(Looper looper) {
         super(looper);
     }
 
-    public static UiHandler createHandler(Looper looper) {
+    public static UiHandler createHandler(Looper looper, Context context) {
         if (instance != null) return instance;
         UiHandler uiHandler = new UiHandler(looper);
         instance = uiHandler;
+        instance.context = context;
         return instance;
     }
     public static UiHandler getInstance() {
@@ -52,7 +56,28 @@ public class UiHandler extends Handler {
             case Package.MESSAGE_NAME_BOOK_A_FOOD:
                 TransmittedPackage tMWizDetail  = (TransmittedPackage) Package.buildFromMessage(jsonMessage, BookFood.class);
                 BookFood bookFood = (BookFood) tMWizDetail.package_content;
-                System.out.println("Got a new booked food.");
+               String notice =  String.format("Direct to food management panel, or show a dialog: consumer: %s, " +
+                    "transaction: %s," +
+                        " donor: %s", bookFood.consumer_id, bookFood.transaction_id,bookFood.donor_id);
+//                NotificationManager NM;
+//                NM=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+
+                new AlertDialog.Builder(context)
+                        .setTitle("Food booked!")
+                        .setMessage(notice)
+
+                        // Specifying a listener allows you to take an action before dismissing the dialog.
+                        // The dialog is automatically dismissed when a dialog button is clicked.
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Continue with delete operation
+                            }
+                        })
+
+                        // A null listener allows the button to dismiss the dialog and take no further action.
+                        .setNegativeButton(android.R.string.no, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
                 break;
             default:
                 break;
