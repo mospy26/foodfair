@@ -148,11 +148,11 @@ public class SetUp extends AppCompatActivity {
             builder.setTitle(R.string.setting_preferred_meat)
                     .setMultiChoiceItems(allItems, checkedItems,
                             (dialog, which, isChecked) -> {
-//                                if(isChecked){
-//                                    checkedItemStrings.add(allItems[which]);
-//                                } else {
-//                                    checkedItemStrings.remove(allItems[which]);
-//                                }
+                                if(isChecked){
+                                    checkedItemStrings.add(allItems[which]);
+                                } else {
+                                    checkedItemStrings.remove(allItems[which]);
+                                }
 
                             })
                     .setPositiveButton(R.string.ok,
