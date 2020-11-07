@@ -10,16 +10,19 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.foodfair.R;
 import com.foodfair.model.Badge;
 import com.foodfair.model.FoodItemInfo;
 import com.foodfair.model.ReviewInfo;
 import com.foodfair.model.UsersInfo;
-import com.foodfair.utilities.Cache;
+import com.foodfair.ui.home.HomeFragment;
 import com.foodfair.utilities.Const;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,7 +39,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -53,6 +55,7 @@ public class ProfileFragment extends Fragment {
         profileViewModel = new ProfileViewModel();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         userId = user.getUid();
+//        userId = "yXnhEl9OBqgKqHLAPMPV";
         profileViewModel.id.setValue(userId);
         profileViewModel.asConsumerTotalBadgeCount.setValue(aConst.CONSUMER_BADGES.size());
         profileViewModel.asDonorTotalBadgeCount.setValue(aConst.DONOR_BADGES.size());
@@ -60,12 +63,17 @@ public class ProfileFragment extends Fragment {
         root = inflater.inflate(R.layout.user_profile, container, false);
         InitUI();
         viewModelObserverSetup();
+//        final TextView textView = root.findViewById(R.id.text_profile);
+//        profileViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+//            @Override
+//            public void onChanged(@Nullable String s) {
+//                textView.setText(s);
+//            }
+//        });
         return root;
     }
-
     View root;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-    Cache cache = Cache.getInstance(getContext());
     Const aConst = Const.getInstance();
     public String userId;
     public CircleImageView profileCircleImageView;
@@ -110,9 +118,6 @@ public class ProfileFragment extends Fragment {
     public ArrayList<ShapeableImageView> donorReviewedItemImageShapeableImageViews = new ArrayList<>();
     public TextView donorReviewedItemTextDescriptionTextView;
 
-    public LinearLayout wholeAsConsumer;
-    public LinearLayout wholeAsDonor;
-
 
     private void viewModelObserverSetup() {
         profileViewModel.currentUserInfo.observe(getViewLifecycleOwner(), currentUserInfo -> {
@@ -129,38 +134,30 @@ public class ProfileFragment extends Fragment {
             profileViewModel.lastLoginDate.setValue(currentUserInfo.getLastLogin());
 
             // as consumer
-            Map<String, Object> asConsumer = currentUserInfo.getAsConsumer();
-            if (asConsumer == null) {
-                wholeAsConsumer.setVisibility(View.GONE);
-            } else {
-                wholeAsConsumer.setVisibility(VISIBLE);
-                ArrayList<DocumentReference> reviews =
-                        (ArrayList<DocumentReference>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS));
-                profileViewModel.asConsumerTotalReviewCount.setValue(reviews.size());
-                ArrayList<Number> consumerBadges =
-                        (ArrayList<Number>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_BADGES));
-                profileViewModel.asConsumerGotBadgeCount.setValue(consumerBadges.size());
-                profileViewModel.asConsumerBadges.setValue(consumerBadges);
-            }
+            Map<String,Object> asConsumer = currentUserInfo.getAsConsumer();
+            ArrayList<DocumentReference> reviews =
+                    (ArrayList<DocumentReference>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS));
+            profileViewModel.asConsumerTotalReviewCount.setValue(reviews.size());
+
+            ArrayList<Number> consumerBadges =
+                    (ArrayList<Number>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_BADGES));
+            profileViewModel.asConsumerGotBadgeCount.setValue(consumerBadges.size());
+            profileViewModel.asConsumerBadges.setValue(consumerBadges);
 
             // as donor
             HashMap<String, Object> asDonor = (HashMap<String, Object>) currentUserInfo.getAsDonor();
-            if (asDonor == null) {
-                wholeAsDonor.setVisibility(View.GONE);
-            } else {
-                wholeAsDonor.setVisibility(VISIBLE);
-                ArrayList<DocumentReference> itemsOnShelf =
-                        (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_ON_SHELF));
-                profileViewModel.asDonorTotalOnShelfCount.setValue(itemsOnShelf.size());
-                ArrayList<DocumentReference> itemsReviewed =
-                        (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_REVIEWED));
-                profileViewModel.asDonorTotalReviewedCount.setValue(itemsReviewed.size());
+            ArrayList<DocumentReference> itemsOnShelf =
+                    (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_ON_SHELF));
+            profileViewModel.asDonorTotalOnShelfCount.setValue(itemsOnShelf.size());
+            ArrayList<DocumentReference> itemsReviewed =
+                    (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_REVIEWED));
+            profileViewModel.asDonorTotalReviewedCount.setValue(itemsReviewed.size());
 
-                ArrayList<Number> donorBadges =
-                        (ArrayList<Number>) asDonor.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_BADGES));
-                profileViewModel.asDonorGotBadgeCount.setValue(donorBadges.size());
-                profileViewModel.asDonorBadges.setValue(donorBadges);
-            }
+            ArrayList<Number> donorBadges =
+                    (ArrayList<Number>) asDonor.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_BADGES));
+            profileViewModel.asDonorGotBadgeCount.setValue(donorBadges.size());
+            profileViewModel.asDonorBadges.setValue(donorBadges);
+
         });
         profileViewModel.consumerReviewInfo.observe(getViewLifecycleOwner(), consumerReviewInfo -> {
             profileViewModel.asConsumerReviewDate.setValue(consumerReviewInfo.getDate());
@@ -196,9 +193,7 @@ public class ProfileFragment extends Fragment {
 
         // ---------
         profileViewModel.profileImageUrl.observe(getViewLifecycleOwner(), profileImageUrl -> {
-            if (profileImageUrl != null){
-                Picasso.get().load(profileImageUrl).into(profileCircleImageView);
-            }
+            Picasso.get().load(profileImageUrl).into(profileCircleImageView);
         });
         profileViewModel.name.observe(getViewLifecycleOwner(), name -> {
             nameTextView.setText(name);
@@ -218,15 +213,11 @@ public class ProfileFragment extends Fragment {
         });
 
         profileViewModel.birthday.observe(getViewLifecycleOwner(), birthday -> {
-            if (birthday == null) {
-                ageTextView.setText("Not Provided.");
-            } else {
-                Date dateBirthday = birthday.toDate();
-                Date now = new Date();
-                long diffInMillies = now.getTime() - dateBirthday.getTime();
-                long year = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS) / 365;
-                ageTextView.setText(Long.toString(year));
-            }
+            Date dateBirthday = birthday.toDate();
+            Date now = new Date();
+            long diffInMillies = now.getTime() - dateBirthday.getTime();
+            long year = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS) / 365;
+            ageTextView.setText(Long.toString(year));
         });
 
         profileViewModel.bio.observe(getViewLifecycleOwner(), bio -> {
@@ -328,7 +319,7 @@ public class ProfileFragment extends Fragment {
         });
 
         profileViewModel.asConsumerBadges.observe(getViewLifecycleOwner(), asConsumerBadges -> {
-            createBadgeViews(asConsumerBadges, usersConsumerBadgeTableLayout, true);
+            createBadgeViews(asConsumerBadges, usersConsumerBadgeTableLayout,true);
         });
 
         // As Donor
@@ -369,9 +360,9 @@ public class ProfileFragment extends Fragment {
         // Reviewed
         profileViewModel.asDonorTotalReviewedCount.observe(getViewLifecycleOwner(), asDonorTotalReviewedCount -> {
             donorReviewedItemCountTextView.setText(Integer.toString(asDonorTotalReviewedCount));
-            if (asDonorTotalReviewedCount.equals(0)) {
+            if (asDonorTotalReviewedCount.equals(0)){
                 donorReviewedItemLinearLayout.setVisibility(View.GONE);
-            } else {
+            }else {
                 donorReviewedItemLinearLayout.setVisibility(VISIBLE);
             }
         });
@@ -414,19 +405,19 @@ public class ProfileFragment extends Fragment {
         });
 
         profileViewModel.asDonorBadges.observe(getViewLifecycleOwner(), asDonorBadges -> {
-            createBadgeViews(asDonorBadges, usersDonorBadgeTableLayout, false);
+            createBadgeViews(asDonorBadges, usersDonorBadgeTableLayout,false);
         });
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        fetchDBInfo(userId);
+        firebaseRegisterAndLogin();
     }
 
     private void createBadgeViews(ArrayList<Number> badges, TableLayout tableLayout, boolean consumer) {
         HashMap<Long, Badge> badgesHashMap = aConst.DONOR_BADGES;
-        if (consumer) {
+        if(consumer){
             badgesHashMap = aConst.CONSUMER_BADGES;
         }
         tableLayout.removeAllViews();
@@ -463,11 +454,9 @@ public class ProfileFragment extends Fragment {
             }
         }
     }
-
-    <T extends View> T findViewById(int id) {
-        return (T) (root.findViewById(id));
+    <T extends View> T findViewById(int id){
+        return (T)(root.findViewById(id));
     }
-
     private void InitUI() {
         profileCircleImageView = findViewById(R.id.userProfile_profileCircleImageView);
         nameTextView = findViewById(R.id.userProfile_nameTextView);
@@ -523,182 +512,113 @@ public class ProfileFragment extends Fragment {
         donorReviewedItemTextDescriptionTextView =
                 findViewById(R.id.userProfile_donorReviewedItemTextDescriptionTextView);
 
-        wholeAsConsumer = findViewById(R.id.userProfile_wholeAsConsumer);
-        wholeAsDonor = findViewById(R.id.userProfile_wholeAsDonor);
+    }
 
+
+    /**
+     * Firebase register and login jobs
+     */
+    private void firebaseRegisterAndLogin() {
+        String email = getResources().getString(R.string.firebase_email);
+        String password = getResources().getString(R.string.firebase_password);
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth.isSignInWithEmailLink(email)) {
+            fetchDBInfo(userId);
+        } else {
+            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            fetchDBInfo(userId);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("TAG", "signInWithEmail:failure", task.getException());
+                        }
+                    });
+        }
     }
 
     private void fetchDBInfo(String userId) {
-        UsersInfo usersInfoCached = (UsersInfo) cache.getStoredObject(userId);
-        if (usersInfoCached == null){
-            FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO)).document(userId).get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        UsersInfo usersInfo = document.toObject(UsersInfo.class);
-                        cache.add(userId,usersInfo);
-                        setUserProfileUI(usersInfo);
-                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
-                    } else {
-                        Log.d("TAG", "No such document");
-                    }
+        FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO)).document(userId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    UsersInfo usersInfo = document.toObject(UsersInfo.class);
+                    setUserProfileUI(usersInfo);
+                    Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                 } else {
-                    int k = 1;
+                    Log.d("TAG", "No such document");
                 }
-            });
-        }else{
-            setUserProfileUI(usersInfoCached);
-        }
+            } else {
+                int k = 1;
+            }
+        });
     }
-    private void setConsumerReviewFoodInfoUI(ReviewInfo reviewInfo){
-        DocumentReference food = reviewInfo.getFoodRef();
-        String foodId = food.getId();
-        FoodItemInfo foodItemInfoCached = (FoodItemInfo) cache.getStoredObject(foodId);
-        if (foodItemInfoCached == null){
-            food.get().addOnCompleteListener(foodTask -> {
-                if (foodTask.isSuccessful()) {
-                    FoodItemInfo foodItemInfo =foodTask.getResult().toObject(FoodItemInfo.class);
-                    cache.add(foodId,foodItemInfo);
-                    profileViewModel.consumerReviewFoodInfo.setValue(foodItemInfo);
-                }
-            });
-        }else {
-            profileViewModel.consumerReviewFoodInfo.setValue(foodItemInfoCached);
-        }
-    }
-    private void setDonorReviewFoodInfoUI(ReviewInfo reviewInfo) {
-        DocumentReference documentReference = reviewInfo.getFoodRef();
-        String foodId = documentReference.getId();
-        FoodItemInfo foodItemInfoCached = (FoodItemInfo)cache.getStoredObject(foodId);
-        if (foodItemInfoCached == null){
-            documentReference.get().addOnCompleteListener(foodTask -> {
-                if (foodTask.isSuccessful()) {
-                    FoodItemInfo foodItemInfo = foodTask.getResult().toObject(FoodItemInfo.class);
-                    cache.add(foodId,foodItemInfo);
-                    profileViewModel.donorReviewedFoodInfo.setValue(foodItemInfo);
-                }
-            });
-        }else {
-            profileViewModel.donorReviewedFoodInfo.setValue(foodItemInfoCached);
-        }
-    }
-    private void setDonorReviewUserInfoUI(ReviewInfo reviewInfo){
-        DocumentReference userRef = reviewInfo.getFromUser();
-        String userId = userRef.getId();
-        UsersInfo usersInfoCached = (UsersInfo)cache.getStoredObject(userId);
-        if (usersInfoCached == null){
-            userRef.get().addOnCompleteListener(userTask -> {
-                if (userTask.isSuccessful()) {
-                    UsersInfo usersInfo = userTask.getResult().toObject(UsersInfo.class);
-                    cache.add(userId,usersInfo);
-                    profileViewModel.donorReviewedUserInfo.setValue(usersInfo);
-                }
-            });
-        }else{
-            profileViewModel.donorReviewedUserInfo.setValue(usersInfoCached);
-        }
-    }
-    private void setConsumerReviewDonorUserInfoUI(ReviewInfo reviewInfo){
-        DocumentReference donor =
-                reviewInfo.getToUser();
-        String donorId = donor.getId();
-        UsersInfo donorInfoCached = (UsersInfo) cache.getStoredObject(donorId);
-        if (donorInfoCached == null){
-            donor.get().addOnCompleteListener(donorTask -> {
-                if (donorTask.isSuccessful()) {
-                    UsersInfo donorInfo = donorTask.getResult().toObject(UsersInfo.class);
-                    cache.add(donorId,donorInfo);
-                    profileViewModel.consumerReviewDonorUserInfo.setValue(donorInfo);
-                }
-            });
-        }else{
-            profileViewModel.consumerReviewDonorUserInfo.setValue(donorInfoCached);
-        }
-    }
+
     private void setUserProfileUI(UsersInfo usersInfo) {
         profileViewModel.currentUserInfo.setValue(usersInfo);
         // -- as Consumer --
         HashMap<String, Object> asConsumer = (HashMap<String, Object>) usersInfo.getAsConsumer();
-        if (asConsumer != null) {
-            // review count
-            ArrayList<DocumentReference> reviews =
-                    (ArrayList<DocumentReference>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS));
-            if (reviews.size() > 0) {
-                DocumentReference lastReviewRef = reviews.get(reviews.size() - 1);
-                String reviewId = lastReviewRef.getId();
-                ReviewInfo reviewInfoCached = (ReviewInfo)cache.getStoredObject(reviewId);
-                if (reviewInfoCached == null){
-                    lastReviewRef.get().addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            // In review document
-                            ReviewInfo reviewInfo = task.getResult().toObject(ReviewInfo.class);
-                            cache.add(reviewId,reviewInfo);
-                            profileViewModel.consumerReviewInfo.setValue(reviewInfo);
-                            setConsumerReviewFoodInfoUI(reviewInfo);
-                            setConsumerReviewDonorUserInfoUI(reviewInfo);
+        // review count
+        ArrayList<DocumentReference> reviews =
+                (ArrayList<DocumentReference>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS));
+        if (reviews.size() > 0) {
+            DocumentReference lastReviewRef = reviews.get(reviews.size() - 1);
+            lastReviewRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    // In review document
+                    ReviewInfo reviewInfo = task.getResult().toObject(ReviewInfo.class);
+                    profileViewModel.consumerReviewInfo.setValue(reviewInfo);
+                    DocumentReference food = reviewInfo.getFoodRef();
+                    food.get().addOnCompleteListener(foodTask -> {
+                        if (foodTask.isSuccessful()) {
+                            profileViewModel.consumerReviewFoodInfo.setValue(foodTask.getResult().toObject(FoodItemInfo.class));
                         }
                     });
-                }else{
-                    profileViewModel.consumerReviewInfo.setValue(reviewInfoCached);
-                    setConsumerReviewFoodInfoUI(reviewInfoCached);
-                    setConsumerReviewDonorUserInfoUI(reviewInfoCached);
+                    DocumentReference donor =
+                            reviewInfo.getToUser();
+                    donor.get().addOnCompleteListener(donorTask -> {
+                        if (donorTask.isSuccessful()) {
+                            profileViewModel.consumerReviewDonorUserInfo.setValue(donorTask.getResult().toObject(UsersInfo.class));
+                        }
+                    });
                 }
-            }
+            });
         }
-
 
         // -- as Donor --
         HashMap<String, Object> asDonor = (HashMap<String, Object>) usersInfo.getAsDonor();
-        if (asDonor != null) {
-            // on shelf
-            ArrayList<DocumentReference> itemsOnShelf =
-                    (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_ON_SHELF));
-            if (itemsOnShelf.size() > 0) {
-                DocumentReference docRef = itemsOnShelf.get(itemsOnShelf.size() - 1);
-                String itemId = docRef.getId();
-                FoodItemInfo itemInfoCached = (FoodItemInfo) cache.getStoredObject(itemId);
-                if (itemInfoCached == null){
-                    docRef.get().addOnCompleteListener(foodTask -> {
+        // on shelf
+        ArrayList<DocumentReference> itemsOnShelf =
+                (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_ON_SHELF));
+        if (itemsOnShelf.size() > 0) {
+            DocumentReference docRef = itemsOnShelf.get(itemsOnShelf.size() - 1);
+            docRef.get().addOnCompleteListener(foodTask -> {
+                if (foodTask.isSuccessful()) {
+                    profileViewModel.donorOnShelfFoodInfo.setValue(foodTask.getResult().toObject(FoodItemInfo.class));
+                }
+            });
+        }
+
+        // reviewed
+        ArrayList<DocumentReference> itemsReviewed =
+                (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_REVIEWED));
+        if (itemsReviewed.size() > 0) {
+            DocumentReference docRef = itemsReviewed.get(itemsReviewed.size() - 1);
+            docRef.get().addOnCompleteListener(reviewedItemTask -> {
+                if (reviewedItemTask.isSuccessful()) {
+                    profileViewModel.donorReviewedInfo.setValue(reviewedItemTask.getResult().toObject(ReviewInfo.class));
+                    profileViewModel.donorReviewedInfo.getValue().getFromUser().get().addOnCompleteListener(userTask -> {
+                        if (userTask.isSuccessful()) {
+                            profileViewModel.donorReviewedUserInfo.setValue(userTask.getResult().toObject(UsersInfo.class));
+                        }
+                    });
+                    profileViewModel.donorReviewedInfo.getValue().getFoodRef().get().addOnCompleteListener(foodTask -> {
                         if (foodTask.isSuccessful()) {
-                            FoodItemInfo foodItemInfo = foodTask.getResult().toObject(FoodItemInfo.class);
-                            cache.add(itemId,foodItemInfo);
-                            profileViewModel.donorOnShelfFoodInfo.setValue(foodItemInfo);
+                            profileViewModel.donorReviewedFoodInfo.setValue(foodTask.getResult().toObject(FoodItemInfo.class));
                         }
                     });
-                }else {
-                    profileViewModel.donorOnShelfFoodInfo.setValue(itemInfoCached);
                 }
-            }
-
-            // reviewed
-            ArrayList<DocumentReference> itemsReviewed =
-                    (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_REVIEWED));
-            if (itemsReviewed.size() > 0) {
-                DocumentReference docRef = itemsReviewed.get(itemsReviewed.size() - 1);
-                String itemId = docRef.getId();
-                ReviewInfo reviewInfoCached = (ReviewInfo) cache.getStoredObject(itemId);
-                if (reviewInfoCached == null){
-                    docRef.get().addOnCompleteListener(reviewedItemTask -> {
-                        if (reviewedItemTask.isSuccessful()) {
-                            ReviewInfo reviewInfo = reviewedItemTask.getResult().toObject(ReviewInfo.class);
-                            cache.add(itemId,reviewInfo);
-                            profileViewModel.donorReviewedInfo.setValue(reviewInfo);
-
-                            setDonorReviewUserInfoUI(reviewInfoCached);
-                            setDonorReviewFoodInfoUI(reviewInfoCached);
-
-
-                        }
-                    });
-                }else {
-                    profileViewModel.donorReviewedInfo.setValue(reviewInfoCached);
-                    setDonorReviewUserInfoUI(reviewInfoCached);
-                    setDonorReviewFoodInfoUI(reviewInfoCached);
-                }
-
-            }
+            });
         }
     }
-
-
 }

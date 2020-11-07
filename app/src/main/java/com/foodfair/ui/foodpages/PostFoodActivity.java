@@ -407,7 +407,19 @@ public class PostFoodActivity extends AppCompatActivity {
 
             // get donor reference
             String userTableStr = getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO);
-            DocumentReference donorRef = mFirestore.document(userTableStr + "/" + UID);
+            // DocumentReference donorRef = mFirestore.document(userTableStr + "/" + UID);
+
+            // Get firebase user
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            DocumentReference donorRef;
+            if(firebaseUser != null){
+                donorRef = mFirestore.document(userTableStr + "/" + firebaseUser.getUid());
+            } else {
+                Toast toast = new Toast(this).makeText(this,
+                        "Please sign in", Toast.LENGTH_SHORT);
+                toast.show();
+                return;
+            }
 
             // upload image onto storage and retrieve the url
             String fileName = mFile.getName();
@@ -418,6 +430,7 @@ public class PostFoodActivity extends AppCompatActivity {
             populateFoodItemInfo(allergenLongList, quantity, dateExpiry, dateOn, donorRef,
                     null, foodNameStr, status, descStr, typeLong, mFoodItemInfo);
 
+            finish();
         }
 
     }

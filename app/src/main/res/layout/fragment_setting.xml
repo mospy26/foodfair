@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#FFE8C2"
     tools:context=".ui.hamburger.SettingFragment">
 
     <ScrollView
@@ -50,7 +51,7 @@
                             android:id="@+id/profile_image"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:src="@drawable/crying_cat"
+                            android:src="@drawable/ic_menu_profile"
                             android:layout_weight="1"/>
 
                         <TextView
