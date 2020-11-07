@@ -312,8 +312,20 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
         for (UsersInfo users : mUsersInfoList) {
             try {
                 donors = users.getAsDonor();
-                userLon = (double) donors.get("lon");
-                userLat = (double) donors.get("lat");
+                Object lonObj = donors.get("lon");
+                Object latObj = donors.get("lat");
+                if (lonObj instanceof String) {
+                    userLon = Double.parseDouble((String) lonObj);
+                } else {
+                    userLon = (double) lonObj;
+                }
+
+                if (latObj instanceof String) {
+                    userLat = Double.parseDouble((String) latObj);
+                } else {
+                    userLat = (double) latObj;
+                }
+
 
                 double dist = Math.abs(calcDist(userLat, userLon, deviceLat, deviceLon));
 
