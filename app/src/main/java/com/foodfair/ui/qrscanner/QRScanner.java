@@ -171,7 +171,7 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
                                 DocumentSnapshot document = task.getResult();
                                 if (document.exists()) {
                                     foodRef = document.toObject(FoodItemInfo.class);
-                                    if (foodRef.getDonorRef().getId() != FirebaseAuth.getInstance().getUid()) {
+                                    if (!foodRef.getDonorRef().getId().equals(FirebaseAuth.getInstance().getUid())) {
                                         spawnNotExistsDialog();
                                         return;
                                     }
@@ -266,13 +266,13 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
     private String _getPeriod() {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
-        period = cal.get(Calendar.YEAR) + "" + cal.get(Calendar.YEAR);
+        period = cal.get(Calendar.YEAR) + "" + cal.get(Calendar.MONTH);
         return cal.get(Calendar.YEAR) + "" + cal.get(Calendar.MONTH);
     }
 
     private void updateLeaderboard() {
         CollectionReference leaderboardRef = FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_LEADERBOARD));
-        FirebaseFirestore.getInstance().collection(("leaderboard"))
+        leaderboardRef
                 .document(period)
                 .collection("ranking")
                 .document(FirebaseAuth.getInstance().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -290,11 +290,30 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
                                 ranking.setScore(100L);
                                 ranking.setDonor(transaction.getDonor());
                             }
+                            saveRanking();
                         }
                     }
+
                 });
     }
 
+    public void saveRanking() {
+        CollectionReference leaderboardRef = FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_LEADERBOARD));
+        FirebaseFirestore.getInstance().collection(("leaderboard"))
+                .document(period)
+                .collection("ranking")
+                .document(FirebaseAuth.getInstance().getUid()).set(ranking).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Log.d("Leaderboard", "Success updating leaderboard");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("Leaderboard", "Failed to update ranking");
+            }
+        });
+    }
 //    private void fetchLeaderboard(String period) {
 //        FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_LEADERBOARD)).document(period).collection("ranking").document(FirebaseAuth.getInstance().getUid()).get().addOnCompleteListener(task -> {
 //            if (task.isSuccessful()) {
