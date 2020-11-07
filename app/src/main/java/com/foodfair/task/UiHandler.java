@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.widget.RemoteViews;
 
 import androidx.core.app.NotificationCompat;
 
@@ -87,8 +88,15 @@ public class UiHandler extends Handler {
                         .setContentTitle(title)
                         .setContentText(content)
                         .setAutoCancel(true)
-                        .setSound(defaultSoundUri)
-                        .setContentIntent(pendingIntent);
+                        .setSound(defaultSoundUri);
+//                        .setContentIntent(pendingIntent).setFullScreenIntent(pendingIntent,true);
+
+//        RemoteViews collapsed = new RemoteViews(context.getPackageName(), R.layout);
+//        RemoteViews show = new RemoteViews(mContext.getPackageName(), R.layout.notify_show);
+//        builder.setCustomContentView(collapsed);
+//        builder.setCustomBigContentView(show);
+//        builder.setCustomHeadsUpContentView(collapsed);
+
 
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

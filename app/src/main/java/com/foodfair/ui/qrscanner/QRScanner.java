@@ -297,12 +297,7 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
                                 ranking = document.toObject(Ranking.class);
                                 ranking.setScore(ranking.getScore() + 100);
                                 ranking.setDonationCount(ranking.getDonationCount() + 1);
-                                if (ranking.getDonationCount() == 5) {
-                                    addBadgeToDonor(201L);
-                                    cache.add(FirebaseAuth.getInstance().getCurrentUser().getUid(), donor);
-                                }
                             } else {
-                                addBadgeToDonor(200L);
                                 ranking = new Ranking();
                                 ranking.setDonationCount(1L);
                                 ranking.setAverageRating(2.9999);
@@ -310,16 +305,65 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
                                 ranking.setDonor(transaction.getDonor());
                             }
                             saveRanking();
-
-                            if (((ArrayList<DocumentReference>) consumer.getAsConsumer().get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_TRANSACTIONS))).size() == 5) {
-                                addBadgeToConsumer(201L);
-                            } else if (((ArrayList<DocumentReference>) consumer.getAsConsumer().get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_TRANSACTIONS))).size() == 1) {
-                                addBadgeToConsumer(200L);
-                            }
                         }
                     }
 
                 });
+
+        leaderboardRef
+                .document("total")
+                .collection("ranking")
+                .document(FirebaseAuth.getInstance().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    Ranking totalRanking;
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        totalRanking = document.toObject(Ranking.class);
+                        totalRanking.setScore(totalRanking.getScore() + 100);
+                        totalRanking.setDonationCount(totalRanking.getDonationCount() + 1);
+                        if (totalRanking.getDonationCount() == 5) {
+                            addBadgeToDonor(201L);
+                            cache.add(FirebaseAuth.getInstance().getCurrentUser().getUid(), donor);
+                        }
+                    } else {
+                        addBadgeToDonor(200L);
+                        totalRanking = new Ranking();
+                        totalRanking.setDonationCount(1L);
+                        totalRanking.setAverageRating(2.9999);
+                        totalRanking.setScore(100L);
+                        totalRanking.setDonor(transaction.getDonor());
+                    }
+                    saveTotalRanking();
+
+                    if (((ArrayList<DocumentReference>) consumer.getAsConsumer().get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_TRANSACTIONS))).size() == 5) {
+                        addBadgeToConsumer(201L);
+                    } else if (((ArrayList<DocumentReference>) consumer.getAsConsumer().get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_TRANSACTIONS))).size() == 1) {
+                        addBadgeToConsumer(200L);
+                    }
+                }
+            }
+
+        });
+    }
+
+    public void saveTotalRanking() {
+        CollectionReference leaderboardRef = FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_LEADERBOARD));
+        FirebaseFirestore.getInstance().collection(("leaderboard"))
+                .document("total")
+                .collection("ranking")
+                .document(FirebaseAuth.getInstance().getUid()).set(ranking).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Log.d("Leaderboard", "Success updating leaderboard");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("Leaderboard", "Failed to update ranking");
+            }
+        });
     }
 
     public void saveRanking() {

@@ -85,7 +85,7 @@ public class Cache {
         try {
             FileOutputStream fout = new FileOutputStream(cacheDir);
             ObjectOutputStream oos = new ObjectOutputStream(fout);
-            oos.writeObject(cache);
+//            oos.writeObject(cache);
             oos.close();
         } catch (IOException e) {
             e.printStackTrace();
