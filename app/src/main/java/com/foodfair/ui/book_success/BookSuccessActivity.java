@@ -224,8 +224,9 @@ public class BookSuccessActivity extends AppCompatActivity {
         mBookSuccessViewModel.getQRCodeContent().observe(this, qrCodeContent -> {
             // Set QRCode image
             try {
+
                 BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-                Bitmap bitmap = barcodeEncoder.encodeBitmap("content", BarcodeFormat.QR_CODE, mWidth, mHeight);
+                Bitmap bitmap = barcodeEncoder.encodeBitmap(qrCodeContent, BarcodeFormat.QR_CODE, mWidth, mHeight);
                 mQRCodeImageView.setImageBitmap(cropBitmapToSquare(bitmap, mQRCodeCropRatio));
             } catch (WriterException e) {
                 e.printStackTrace();
