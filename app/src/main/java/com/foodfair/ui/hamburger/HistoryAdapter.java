@@ -10,6 +10,10 @@ import android.view.ViewGroup;
 import android.widget.RatingBar;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.foodfair.R;
@@ -90,6 +94,11 @@ public class HistoryAdapter extends FirestoreAdapter<HistoryAdapter.ViewHolder> 
                 public void onClick(View v) {
 //                    Intent intent = new Intent(context, UserProfileActivity.class);
 //                    context.startActivity(intent);
+                    Fragment fragment = new ProfileFragment();
+                    AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                    activity.getSupportFragmentManager().beginTransaction().replace(
+                            R.id.drawer_layout, fragment).addToBackStack(null).commit();
+
                 }
             });
             // Firestore
