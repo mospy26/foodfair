@@ -1,6 +1,7 @@
 package com.foodfair.ui.hamburger;
 
 import android.content.res.Resources;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,13 +9,20 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.foodfair.R;
 import com.foodfair.databinding.AdapterBookingBinding;
 import com.foodfair.model.FoodItemInfo;
 import com.foodfair.model.FooditemTransaction;
+import com.foodfair.model.Ranking;
 import com.foodfair.model.UsersInfo;
 import com.foodfair.utilities.Const;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -23,15 +31,18 @@ import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Document;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ManageFoodAdapter extends FirestoreAdapter<ManageFoodAdapter.ViewHolder>{
 
     private boolean isAsDonor = true;
+    private Ranking ranking;
+    private String period;
 
     public interface OnManageFoodSelectedListener {
-        void onManageFoodSelected();
+        void onManageFoodSelected(DocumentSnapshot snapshot);
     }
     private OnManageFoodSelectedListener mListener;
 
@@ -136,6 +147,7 @@ public class ManageFoodAdapter extends FirestoreAdapter<ManageFoodAdapter.ViewHo
                         snapshot.getReference().update(updateMap);
                         foodRef.update("status",
                                 Const.getInstance().TRANSACTION_STATUS.get("success"));
+                        updateLeaderboard(transaction);
                     }
                 });
 
@@ -156,5 +168,60 @@ public class ManageFoodAdapter extends FirestoreAdapter<ManageFoodAdapter.ViewHo
             }
         }
 
+    }
+
+    private String _getPeriod() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        int month = cal.get(Calendar.MONTH) + 1;
+        period = cal.get(Calendar.YEAR) + "" + month;
+        return period;
+    }
+
+    private void updateLeaderboard(FooditemTransaction transaction) {
+        CollectionReference leaderboardRef = FirebaseFirestore.getInstance().collection(
+                "leaderboard");
+        leaderboardRef
+                .document(_getPeriod())
+                .collection("ranking")
+                .document(FirebaseAuth.getInstance().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        ranking = document.toObject(Ranking.class);
+                        ranking.setScore(ranking.getScore() + 100);
+                    } else {
+                        ranking = new Ranking();
+                        ranking.setDonationCount(1L);
+                        ranking.setAverageRating(2.9999);
+                        ranking.setScore(100L);
+                        ranking.setDonor(transaction.getDonor());
+                    }
+                    saveRanking();
+                }
+            }
+
+        });
+    }
+
+    public void saveRanking() {
+        CollectionReference leaderboardRef = FirebaseFirestore.getInstance().collection(
+                "leaderboard");
+        FirebaseFirestore.getInstance().collection(("leaderboard"))
+                .document(period)
+                .collection("ranking")
+                .document(FirebaseAuth.getInstance().getUid()).set(ranking).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Log.d("Leaderboard", "Success updating leaderboard");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("Leaderboard", "Failed to update ranking");
+            }
+        });
     }
 }
