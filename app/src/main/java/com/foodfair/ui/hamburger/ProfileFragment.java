@@ -42,6 +42,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
+import static android.view.View.inflate;
 
 public class ProfileFragment extends Fragment {
 
@@ -54,12 +55,11 @@ public class ProfileFragment extends Fragment {
         profileViewModel = new ProfileViewModel();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         userId = user.getUid();
-        profileViewModel.id.setValue(userId);
-        profileViewModel.asConsumerTotalBadgeCount.setValue(aConst.CONSUMER_BADGES.size());
-        profileViewModel.asDonorTotalBadgeCount.setValue(aConst.DONOR_BADGES.size());
+
 
         root = inflater.inflate(R.layout.user_profile, container, false);
-        InitUI();
+        headLayout = findViewById(R.id.header_linearLayout);
+//        InitUI();
         viewModelObserverSetup();
         return root;
     }
@@ -111,16 +111,27 @@ public class ProfileFragment extends Fragment {
     public ArrayList<ShapeableImageView> donorReviewedItemImageShapeableImageViews = new ArrayList<>();
     public TextView donorReviewedItemTextDescriptionTextView;
 
+    public LinearLayout headLayout;
     public LinearLayout wholeAsConsumer;
     public LinearLayout wholeAsDonor;
+    public LinearLayout baseUserLayout;
 
 
     private void viewModelObserverSetup() {
         profileViewModel.currentUserInfo.observe(getViewLifecycleOwner(), currentUserInfo -> {
+            View userBaseLayout = findViewById(R.id.userProfile_userBaseLayout);
+            if (userBaseLayout == null){
+                View view = LayoutInflater.from(getContext()).inflate(R.layout.user_profile_baseuser,
+                        headLayout, false);
+                headLayout.addView(view);
+                InitUI();
+            }
+
+
+            profileViewModel.id.setValue(userId);
             profileViewModel.profileImageUrl.setValue(currentUserInfo.getProfileImage());
             profileViewModel.name.setValue(currentUserInfo.getName());
             profileViewModel.gender.setValue(currentUserInfo.getGender().intValue());
-//            userProfileViewModel.id.setValue(userId);
             profileViewModel.birthday.setValue(currentUserInfo.getBirthday());
             profileViewModel.bio.setValue(currentUserInfo.getBio());
             profileViewModel.allergy.setValue((ArrayList<Long>) currentUserInfo.getAllergy());
@@ -131,10 +142,15 @@ public class ProfileFragment extends Fragment {
 
             // as consumer
             Map<String, Object> asConsumer = currentUserInfo.getAsConsumer();
-            if (asConsumer == null) {
-                wholeAsConsumer.setVisibility(View.GONE);
-            } else {
-                wholeAsConsumer.setVisibility(VISIBLE);
+            if (asConsumer != null) {
+                View wholeAsConsumerLayout = findViewById(R.id.userProfile_wholeAsConsumer);
+                if (wholeAsConsumerLayout == null){
+                    View view = LayoutInflater.from(getContext()).inflate(R.layout.user_profile_consumer,
+                            headLayout, false);
+                    headLayout.addView(view);
+                    InitUI();
+                    profileViewModel.asConsumerTotalBadgeCount.setValue(aConst.CONSUMER_BADGES.size());
+                }
                 ArrayList<DocumentReference> reviews =
                         (ArrayList<DocumentReference>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS));
                 profileViewModel.asConsumerTotalReviewCount.setValue(reviews.size());
@@ -146,10 +162,15 @@ public class ProfileFragment extends Fragment {
 
             // as donor
             HashMap<String, Object> asDonor = (HashMap<String, Object>) currentUserInfo.getAsDonor();
-            if (asDonor == null) {
-                wholeAsDonor.setVisibility(View.GONE);
-            } else {
-                wholeAsDonor.setVisibility(VISIBLE);
+            if (asDonor != null) {
+                View wholeAsDonorLayout = findViewById(R.id.userProfile_wholeAsDonor);
+                if (wholeAsDonorLayout == null){
+                    View view = LayoutInflater.from(getContext()).inflate(R.layout.user_profile_donor,
+                            headLayout, false);
+                    headLayout.addView(view);
+                    InitUI();
+                    profileViewModel.asDonorTotalBadgeCount.setValue(aConst.DONOR_BADGES.size());
+                }
                 ArrayList<DocumentReference> itemsOnShelf =
                         (ArrayList<DocumentReference>) asDonor.get(getResources().getString(R.string.ITEMS_ON_SHELF));
                 profileViewModel.asDonorTotalOnShelfCount.setValue(itemsOnShelf.size());
