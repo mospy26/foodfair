@@ -19,6 +19,15 @@ public class FoodItemInfo /*implements Parcelable*/ {
     Integer status;
     String textDescription;
     Long type;
+    String city;
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
 
     public ArrayList<Long> getAllergyInfo() {
         return allergyInfo;

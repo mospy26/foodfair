@@ -92,6 +92,7 @@
     <string name="ITEMS_REVIEWED">itemsReviewed</string>
     <integer name="FIREBASE_COLLECTION_USER_INFO_GENDER_VALUE_MALE">1</integer>
     <string name="FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS">reviews</string>
+    <string name="FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_TRANSACTIONS">transactions</string>
     <string name="FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_BADGES">badges</string>
     <string name="FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_BADGES">badges</string>
     <string name="FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_LAT">lat</string>

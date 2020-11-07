@@ -62,6 +62,16 @@
             android:layout_width="320dp"
             android:layout_height="match_parent"
             android:stretchColumns="1">
+            <TableRow>
+                <TextView
+                    style="@style/TableLeftCell"
+                    android:text="Type" />
+
+                <TextView
+                    android:id="@+id/userProfile_typeTextView"
+                    style="@style/TableRightCell"
+                    android:text="Loading" />
+            </TableRow>
             <TableRow android:visibility="gone">
                 <TextView
                     style="@style/TableLeftCell"

@@ -27,6 +27,7 @@ import com.foodfair.utilities.Utility;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -49,13 +50,23 @@ public class HomeFragment extends Fragment {
         recyclerView = root.findViewById(R.id.list);
         System.out.println(recyclerView);
         dbReference = FirebaseFirestore.getInstance();
-        Query query = dbReference.collection("foodItemInfo").whereEqualTo("status",1);
+
+        // Queries items where status is "1" and the count is greater than 0
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+       DocumentReference df = dbReference.collection("usersInfo").document("XWNQVbEdFKWbGOnok7wgMARYXgp2");
+
+
+
+        Query query = dbReference.collection("foodItemInfo");
 
 
         FirestoreRecyclerOptions<FoodItemInfo> foodItemInfoFirestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<FoodItemInfo>().setQuery(query, FoodItemInfo.class).build();
 
 
-        adapter = new FirestoreRecyclerAdapter<FoodItemInfo, FoodPostingHolder>(foodItemInfoFirestoreRecyclerOptions) {
+
+
+        adapter = new FirestoreRecyclerAdapter<FoodItemInfo, FoodPostingHolder>(foodItemInfoFirestoreRecyclerOptions){
 
 
             @NonNull
@@ -76,17 +87,13 @@ public class HomeFragment extends Fragment {
                         if (rf.exists()) {
                             String name = (String) rf.get("name");
                             holder.foodPostedBy.setText(name);
-                            holder.foodTitle.setText(model.getName());
-                            holder.foodPostedDate.setText("Expires  " + Utility.timeStampToDateString(model.getDateExpire()));
-
-                            if (model.getImageDescription() != null && model.getImageDescription().size() != 0) {
-                                Picasso.get().load(model.getImageDescription().get(0)).into(holder.imageToDisplay);
-                            }
-                            ;
                             holder.foodItemId = ((DocumentSnapshot) adapter.getSnapshots().getSnapshot(position)).getId();
+
                         }
 
-
+                        holder.foodTitle.setText(model.getName());
+                        holder.foodPostedDate.setText("Expires  " + Utility.timeStampToDateString(model.getDateExpire()));
+                        Picasso.get().load(model.getImageDescription().get(0)).into(holder.imageToDisplay);
                     }
                 });
 
@@ -124,7 +131,7 @@ public class HomeFragment extends Fragment {
         SharedPreferences sharedPref = getActivity().getSharedPreferences("foodfair", Context.MODE_PRIVATE);
         String uid = sharedPref.getString("firebasekey", null);
         Long status = sharedPref.getLong(uid + "_status", -1);
-        if (status == 2) {
+        if (status == 2 || FirebaseAuth.getInstance().getCurrentUser() == null) {
             postButton.setVisibility(View.GONE);
         }
 

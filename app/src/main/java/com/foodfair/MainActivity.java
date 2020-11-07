@@ -1,10 +1,16 @@
 package com.foodfair;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Menu;
@@ -14,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -57,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//            FirebaseMessaging.getInstance().send();
         setContentView(R.layout.activity_main);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -96,8 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 if(item.getItemId() == R.id.nav_user_profile ||
                     item.getItemId() == R.id.nav_settings ||
                     item.getItemId() == R.id.nav_history_of_items ||
-                    item.getItemId() == R.id.nav_manage_food_bookings ||
-                    item.getItemId() == R.id.nav_qr_scanner) {
+                    item.getItemId() == R.id.nav_manage_food_bookings) {
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     if(user != null){
                         navController.navigate(item.getItemId());
@@ -184,9 +191,8 @@ public class MainActivity extends AppCompatActivity {
         Cache.getInstance(this).add(getResources().getString(R.string.CACHE_KEY_NETWORK_STATUS),true);
     }
     private void BackgroundStuff() {
-        new CountDownTimer(Long.MAX_VALUE, 10000){
-            @Override
-            public void onTick(long millisUntilFinished) {
+            ThreadPoolManager.getInstance().addCallable(()->{
+            while (true){
                 // Network checking
                 ConnectivityManager cm = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo nInfo = cm.getActiveNetworkInfo();
@@ -194,20 +200,18 @@ public class MainActivity extends AppCompatActivity {
                 InetAddress ipAddr = null;
                 try {
                     ipAddr = InetAddress.getByName("google.com");
-                }catch (Exception e){ }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 if (ipAddr == null){
                     connected = false;
                 }else {
                     connected = (!ipAddr.equals("")) && connected;
                 }
                 uiHandler.sendMessage(MessageUtil.createMessage(MESSAGE_NETWORK_STATUS,Boolean.toString(connected)));
+                Thread.sleep(10000);
             }
-
-            @Override
-            public void onFinish() {
-
-            }
-        }.start();
+            });
     }
 
     @Override

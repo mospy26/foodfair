@@ -18,6 +18,7 @@ import java.io.Serializable;
 public class MessageUtil {
     public static final int MESSAGE_WS_MESSAGE = 1;
     public static final int MESSAGE_NETWORK_STATUS = 2;
+    public static final int MESSAGE_NOTIFICATION = 3;
     public static final String MESSAGE_BODY = "MESSAGE_BODY";
     public static Message createMessage(int id, String data) {
         Bundle bundle = new Bundle();

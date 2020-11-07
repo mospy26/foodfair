@@ -1,5 +1,6 @@
 package com.foodfair.model;
 
+import android.location.Geocoder;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -26,6 +27,9 @@ public class UsersInfo /*implements Parcelable*/ {
     private Long preference;
     private String profileImage;
     private Long status;
+
+
+
 
     public List<Long> getAllergy() {
         return allergy;

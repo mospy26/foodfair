@@ -396,6 +396,13 @@ public class PostFoodActivity extends AppCompatActivity {
         allergenStringToLongList(allergenStr, allergenLongList);
         typeLong = typeStringToLong(typeStr);
 
+        Log.e("NOOOOO", "NOOOO");
+        System.out.println(dateExpiryStr);
+
+        if (dateExpiryStr.equals("Expiry Date:")) {
+            Toast.makeText(this, "Please add an expiry date", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         // first check if fields are empty
         List<EditText> etList = Arrays.asList(etFoodName, etType, etAllergen,

@@ -71,6 +71,7 @@ public class ProfileFragment extends Fragment {
     public String userId;
     public CircleImageView profileCircleImageView;
     public TextView nameTextView;
+    public TextView typeTextView;
     public ImageView genderImageView;
     public TextView userIdTextView;
     public TextView ageTextView;
@@ -131,6 +132,7 @@ public class ProfileFragment extends Fragment {
             profileViewModel.id.setValue(userId);
             profileViewModel.profileImageUrl.setValue(currentUserInfo.getProfileImage());
             profileViewModel.name.setValue(currentUserInfo.getName());
+            profileViewModel.type.setValue(currentUserInfo.getStatus());
             profileViewModel.gender.setValue(currentUserInfo.getGender().intValue());
             profileViewModel.birthday.setValue(currentUserInfo.getBirthday());
             profileViewModel.bio.setValue(currentUserInfo.getBio());
@@ -224,6 +226,17 @@ public class ProfileFragment extends Fragment {
         });
         profileViewModel.name.observe(getViewLifecycleOwner(), name -> {
             nameTextView.setText(name);
+        });
+        profileViewModel.type.observe(getViewLifecycleOwner(), type -> {
+            if (type.equals(0L)){
+                typeTextView.setText("Restaurant");
+            }
+            if (type.equals(1L)){
+                typeTextView.setText("User");
+            }
+            if (type.equals(2L)){
+                typeTextView.setText("Charity");
+            }
         });
 
         profileViewModel.gender.observe(getViewLifecycleOwner(), gender -> {
@@ -385,7 +398,7 @@ public class ProfileFragment extends Fragment {
         });
 
         profileViewModel.asDonorFoodTextDescription.observe(getViewLifecycleOwner(), asDonorFoodTextDescription -> {
-            donorReviewedItemConsumerTextView.setText(asDonorFoodTextDescription);
+            donorOnShelfTextDescriptionTextView.setText(asDonorFoodTextDescription);
         });
 
         // Reviewed
@@ -493,6 +506,7 @@ public class ProfileFragment extends Fragment {
     private void InitUI() {
         profileCircleImageView = findViewById(R.id.userProfile_profileCircleImageView);
         nameTextView = findViewById(R.id.userProfile_nameTextView);
+        typeTextView = findViewById(R.id.userProfile_typeTextView);
         genderImageView = findViewById(R.id.userProfile_genderImageView);
         userIdTextView = findViewById(R.id.userProfile_userIdTextView);
         ageTextView = findViewById(R.id.userProfile_ageTextView);
@@ -509,10 +523,14 @@ public class ProfileFragment extends Fragment {
         reviewsDateTextView = findViewById(R.id.userProfile_reviewsDateTextView);
         reviewsRatingBar = findViewById(R.id.userProfile_reviewsRatingBar);
         reviewsTextReviewTextView = findViewById(R.id.userProfile_reviewsTextReviewTextView);
-        reviewsImageShapeableImageViews.add(findViewById(R.id.userProfile_reviewsImageReviewShapeableImageView1));
-        reviewsImageShapeableImageViews.add(findViewById(R.id.userProfile_reviewsImageReviewShapeableImageView2));
-        reviewsImageShapeableImageViews.add(findViewById(R.id.userProfile_reviewsImageReviewShapeableImageView3));
-        reviewsImageShapeableImageViews.add(findViewById(R.id.userProfile_reviewsImageReviewShapeableImageView4));
+        if (reviewsImageShapeableImageViews.isEmpty()){
+            if (findViewById(R.id.userProfile_reviewsImageReviewShapeableImageView1) != null){
+                reviewsImageShapeableImageViews.add(findViewById(R.id.userProfile_reviewsImageReviewShapeableImageView1));
+                reviewsImageShapeableImageViews.add(findViewById(R.id.userProfile_reviewsImageReviewShapeableImageView2));
+                reviewsImageShapeableImageViews.add(findViewById(R.id.userProfile_reviewsImageReviewShapeableImageView3));
+                reviewsImageShapeableImageViews.add(findViewById(R.id.userProfile_reviewsImageReviewShapeableImageView4));
+            }
+        }
         usersConsumerBadgeCountTextView = findViewById(R.id.userProfile_usersConsumerBadgeCountTextView);
         usersConsumerBadgeTotalCountTextView = findViewById(R.id.userProfile_usersConsumerBadgeTotalCountTextView);
         usersConsumerBadgeTableLayout = findViewById(R.id.userProfile_usersConsumerBadgeTableLayout);
@@ -524,10 +542,14 @@ public class ProfileFragment extends Fragment {
         donorOnShelfFoodNameTextView = findViewById(R.id.userProfile_donorOnShelfFoodNameTextView);
         donorOnShelfDateOnTextView = findViewById(R.id.userProfile_donorOnShelfDateOnTextView);
         donorOnShelfDateExpireTextView = findViewById(R.id.userProfile_donorOnShelfDateExpireTextView);
-        donorOnShelfFoodImageShapeableImageViews.add(findViewById(R.id.userProfile_donorOnShelfFoodImageImageView1));
-        donorOnShelfFoodImageShapeableImageViews.add(findViewById(R.id.userProfile_donorOnShelfFoodImageImageView2));
-        donorOnShelfFoodImageShapeableImageViews.add(findViewById(R.id.userProfile_donorOnShelfFoodImageImageView3));
-        donorOnShelfFoodImageShapeableImageViews.add(findViewById(R.id.userProfile_donorOnShelfFoodImageImageView4));
+        if (donorOnShelfFoodImageShapeableImageViews.isEmpty()){
+            if (findViewById(R.id.userProfile_donorOnShelfFoodImageImageView1) != null){
+                donorOnShelfFoodImageShapeableImageViews.add(findViewById(R.id.userProfile_donorOnShelfFoodImageImageView1));
+                donorOnShelfFoodImageShapeableImageViews.add(findViewById(R.id.userProfile_donorOnShelfFoodImageImageView2));
+                donorOnShelfFoodImageShapeableImageViews.add(findViewById(R.id.userProfile_donorOnShelfFoodImageImageView3));
+                donorOnShelfFoodImageShapeableImageViews.add(findViewById(R.id.userProfile_donorOnShelfFoodImageImageView4));
+            }
+        }
         donorOnShelfTextDescriptionTextView = findViewById(R.id.userProfile_donorOnShelfTextDescriptionTextView);
         donorReviewedItemCountTextView = findViewById(R.id.userProfile_donorReviewedItemCountTextView);
         donorReviewedItemLinearLayout = findViewById(R.id.userProfile_donorReviewedItemLinearLayout);
@@ -537,11 +559,14 @@ public class ProfileFragment extends Fragment {
         ;
         donorReviewedItemReviewedDateTextView = findViewById(R.id.userProfile_donorReviewedItemReviewedDateTextView);
         donorReviewedItemRatingBar = findViewById(R.id.userProfile_donorReviewedItemRatingBar);
-
-        donorReviewedItemImageShapeableImageViews.add(findViewById(R.id.userProfile_donorReviewedItemFoodImageImageView1));
-        donorReviewedItemImageShapeableImageViews.add(findViewById(R.id.userProfile_donorReviewedItemFoodImageImageView2));
-        donorReviewedItemImageShapeableImageViews.add(findViewById(R.id.userProfile_donorReviewedItemFoodImageImageView3));
-        donorReviewedItemImageShapeableImageViews.add(findViewById(R.id.userProfile_donorReviewedItemFoodImageImageView4));
+        if (donorReviewedItemImageShapeableImageViews.isEmpty()){
+            if (findViewById(R.id.userProfile_donorReviewedItemFoodImageImageView1) != null){
+                donorReviewedItemImageShapeableImageViews.add(findViewById(R.id.userProfile_donorReviewedItemFoodImageImageView1));
+                donorReviewedItemImageShapeableImageViews.add(findViewById(R.id.userProfile_donorReviewedItemFoodImageImageView2));
+                donorReviewedItemImageShapeableImageViews.add(findViewById(R.id.userProfile_donorReviewedItemFoodImageImageView3));
+                donorReviewedItemImageShapeableImageViews.add(findViewById(R.id.userProfile_donorReviewedItemFoodImageImageView4));
+            }
+        }
         donorReviewedItemTextDescriptionTextView =
                 findViewById(R.id.userProfile_donorReviewedItemTextDescriptionTextView);
 
