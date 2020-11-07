@@ -52,12 +52,23 @@ public class HomeFragment extends Fragment {
         dbReference = FirebaseFirestore.getInstance();
 
         // Queries items where status is "1" and the count is greater than 0
-        Query query = dbReference.collection("foodItemInfo").whereEqualTo("status",1).whereNotEqualTo("count",0);
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+       System.out.println("The current logged in user " + firebaseAuth.getCurrentUser().getUid());
+       DocumentReference df = dbReference.collection("usersInfo").document("XWNQVbEdFKWbGOnok7wgMARYXgp2");
+
+
+
+        Query query = dbReference.collection("foodItemInfo").whereNotEqualTo("donorRef",df).whereEqualTo("status",1);
+
+
 
         FirestoreRecyclerOptions<FoodItemInfo> foodItemInfoFirestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<FoodItemInfo>().setQuery(query, FoodItemInfo.class).build();
 
 
-        adapter = new FirestoreRecyclerAdapter<FoodItemInfo, FoodPostingHolder>(foodItemInfoFirestoreRecyclerOptions) {
+
+
+        adapter = new FirestoreRecyclerAdapter<FoodItemInfo, FoodPostingHolder>(foodItemInfoFirestoreRecyclerOptions){
 
 
             @NonNull
