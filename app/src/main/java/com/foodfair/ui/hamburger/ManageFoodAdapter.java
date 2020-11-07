@@ -20,6 +20,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Document;
+
 public class ManageFoodAdapter extends FirestoreAdapter<ManageFoodAdapter.ViewHolder>{
 
     private boolean isAsDonor = true;
@@ -124,6 +126,8 @@ public class ManageFoodAdapter extends FirestoreAdapter<ManageFoodAdapter.ViewHo
                         // Update firebase - transaction success
                         snapshot.getReference().update(FooditemTransaction.FIELD_STATUS,
                                 Const.getInstance().TRANSACTION_STATUS.get("Success"));
+                        foodRef.update("status",
+                                Const.getInstance().TRANSACTION_STATUS.get("success"));
                     }
                 });
 
@@ -132,6 +136,8 @@ public class ManageFoodAdapter extends FirestoreAdapter<ManageFoodAdapter.ViewHo
                     public void onClick(View v) {
                         // Update firebase - remove transaction
                         snapshot.getReference().update(FooditemTransaction.FIELD_STATUS,
+                                Const.getInstance().TRANSACTION_STATUS.get("Cancelled"));
+                        foodRef.update("status",
                                 Const.getInstance().TRANSACTION_STATUS.get("Cancelled"));
                     }
                 });

@@ -30,6 +30,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -240,6 +241,10 @@ public class FoodDetailActivity extends AppCompatActivity {
         String foodTableStr = getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_INFO);
         DocumentReference donorRef = mFirestore.document(userTableStr + "/" + mDonorID);
         DocumentReference consumerRef = mFirestore.document(userTableStr + "/" + UID);
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(firebaseUser != null){
+            consumerRef = mFirestore.document(userTableStr + "/" + firebaseUser.getUid());
+        }
         DocumentReference foodRef = mFirestore.document(foodTableStr + "/" + mFoodItemID);
         mOpenDate = Utility.parseDateTime(Utility.getCurrentTimeStr(), aConst.DATE_TIME_PATTERN);
 
