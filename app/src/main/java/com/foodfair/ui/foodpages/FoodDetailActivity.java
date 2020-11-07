@@ -29,8 +29,10 @@ import com.foodfair.ui.book_success.BookSuccessViewModel;
 import com.foodfair.utilities.Const;
 import com.foodfair.utilities.Utility;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -261,10 +263,26 @@ public class FoodDetailActivity extends AppCompatActivity {
         DocumentReference foodRef = mFirestore.document(foodTableStr + "/" + mFoodItemID);
         mOpenDate = Utility.parseDateTime(Utility.getCurrentTimeStr(), aConst.DATE_TIME_PATTERN);
 
-        populateFoodItemTransaction(aConst.ALIVE_RECORD, null, consumerRef, null,
-                donorRef, null, foodRef, mOpenDate, bookStatus, foodItemTransaction);
+        DocumentReference finalConsumerRef = consumerRef;
+        foodRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    FoodItemInfo item = document.toObject(FoodItemInfo.class);
+                    if (item.getCount() > 0) {
+                        populateFoodItemTransaction(aConst.ALIVE_RECORD, null, finalConsumerRef, null,
+                                donorRef, null, foodRef, mOpenDate, bookStatus, foodItemTransaction);
 
-        postFoodTransactionToFirebase(foodItemTransaction);
+                        postFoodTransactionToFirebase(foodItemTransaction);
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "Not enough quantity left. Cannot book this.", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+            }
+        }
+    });
     }
 
     public void populateFoodItemTransaction(Long aliveRecord, DocumentReference cdReview,
