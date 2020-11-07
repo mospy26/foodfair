@@ -1,5 +1,8 @@
 package com.foodfair;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -60,6 +63,15 @@ public class MainActivity extends AppCompatActivity {
             FoodFairWSClient.globalCon.connect();
         }
 
+//
+//        NotificationManager notif=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+//        Notification notify=new Notification.Builder
+//                (getApplicationContext()).setContentTitle(tittle).setContentText(body).
+//                setContentTitle(subject).setSmallIcon(R.drawable.abc).build();
+
+//        notify.flags |= Notification.FLAG_AUTO_CANCEL;
+//        notif.notify(0, notify);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -68,9 +80,9 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home,
-                R.id.nav_user_profile, R.id.nav_history_of_items, R.id.nav_leaderboards,
-                R.id.nav_manage_food_postings, R.id.nav_settings)
+                R.id.nav_home, R.id.nav_user_profile, R.id.nav_history_of_items,
+                R.id.nav_leaderboards, R.id.nav_manage_food_bookings,
+                R.id.nav_view_food_postings, R.id.nav_qr_scanner, R.id.nav_settings)
                 .setDrawerLayout(drawer)
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -83,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 if(item.getItemId() == R.id.nav_user_profile ||
                     item.getItemId() == R.id.nav_settings ||
                     item.getItemId() == R.id.nav_history_of_items ||
-                    item.getItemId() == R.id.nav_manage_food_postings ||
+                    item.getItemId() == R.id.nav_manage_food_bookings ||
                     item.getItemId() == R.id.nav_qr_scanner) {
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     if(user != null){
