@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private MenuItem signInMenu;
 
+    private NavController navController;
+
 
         @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 R.id.nav_manage_food_postings, R.id.nav_settings)
                 .setDrawerLayout(drawer)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
@@ -115,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
                             "Successfully sign out", Toast.LENGTH_SHORT);
                     toast.show();
                     item.setTitle("Sign in");
+                    navController.navigate(R.id.nav_home);
                 }
                 return true;
             default:
