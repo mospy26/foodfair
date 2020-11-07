@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.foodfair.R;
 import com.foodfair.databinding.FragmentHistoryBinding;
 import com.foodfair.model.FooditemTransaction;
+import com.foodfair.utilities.Const;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -58,13 +59,17 @@ public class HistoryFragment extends Fragment implements
 
         mQueryDonor = mFirestore.collection(
                 getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_TRANSACTION))
-                .whereEqualTo(FooditemTransaction.FIELD_DONOR, userCriteria);
+                .whereEqualTo(FooditemTransaction.FIELD_DONOR, userCriteria)
+                .whereEqualTo(FooditemTransaction.FIELD_STATUS,
+                        Const.getInstance().TRANSACTION_STATUS.get("Success"));
 
         mAdapterDonor = new HistoryAdapter(mQueryDonor, this, true);
 
         mQueryConsumer = mFirestore.collection(
                 getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_TRANSACTION))
-                .whereEqualTo(FooditemTransaction.FIELD_CONSUMER, userCriteria);
+                .whereEqualTo(FooditemTransaction.FIELD_CONSUMER, userCriteria)
+                .whereEqualTo(FooditemTransaction.FIELD_STATUS,
+                        Const.getInstance().TRANSACTION_STATUS.get("Success"));
 
         mAdapterConsumer = new HistoryAdapter(mQueryConsumer, this, false);
 

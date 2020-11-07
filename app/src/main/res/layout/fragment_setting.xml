@@ -200,6 +200,39 @@
 
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/linearLayout_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginVertical="4dp"
+                        android:layout_marginHorizontal="8dp"
+                        android:background="@drawable/background_setting_menu_border">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textColor="@android:color/black"
+                            android:text="@string/setting_your_location"
+                            android:layout_marginVertical="4dp"
+                            android:layout_marginHorizontal="8dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textColor="@android:color/black"
+                            android:id="@+id/user_location"
+                            android:text=""
+                            android:layout_marginVertical="4dp"
+                            android:layout_marginHorizontal="16dp"/>
+
+                        <fragment android:id="@+id/autocomplete_fragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                            android:layout_marginHorizontal="8dp"/>
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
             <LinearLayout
