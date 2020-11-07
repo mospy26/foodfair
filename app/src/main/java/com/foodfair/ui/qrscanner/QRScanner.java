@@ -299,6 +299,7 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
                                 ranking.setDonationCount(ranking.getDonationCount() + 1);
                                 if (ranking.getDonationCount() == 5) {
                                     addBadgeToDonor(201L);
+                                    cache.add(FirebaseAuth.getInstance().getCurrentUser().getUid(), donor);
                                 }
                             } else {
                                 addBadgeToDonor(200L);
@@ -346,6 +347,7 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
         badgesSet.add(badgeId);
         Map<String, Object> asDonor = donor.getAsDonor();
         asDonor.replace(badgesString, badgesSet.stream().collect(Collectors.toList()));
+        donor.setAsDonor(asDonor);
         FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO))
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid()).update("asDonor", asDonor);
     }
