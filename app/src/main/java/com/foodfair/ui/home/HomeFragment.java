@@ -58,8 +58,7 @@ public class HomeFragment extends Fragment {
 
 
 
-        Query query = dbReference.collection("foodItemInfo").whereNotEqualTo("donorRef",df);
-
+        Query query = dbReference.collection("foodItemInfo");
 
 
         FirestoreRecyclerOptions<FoodItemInfo> foodItemInfoFirestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<FoodItemInfo>().setQuery(query, FoodItemInfo.class).build();
@@ -88,18 +87,13 @@ public class HomeFragment extends Fragment {
                         if (rf.exists()) {
                             String name = (String) rf.get("name");
                             holder.foodPostedBy.setText(name);
-                            holder.foodTitle.setText(model.getName());
-                            holder.foodPostedDate.setText("Expires  " + Utility.timeStampToDateString(model.getDateExpire()));
-
-                            if (model.getImageDescription() != null && model.getImageDescription().size() != 0) {
-                                Picasso.get().load(model.getImageDescription().get(0)).into(holder.imageToDisplay);
-                            }
-                            ;
                             holder.foodItemId = ((DocumentSnapshot) adapter.getSnapshots().getSnapshot(position)).getId();
 
                         }
 
-
+                        holder.foodTitle.setText(model.getName());
+                        holder.foodPostedDate.setText("Expires  " + Utility.timeStampToDateString(model.getDateExpire()));
+                        Picasso.get().load(model.getImageDescription().get(0)).into(holder.imageToDisplay);
                     }
                 });
 
