@@ -139,6 +139,8 @@ public class Login extends AppCompatActivity {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     user = document.toObject(UsersInfo.class);
+                } else {
+                    Toast.makeText(context, "Invalid Login", Toast.LENGTH_LONG).show();
                 }
                 if (!started) {
                     if (user.getLocation() == null || user.getLocation().equals("") ||
