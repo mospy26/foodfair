@@ -59,17 +59,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if(item.getItemId() == R.id.nav_user_profile ||
-                    item.getItemId() == R.id.nav_settings) {
+                    item.getItemId() == R.id.nav_settings ||
+                    item.getItemId() == R.id.nav_history_of_items ||
+                    item.getItemId() == R.id.nav_manage_food_postings ||
+                    item.getItemId() == R.id.nav_qr_scanner) {
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     if(user != null){
                         navController.navigate(item.getItemId());
-                        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-                        drawer.close();
                     } else {
                         Toast toast = new Toast(getApplicationContext())
                                 .makeText(getApplicationContext(), "Please sign in", Toast.LENGTH_SHORT);
                         toast.show();
                     }
+                    DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                    drawer.close();
                 } else if(item.getItemId() == R.id.nav_qr_scanner) {
                     Intent intent = new Intent(getApplicationContext(), QRScanner.class);
                     // Could be startActivityForResult or something
