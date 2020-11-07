@@ -22,6 +22,8 @@ import com.budiyev.android.codescanner.DecodeCallback;
 import com.foodfair.R;
 import com.foodfair.model.FoodItemInfo;
 import com.foodfair.model.FooditemTransaction;
+import com.foodfair.model.Leaderboard;
+import com.foodfair.model.Ranking;
 import com.foodfair.model.User;
 import com.foodfair.model.UsersInfo;
 import com.foodfair.ui.qr_success.QRSuccess;
@@ -31,15 +33,21 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.gson.Gson;
 import com.google.zxing.Result;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Adopted from https://github.com/yuriy-budiyev/code-scanner
@@ -54,6 +62,8 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
     private FoodItemInfo foodRef;
     private String transactionId;
     private Cache cache;
+    private Ranking ranking;
+    String period;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +75,7 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
         }
 
         cache = Cache.getInstance(getApplicationContext());
+        String period = _getPeriod();
     }
 
     @Override
@@ -160,6 +171,10 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
                                 DocumentSnapshot document = task.getResult();
                                 if (document.exists()) {
                                     foodRef = document.toObject(FoodItemInfo.class);
+                                    if (foodRef.getDonorRef().getId() != FirebaseAuth.getInstance().getUid()) {
+                                        spawnNotExistsDialog();
+                                        return;
+                                    }
                                     onStateChange(null);
                                     Log.d("Transaction Food", "DocumentSnapshot data: " + document.getData());
                                 } else {
@@ -248,6 +263,51 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
             spawnDialog();
     }
 
+    private String _getPeriod() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        period = cal.get(Calendar.YEAR) + "" + cal.get(Calendar.YEAR);
+        return cal.get(Calendar.YEAR) + "" + cal.get(Calendar.MONTH);
+    }
+
+    private void updateLeaderboard() {
+        CollectionReference leaderboardRef = FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_LEADERBOARD));
+        FirebaseFirestore.getInstance().collection(("leaderboard"))
+                .document(period)
+                .collection("ranking")
+                .document(FirebaseAuth.getInstance().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                ranking = document.toObject(Ranking.class);
+                                ranking.setScore(ranking.getScore() + 100);
+                            } else {
+                                ranking = new Ranking();
+                                ranking.setDonationCount(1L);
+                                ranking.setAverageRating(2.9999);
+                                ranking.setScore(100L);
+                                ranking.setDonor(transaction.getDonor());
+                            }
+                        }
+                    }
+                });
+    }
+
+//    private void fetchLeaderboard(String period) {
+//        FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_LEADERBOARD)).document(period).collection("ranking").document(FirebaseAuth.getInstance().getUid()).get().addOnCompleteListener(task -> {
+//            if (task.isSuccessful()) {
+//                DocumentSnapshot document = task.getResult();
+//                if (document.exists()) {
+//                    leaderboard = document.toObject(Leaderboard.class);
+//                } else {
+//                    leaderboard = null;
+//                }
+//            }
+//        });
+//    }
+
     public void approveTransactionAndSave(FooditemTransaction transaction) {
 
         CollectionReference transactions = FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_TRANSACTION));
@@ -279,5 +339,7 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
                         Log.e("Transaction update", "Error writing document", e);
                     }
                 });
+
+        updateLeaderboard();
     }
 }
