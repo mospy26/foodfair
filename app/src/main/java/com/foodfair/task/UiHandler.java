@@ -119,9 +119,9 @@ public class UiHandler extends Handler {
         Cache.getInstance(context).add(context.getResources().getString(R.string.CACHE_KEY_NETWORK_STATUS),
                 new Boolean(currentConnectionStatu));
 
-        Gson g = new Gson();
-        this.sendMessage(MessageUtil.createMessage(MESSAGE_NOTIFICATION,
-                g.toJson(new Notification("New Food Booked","234"))));
+//        Gson g = new Gson();
+//        this.sendMessage(MessageUtil.createMessage(MESSAGE_NOTIFICATION,
+//                g.toJson(new Notification("New Food Booked","234"))));
     }
 
     private void handleWSMessage(Message msg) {
