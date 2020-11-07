@@ -19,6 +19,8 @@ import com.foodfair.model.FoodItemInfo;
 import com.foodfair.model.FooditemTransaction;
 import com.foodfair.model.ReviewInfo;
 import com.foodfair.model.UsersInfo;
+import com.foodfair.network.BookFood;
+import com.foodfair.network.FoodFairWSClient;
 import com.foodfair.ui.book_success.BookSuccessActivity;
 import com.foodfair.ui.book_success.BookSuccessViewModel;
 import com.foodfair.utilities.Const;
@@ -35,6 +37,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.auth.User;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -233,7 +236,6 @@ public class FoodDetailActivity extends AppCompatActivity {
      */
 
     public void onBookClick(View view){
-
         FooditemTransaction foodItemTransaction = new FooditemTransaction();
         Long bookStatus = aConst.TRANSACTION_STATUS.get("Booked");
         String userTableStr = getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO);
@@ -280,6 +282,13 @@ public class FoodDetailActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot successfully written!");
+
+                        Gson g = new Gson();
+                        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        FoodFairWSClient.globalCon.send(g.toJson(new BookFood(uid,
+                                foodItemTransaction.getDonor().getId(),documentReference.getId()
+                                ).buildToMessage(foodItemTransaction.getDonor().getId(),uid)));
+
                         returnBookSuccessPage(documentReference.getId());
                     }
                 })
@@ -307,8 +316,12 @@ public class FoodDetailActivity extends AppCompatActivity {
         String donorAddr = donorInfo.getLocation().toString();
         String donorName = donorInfo.getName();
         String foodName = foodInfo.getName();
-        double lat = (double) donorInfo.getAsDonor().get("lat");
-        double lon = (double) donorInfo.getAsDonor().get("lon");
+        double lat = 23d;
+        double lon = 23d;
+        if (donorInfo.getAsDonor() != null){
+            lat = (double) donorInfo.getAsDonor().get("lat");
+            lon = (double) donorInfo.getAsDonor().get("lon");
+        }
         LatLng geoloc = new LatLng(lat, lon);
         String foodUrl = foodInfo.getImageDescription().get(0);
         Timestamp transactionStartDate = mOpenDate;

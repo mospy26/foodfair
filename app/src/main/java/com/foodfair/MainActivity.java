@@ -17,11 +17,18 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.foodfair.network.FoodFairWSClient;
+import com.foodfair.network.Register;
+import com.foodfair.task.UiHandler;
 import com.foodfair.ui.login.Login;
 import com.foodfair.ui.qrscanner.QRScanner;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.Gson;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private SharedPreferences sharedPreferences;
     private MenuItem signInMenu;
+    UiHandler uiHandler;
 
     private NavController navController;
 
@@ -37,6 +45,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        uiHandler =  UiHandler.createHandler(this.getMainLooper(),this);
+        if (user != null){
+            if (FoodFairWSClient.globalCon != null){
+                FoodFairWSClient.globalCon.close();
+            }
+            try {
+                FoodFairWSClient.globalCon = new FoodFairWSClient(new URI("ws://ss.caihuashuai.com:8282"));
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+            FoodFairWSClient.globalCon.connect();
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
