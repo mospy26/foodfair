@@ -248,6 +248,7 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
                 sharedPreferences = getSharedPreferences("foodfair", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("firebasekey", userId);
+                editor.putLong(userId + "_status", user.getStatus());
                 editor.commit();
                 Intent intent = new Intent(context, SetUp.class);
                 startActivity(intent);

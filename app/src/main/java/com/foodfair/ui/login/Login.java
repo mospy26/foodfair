@@ -139,6 +139,11 @@ public class Login extends AppCompatActivity {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     user = document.toObject(UsersInfo.class);
+                    // store it globally for access
+                    sharedPreferences = getSharedPreferences("foodfair", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putLong(userId + "_status", user.getStatus());
+                    editor.commit();
                 } else {
                     Toast.makeText(context, "Invalid Login", Toast.LENGTH_LONG).show();
                 }
