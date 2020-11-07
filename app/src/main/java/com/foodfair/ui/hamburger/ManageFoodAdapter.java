@@ -1,5 +1,6 @@
 package com.foodfair.ui.hamburger;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import com.foodfair.model.FoodItemInfo;
 import com.foodfair.model.FooditemTransaction;
 import com.foodfair.model.Ranking;
 import com.foodfair.model.UsersInfo;
+import com.foodfair.ui.book_success.BookSuccessActivity;
 import com.foodfair.utilities.Const;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -129,8 +131,10 @@ public class ManageFoodAdapter extends FirestoreAdapter<ManageFoodAdapter.ViewHo
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         FoodItemInfo foodItemInfo = documentSnapshot.toObject(FoodItemInfo.class);
-                        Picasso.get().load(foodItemInfo.getImageDescription().get(0))
-                                .into(binding.foodPhoto);
+                        if(foodItemInfo != null && foodItemInfo.getCount() > 0){
+                            Picasso.get().load(foodItemInfo.getImageDescription().get(0))
+                                    .into(binding.foodPhoto);
+                        }
                         binding.foodNameFood.setText(foodItemInfo.getName());
                         binding.quantity.setText("Quantity: " + foodItemInfo.getCount());
                     }
@@ -159,6 +163,17 @@ public class ManageFoodAdapter extends FirestoreAdapter<ManageFoodAdapter.ViewHo
                         snapshot.getReference().update(FooditemTransaction.FIELD_STATUS,
                                 Const.getInstance().TRANSACTION_STATUS.get("Cancelled"));
                         foodRef.update("count", FieldValue.increment(1));
+                    }
+                });
+
+                binding.cvFood.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!isAsDonor){
+                            Intent intent = new Intent(itemView.getContext(), BookSuccessActivity.class);
+                            intent.putExtra("transactionId", snapshot.getReference().getId());
+                            itemView.getContext().startActivity(intent);
+                        }
                     }
                 });
 

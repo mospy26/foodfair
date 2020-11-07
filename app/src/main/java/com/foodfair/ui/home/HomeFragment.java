@@ -18,6 +18,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.foodfair.FoodPostingHolder;
 import com.foodfair.R;
+import com.foodfair.databinding.FragmentHomeBinding;
 import com.foodfair.model.FoodItemInfo;
 import com.foodfair.ui.foodpages.FoodDetailActivity;
 import com.foodfair.ui.foodpages.MapViewActivity;
@@ -34,90 +35,43 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.squareup.picasso.Picasso;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements
+    HomeAdapter.OnHomeItemSelectedListener, View.OnClickListener {
 
-    private HomeViewModel homeViewModel;
-    private FirebaseFirestore dbReference;
-    private FirestoreRecyclerAdapter adapter;
-    private RecyclerView recyclerView;
+//    private HomeViewModel homeViewModel;
+//    private FirebaseFirestore dbReference;
+//    private FirestoreRecyclerAdapter adapter;
+//    private RecyclerView recyclerView;
 
+    private FragmentHomeBinding mBinding;
+
+    private HomeAdapter mAdapter;
+    private FirebaseFirestore mFirestore;
+    private Query mQuery;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
-        recyclerView = root.findViewById(R.id.list);
-        System.out.println(recyclerView);
-        dbReference = FirebaseFirestore.getInstance();
 
-        // Queries items where status is "1" and the count is greater than 0
+        mBinding = FragmentHomeBinding.inflate(getLayoutInflater());
+        // Enable Firestore logging
+        FirebaseFirestore.setLoggingEnabled(true);
 
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-       DocumentReference df = dbReference.collection("usersInfo").document("XWNQVbEdFKWbGOnok7wgMARYXgp2");
+        // Firestore
+        mFirestore = FirebaseFirestore.getInstance();
 
-
-
-        Query query = dbReference.collection("foodItemInfo");
+        // TODO: @Sadman, add more criteria here and order by if you can. 
+        mQuery = mFirestore.collection("foodItemInfo")
+                .whereGreaterThan("count", 0);
 
 
-        FirestoreRecyclerOptions<FoodItemInfo> foodItemInfoFirestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<FoodItemInfo>().setQuery(query, FoodItemInfo.class).build();
-
-
-
-
-        adapter = new FirestoreRecyclerAdapter<FoodItemInfo, FoodPostingHolder>(foodItemInfoFirestoreRecyclerOptions){
-
-
-            @NonNull
-            @Override
-            public FoodPostingHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.foodposting, parent, false);
-                return new FoodPostingHolder(view);
-            }
-
-            @Override
-            protected void onBindViewHolder(@NonNull FoodPostingHolder holder, int position, @NonNull FoodItemInfo model) {
-
-                DocumentReference ref = model.getDonorRef();
-                ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        DocumentSnapshot rf = task.getResult();
-                        if (rf.exists()) {
-                            String name = (String) rf.get("name");
-                            holder.foodPostedBy.setText(name);
-                            holder.foodItemId = ((DocumentSnapshot) adapter.getSnapshots().getSnapshot(position)).getId();
-
-                        }
-
-                        holder.foodTitle.setText(model.getName());
-                        holder.foodPostedDate.setText("Expires  " + Utility.timeStampToDateString(model.getDateExpire()));
-                        Picasso.get().load(model.getImageDescription().get(0)).into(holder.imageToDisplay);
-                    }
-                });
-
-
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        //Start Food Detail Activity
-                        Intent intent = new Intent(getContext(), FoodDetailActivity.class);
-                        intent.putExtra("foodId",holder.foodItemId);
-                        startActivity(intent);
-                    }
-                });
-
-            }
-        };
-
+        mAdapter = new HomeAdapter(mQuery, this);
 
         //recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
-        recyclerView.setAdapter(adapter);
+        mBinding.list.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+        mBinding.list.setAdapter(mAdapter);
 
-        fabStuff(root);
-        return root;
+        fabStuff(mBinding.getRoot());
+        return mBinding.getRoot();
     }
 
     private void fabStuff(View root) {
@@ -144,12 +98,28 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        adapter.startListening();
+        if(mAdapter != null){
+            mAdapter.startListening();
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        adapter.stopListening();
+        if(mAdapter != null){
+            mAdapter.stopListening();
+        }
+    }
+
+    @Override
+    public void onHomeItemSelected(DocumentSnapshot snapshot) {
+        Intent intent = new Intent(getContext(), FoodDetailActivity.class);
+                    intent.putExtra("foodId", snapshot.getReference().getId());
+                    startActivity(intent);
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }
