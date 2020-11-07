@@ -1,11 +1,12 @@
 package com.foodfair;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -22,16 +23,25 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.foodfair.network.FoodFairWSClient;
 import com.foodfair.network.Register;
+import com.foodfair.task.MessageUtil;
+import com.foodfair.task.ThreadPoolManager;
 import com.foodfair.task.UiHandler;
 import com.foodfair.ui.login.Login;
 import com.foodfair.ui.qrscanner.QRScanner;
+import com.foodfair.utilities.Cache;
+import com.foodfair.utilities.Const;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 
+import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
+
+import static com.foodfair.task.MessageUtil.MESSAGE_NETWORK_STATUS;
+import static com.foodfair.task.MessageUtil.MESSAGE_WS_MESSAGE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -62,15 +72,6 @@ public class MainActivity extends AppCompatActivity {
             }
             FoodFairWSClient.globalCon.connect();
         }
-
-//
-//        NotificationManager notif=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-//        Notification notify=new Notification.Builder
-//                (getApplicationContext()).setContentTitle(tittle).setContentText(body).
-//                setContentTitle(subject).setSmallIcon(R.drawable.abc).build();
-
-//        notify.flags |= Notification.FLAG_AUTO_CANCEL;
-//        notif.notify(0, notify);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -119,7 +120,8 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
+        InitiateCache();
+        BackgroundStuff();
     }
 
     @Override
@@ -178,6 +180,39 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+    private void InitiateCache() {
+        Cache.getInstance(this).add(getResources().getString(R.string.CACHE_KEY_NETWORK_STATUS),true);
+    }
+    private void BackgroundStuff() {
+        new CountDownTimer(Long.MAX_VALUE, 10000){
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // Network checking
+                ConnectivityManager cm = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo nInfo = cm.getActiveNetworkInfo();
+                boolean connected = nInfo != null && nInfo.isAvailable() && nInfo.isConnected();
+                InetAddress ipAddr = null;
+                try {
+                    ipAddr = InetAddress.getByName("google.com");
+                }catch (Exception e){ }
+                if (ipAddr == null){
+                    connected = false;
+                }else {
+                    connected = (!ipAddr.equals("")) && connected;
+                }
+                uiHandler.sendMessage(MessageUtil.createMessage(MESSAGE_NETWORK_STATUS,Boolean.toString(connected)));
+            }
 
+            @Override
+            public void onFinish() {
 
+            }
+        }.start();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UiHandler.getInstance().context = this;
+    }
 }

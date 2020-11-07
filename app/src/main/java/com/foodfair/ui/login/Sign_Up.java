@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.foodfair.R;
 import com.foodfair.model.User;
 import com.foodfair.model.UsersInfo;
+import com.foodfair.task.UiHandler;
 import com.foodfair.utilities.Cache;
 import com.foodfair.utilities.LoadingDialog;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -109,6 +110,10 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
 //        if (Patterns.EMAIL_ADDRESS.matcher(emaiValue).matches()) {
 //            return "Email cannot be empty";
 //        }
+
+        if (emailValue == null || emailValue.equals("")) {
+            return "Email cannot be empty";
+        }
 
         String passwordValue = password.getText().toString().trim();
         String confirmPasswordValue = confirmPassword.getText().toString().trim();
@@ -248,6 +253,7 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
                 sharedPreferences = getSharedPreferences("foodfair", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("firebasekey", userId);
+                editor.putLong(userId + "_status", user.getStatus());
                 editor.commit();
                 Intent intent = new Intent(context, SetUp.class);
                 startActivity(intent);
@@ -260,5 +266,10 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
                 Log.e("Sign Up", e.getMessage());
             }
         });
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UiHandler.getInstance().context = this;
     }
 }

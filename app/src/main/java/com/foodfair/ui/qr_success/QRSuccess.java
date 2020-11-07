@@ -16,6 +16,7 @@ import com.foodfair.model.FoodItemInfo;
 import com.foodfair.model.FooditemTransaction;
 import com.foodfair.model.ReviewInfo;
 import com.foodfair.model.UsersInfo;
+import com.foodfair.task.UiHandler;
 import com.foodfair.ui.qrscanner.OnStateChangeListener;
 import com.foodfair.utilities.Cache;
 import com.foodfair.utilities.CacheObject;
@@ -134,6 +135,11 @@ public class QRSuccess extends AppCompatActivity {
                 }
             }
         });
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UiHandler.getInstance().context = this;
     }
 }
 

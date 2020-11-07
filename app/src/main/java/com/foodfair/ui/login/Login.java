@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.foodfair.MainActivity;
 import com.foodfair.R;
 import com.foodfair.model.UsersInfo;
+import com.foodfair.task.UiHandler;
 import com.foodfair.utilities.Cache;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -54,8 +55,8 @@ public class Login extends AppCompatActivity {
 //        getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("uid", Context.MODE_PRIVATE);
-        String uid = sharedPref.getString("uid", null);
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("foodfair", Context.MODE_PRIVATE);
+        String uid = sharedPref.getString("firebasekey", null);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -139,6 +140,13 @@ public class Login extends AppCompatActivity {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     user = document.toObject(UsersInfo.class);
+                    // store it globally for access
+                    sharedPreferences = getSharedPreferences("foodfair", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putLong(userId + "_status", user.getStatus());
+                    editor.commit();
+                } else {
+                    Toast.makeText(context, "Invalid Login", Toast.LENGTH_LONG).show();
                 }
                 if (!started) {
                     if (user.getLocation() == null || user.getLocation().equals("") ||
@@ -156,5 +164,10 @@ public class Login extends AppCompatActivity {
                 }
             }
         });
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UiHandler.getInstance().context = this;
     }
 }

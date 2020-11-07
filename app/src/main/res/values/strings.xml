@@ -106,4 +106,7 @@
     <string name="places">AIzaSyBlDU3a7HGpvApHEfOUVBG39MmxIBBJdrM</string>
     <string name="setting_your_location">Your location:</string>
 
+    <string name="CACHE_KEY_NETWORK_STATUS">NETWORK_STATUS</string>
+
+
 </resources>

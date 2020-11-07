@@ -11,6 +11,7 @@ public class Ranking {
 
     private Double averageRating;
     private Long donationCount;
+    private Long score;
     private DocumentReference donor;
     private Long position;
 
@@ -44,5 +45,13 @@ public class Ranking {
 
     public void setPosition(Long position) {
         this.position = position;
+    }
+
+    public Long getScore() {
+        return score;
+    }
+
+    public void setScore(Long score) {
+        this.score = score;
     }
 }

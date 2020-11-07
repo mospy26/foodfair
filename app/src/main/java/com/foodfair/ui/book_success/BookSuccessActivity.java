@@ -15,6 +15,7 @@ import com.foodfair.model.FoodItemInfo;
 import com.foodfair.model.FooditemTransaction;
 import com.foodfair.model.UsersInfo;
 import com.foodfair.R;
+import com.foodfair.task.UiHandler;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
@@ -224,8 +225,9 @@ public class BookSuccessActivity extends AppCompatActivity {
         mBookSuccessViewModel.getQRCodeContent().observe(this, qrCodeContent -> {
             // Set QRCode image
             try {
+
                 BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-                Bitmap bitmap = barcodeEncoder.encodeBitmap("content", BarcodeFormat.QR_CODE, mWidth, mHeight);
+                Bitmap bitmap = barcodeEncoder.encodeBitmap(qrCodeContent, BarcodeFormat.QR_CODE, mWidth, mHeight);
                 mQRCodeImageView.setImageBitmap(cropBitmapToSquare(bitmap, mQRCodeCropRatio));
             } catch (WriterException e) {
                 e.printStackTrace();
@@ -293,5 +295,10 @@ public class BookSuccessActivity extends AppCompatActivity {
     public static void setBookSuccessViewModel(BookSuccessViewModel bookSuccessViewModel) {
         String transactionId = bookSuccessViewModel.getTransactionId().getValue();
         modelInstances.put(transactionId, bookSuccessViewModel);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UiHandler.getInstance().context = this;
     }
 }
