@@ -35,6 +35,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.auth.User;
 import com.google.gson.Gson;
@@ -81,7 +82,6 @@ public class FoodDetailActivity extends AppCompatActivity {
         setContentView(R.layout.food_item);
         foodDetailModel = new FoodDetailModel();
         InitUI();
-        foodId = "8g51f4M0j881nqW0v59o";
         Intent intent = getIntent();
         String idFromIntent = intent.getStringExtra("foodId");
         if(idFromIntent != null && !idFromIntent.isEmpty()){
@@ -289,6 +289,7 @@ public class FoodDetailActivity extends AppCompatActivity {
                                 foodItemTransaction.getDonor().getId(),documentReference.getId()
                                 ).buildToMessage(foodItemTransaction.getDonor().getId(),uid)));
 
+                        quantityDecrement(foodId);
                         returnBookSuccessPage(documentReference.getId());
                     }
                 })
@@ -343,6 +344,11 @@ public class FoodDetailActivity extends AppCompatActivity {
 
 
 
+    }
+
+    public void quantityDecrement(String foodItemId) {
+        mFirestore.collection(getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_INFO))
+                .document(foodItemId).update("count", FieldValue.increment(-1));
     }
 
 }
