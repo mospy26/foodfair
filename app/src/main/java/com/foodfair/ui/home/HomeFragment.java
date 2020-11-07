@@ -54,7 +54,6 @@ public class HomeFragment extends Fragment {
         // Queries items where status is "1" and the count is greater than 0
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-       System.out.println("The current logged in user " + firebaseAuth.getCurrentUser().getUid());
        DocumentReference df = dbReference.collection("usersInfo").document("XWNQVbEdFKWbGOnok7wgMARYXgp2");
 
 

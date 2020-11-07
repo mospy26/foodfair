@@ -104,8 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 if(item.getItemId() == R.id.nav_user_profile ||
                     item.getItemId() == R.id.nav_settings ||
                     item.getItemId() == R.id.nav_history_of_items ||
-                    item.getItemId() == R.id.nav_manage_food_bookings ||
-                    item.getItemId() == R.id.nav_qr_scanner) {
+                    item.getItemId() == R.id.nav_manage_food_bookings) {
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     if(user != null){
                         navController.navigate(item.getItemId());
