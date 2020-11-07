@@ -50,6 +50,7 @@ public class ProfileFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        cache = Cache.getInstance(getContext());
         profileViewModel = new ProfileViewModel();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         userId = user.getUid();
@@ -65,7 +66,7 @@ public class ProfileFragment extends Fragment {
 
     View root;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-    Cache cache = Cache.getInstance(getContext());
+    Cache cache = null;
     Const aConst = Const.getInstance();
     public String userId;
     public CircleImageView profileCircleImageView;
@@ -124,7 +125,7 @@ public class ProfileFragment extends Fragment {
             profileViewModel.bio.setValue(currentUserInfo.getBio());
             profileViewModel.allergy.setValue((ArrayList<Long>) currentUserInfo.getAllergy());
             profileViewModel.preference.setValue(currentUserInfo.getPreference());
-            profileViewModel.location.setValue(currentUserInfo.getLocation().toString());
+                profileViewModel.location.setValue(currentUserInfo.getLocation().toString());
             profileViewModel.joinDate.setValue(currentUserInfo.getJoinDate());
             profileViewModel.lastLoginDate.setValue(currentUserInfo.getLastLogin());
 

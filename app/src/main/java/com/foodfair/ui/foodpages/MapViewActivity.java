@@ -101,6 +101,11 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
         }
 
         setContentView(R.layout.activity_map_view);
+
+        // Prompt the user for permission.
+        mLocationPermissionGranted = marshmallowPermission
+                .checkLocationPermission(PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
         setUpMapIfNeeded();
 
         // initialise Firebase
@@ -140,9 +145,6 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Prompt the user for permission.
-        mLocationPermissionGranted = marshmallowPermission
-                .checkLocationPermission(PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
 
         updateLocationUI();
         getDeviceLocation();
