@@ -71,6 +71,7 @@ public class ProfileFragment extends Fragment {
     public String userId;
     public CircleImageView profileCircleImageView;
     public TextView nameTextView;
+    public TextView typeTextView;
     public ImageView genderImageView;
     public TextView userIdTextView;
     public TextView ageTextView;
@@ -131,6 +132,7 @@ public class ProfileFragment extends Fragment {
             profileViewModel.id.setValue(userId);
             profileViewModel.profileImageUrl.setValue(currentUserInfo.getProfileImage());
             profileViewModel.name.setValue(currentUserInfo.getName());
+            profileViewModel.type.setValue(currentUserInfo.getStatus());
             profileViewModel.gender.setValue(currentUserInfo.getGender().intValue());
             profileViewModel.birthday.setValue(currentUserInfo.getBirthday());
             profileViewModel.bio.setValue(currentUserInfo.getBio());
@@ -224,6 +226,17 @@ public class ProfileFragment extends Fragment {
         });
         profileViewModel.name.observe(getViewLifecycleOwner(), name -> {
             nameTextView.setText(name);
+        });
+        profileViewModel.type.observe(getViewLifecycleOwner(), type -> {
+            if (type.equals(0L)){
+                typeTextView.setText("Restaurant");
+            }
+            if (type.equals(1L)){
+                typeTextView.setText("User");
+            }
+            if (type.equals(2L)){
+                typeTextView.setText("Charity");
+            }
         });
 
         profileViewModel.gender.observe(getViewLifecycleOwner(), gender -> {
@@ -493,6 +506,7 @@ public class ProfileFragment extends Fragment {
     private void InitUI() {
         profileCircleImageView = findViewById(R.id.userProfile_profileCircleImageView);
         nameTextView = findViewById(R.id.userProfile_nameTextView);
+        typeTextView = findViewById(R.id.userProfile_typeTextView);
         genderImageView = findViewById(R.id.userProfile_genderImageView);
         userIdTextView = findViewById(R.id.userProfile_userIdTextView);
         ageTextView = findViewById(R.id.userProfile_ageTextView);

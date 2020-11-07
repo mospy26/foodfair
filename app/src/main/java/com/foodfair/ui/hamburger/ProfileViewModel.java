@@ -32,6 +32,7 @@ public class ProfileViewModel extends ViewModel {
     // ------------
     MutableLiveData<String> profileImageUrl = new MutableLiveData<>();
     MutableLiveData<String> name = new MutableLiveData<>();
+    MutableLiveData<Long> type = new MutableLiveData<>();
     MutableLiveData<Integer> gender = new MutableLiveData<>();
     MutableLiveData<String> id = new MutableLiveData<>();
     MutableLiveData<Timestamp> birthday = new MutableLiveData<>();
