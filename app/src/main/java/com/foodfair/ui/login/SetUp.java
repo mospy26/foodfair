@@ -128,18 +128,18 @@ public class SetUp extends AppCompatActivity {
             if(_preferredMeatList != null && !_preferredMeatList.isEmpty()
                     && !_preferredMeatList.equals(getString(R.string.setting_all))){
                 for(String _preferredMeat: _preferredMeatArray) {
-                    checkedItemStrings.add(_preferredMeat.trim());
+//                    checkedItemStrings.add(_preferredMeat.trim());
                 }
                 for(int i=0; i < allItems.length; i++){
-                    checkedItems[i] =
-                            Arrays.stream(_preferredMeatArray).anyMatch(allItems[i]::contains);
+//                    checkedItems[i] =
+//                            Arrays.stream(_preferredMeatArray).anyMatch(allItems[i]::contains);
                 }
 
             } else {
                 int i = 0;
                 for(String _preferredMeat: allItems) {
-                    checkedItemStrings.add(_preferredMeat);
-                    checkedItems[i] = true;
+//                    checkedItemStrings.add(_preferredMeat);
+//                    checkedItems[i] = true;
                     i++;
                 }
             }
@@ -148,11 +148,11 @@ public class SetUp extends AppCompatActivity {
             builder.setTitle(R.string.setting_preferred_meat)
                     .setMultiChoiceItems(allItems, checkedItems,
                             (dialog, which, isChecked) -> {
-                                if(isChecked){
-                                    checkedItemStrings.add(allItems[which]);
-                                } else {
-                                    checkedItemStrings.remove(allItems[which]);
-                                }
+//                                if(isChecked){
+//                                    checkedItemStrings.add(allItems[which]);
+//                                } else {
+//                                    checkedItemStrings.remove(allItems[which]);
+//                                }
 
                             })
                     .setPositiveButton(R.string.ok,
