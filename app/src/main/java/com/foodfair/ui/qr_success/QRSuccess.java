@@ -3,6 +3,8 @@ package com.foodfair.ui.qr_success;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,6 +40,7 @@ public class QRSuccess extends AppCompatActivity {
     private ShapeableImageView success_foodImageView;
 
     private QRSuccessViewModel qrSuccessViewModel;
+    private Button qrsuccess_backButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +52,13 @@ public class QRSuccess extends AppCompatActivity {
         initViews();
         addObservables();
         retrieveData(transactionId);
+
+        qrsuccess_backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     private void initViews() {
@@ -56,6 +66,7 @@ public class QRSuccess extends AppCompatActivity {
         success_receivedTime = findViewById(R.id.qrsuccess_receivedTime);
         success_foodNameTextView = findViewById(R.id.qrsuccess_foodNameTextView);
         success_foodImageView = findViewById(R.id.qrsuccess_foodImageView);
+        qrsuccess_backButton = findViewById(R.id.qrsuccess_backButton);
     }
 
     private void addObservables() {
