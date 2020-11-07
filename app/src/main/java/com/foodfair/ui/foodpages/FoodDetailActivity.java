@@ -51,7 +51,7 @@ public class FoodDetailActivity extends AppCompatActivity {
 
     private final int BOOK_SUCCESS_REQ_CODE = 1121;
     // !!!!!! Assume we have user ID!!!
-    private static final String UID = "yXnhEl9OBqgKqHLAPMPV";
+    private static String UID;
     private static final String TAG = MapViewActivity.class.getSimpleName();
 
     String foodId;
@@ -79,6 +79,7 @@ public class FoodDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         mFirestore = FirebaseFirestore.getInstance();
+        UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         setContentView(R.layout.food_item);
         foodDetailModel = new FoodDetailModel();
         InitUI();
