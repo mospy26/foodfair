@@ -15,6 +15,7 @@ import com.foodfair.model.FoodItemInfo;
 import com.foodfair.model.FooditemTransaction;
 import com.foodfair.model.UsersInfo;
 import com.foodfair.R;
+import com.foodfair.task.UiHandler;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
@@ -294,5 +295,10 @@ public class BookSuccessActivity extends AppCompatActivity {
     public static void setBookSuccessViewModel(BookSuccessViewModel bookSuccessViewModel) {
         String transactionId = bookSuccessViewModel.getTransactionId().getValue();
         modelInstances.put(transactionId, bookSuccessViewModel);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UiHandler.getInstance().context = this;
     }
 }

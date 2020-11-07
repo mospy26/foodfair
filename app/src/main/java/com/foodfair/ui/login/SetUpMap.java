@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.foodfair.R;
+import com.foodfair.task.UiHandler;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
@@ -184,5 +185,10 @@ public class SetUpMap extends AppCompatActivity implements OnMapReadyCallback {
         i.putExtra("result", latlon);
         setResult(RESULT_OK, i);
         return true;
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UiHandler.getInstance().context = this;
     }
 }

@@ -1,5 +1,6 @@
 package com.foodfair.ui.hamburger;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +13,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.foodfair.R;
 import com.foodfair.databinding.FragmentManageFoodBinding;
 import com.foodfair.model.FooditemTransaction;
+import com.foodfair.ui.book_success.BookSuccessActivity;
 import com.foodfair.utilities.Const;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -126,7 +129,12 @@ public class ManageFoodFragment extends Fragment implements
     }
 
     @Override
-    public void onManageFoodSelected() {
+    public void onManageFoodSelected(DocumentSnapshot snapshot) {
+        if(!isAsDonor){
+            Intent intent = new Intent(getContext(), BookSuccessActivity.class);
+            intent.putExtra("transactionId", snapshot.getReference().getId());
+            startActivity(intent);
+        }
 
     }
 }

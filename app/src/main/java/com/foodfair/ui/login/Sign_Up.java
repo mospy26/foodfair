@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.foodfair.R;
 import com.foodfair.model.User;
 import com.foodfair.model.UsersInfo;
+import com.foodfair.task.UiHandler;
 import com.foodfair.utilities.Cache;
 import com.foodfair.utilities.LoadingDialog;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -62,6 +63,9 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
     private Button signUpBtn;
     private final String[] GENDERS = {"Male", "Female", "Other", "Prefer to not say"};
     private final String[] STATUS = {"Restaurant", "User", "Charity"};
+    private final Long STATUS_RESTAURANT = 0L;
+    private final Long STATUS_USER = 1L;
+    private final Long STATUS_CHARITY = 2L;
 
     private LoadingDialog loadingDialog = new LoadingDialog(this);
     private FirebaseAuth firebaseAuth;
@@ -104,11 +108,15 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
             return "Name cannot be empty";
         }
 
-        String emaiValue = email.getText().toString().trim();
+        String emailValue = email.getText().toString().trim();
 //
 //        if (Patterns.EMAIL_ADDRESS.matcher(emaiValue).matches()) {
 //            return "Email cannot be empty";
 //        }
+
+        if (emailValue == null || emailValue.equals("")) {
+            return "Email cannot be empty";
+        }
 
         String passwordValue = password.getText().toString().trim();
         String confirmPasswordValue = confirmPassword.getText().toString().trim();
@@ -239,6 +247,14 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
         user.setJoinDate(rightNow);
         user.setName(name.getText().toString());
         user.setStatus((long) Arrays.asList(STATUS).indexOf(status.getSelectedItem().toString()));
+        if (user.getStatus().equals(STATUS_CHARITY) || user.getStatus().equals(STATUS_USER)){
+            HashMap<String,Object> asConsumer = new HashMap<>();
+            asConsumer.put(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_BADGES),new ArrayList<Long>());
+            asConsumer.put(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS),new ArrayList<DocumentReference>());
+            asConsumer.put(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_TRANSACTIONS), new ArrayList<DocumentReference>());
+            user.setAsConsumer(asConsumer);
+        }
+
         documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -248,6 +264,7 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
                 sharedPreferences = getSharedPreferences("foodfair", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("firebasekey", userId);
+                editor.putLong(userId + "_status", user.getStatus());
                 editor.commit();
                 Intent intent = new Intent(context, SetUp.class);
                 startActivity(intent);
@@ -260,5 +277,10 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
                 Log.e("Sign Up", e.getMessage());
             }
         });
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UiHandler.getInstance().context = this;
     }
 }

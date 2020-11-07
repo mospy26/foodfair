@@ -1,11 +1,14 @@
 package com.foodfair.ui.foodpages;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,13 +24,16 @@ import com.foodfair.model.ReviewInfo;
 import com.foodfair.model.UsersInfo;
 import com.foodfair.network.BookFood;
 import com.foodfair.network.FoodFairWSClient;
+import com.foodfair.task.UiHandler;
 import com.foodfair.ui.book_success.BookSuccessActivity;
 import com.foodfair.ui.book_success.BookSuccessViewModel;
 import com.foodfair.utilities.Const;
 import com.foodfair.utilities.Utility;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,7 +57,7 @@ public class FoodDetailActivity extends AppCompatActivity {
 
     private final int BOOK_SUCCESS_REQ_CODE = 1121;
     // !!!!!! Assume we have user ID!!!
-    private static final String UID = "yXnhEl9OBqgKqHLAPMPV";
+    private static String UID;
     private static final String TAG = MapViewActivity.class.getSimpleName();
 
     String foodId;
@@ -79,9 +85,18 @@ public class FoodDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         mFirestore = FirebaseFirestore.getInstance();
+        UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         setContentView(R.layout.food_item);
         foodDetailModel = new FoodDetailModel();
         InitUI();
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("foodfair", Context.MODE_PRIVATE);
+        String uid = sharedPref.getString("firebasekey", null);
+        Long status = sharedPref.getLong(uid + "_status", -1);
+        if (status == 0) {
+            View view = findViewById(R.id.fooddetail_bookButton);
+            view.setVisibility(View.GONE);
+        }
+
         Intent intent = getIntent();
         String idFromIntent = intent.getStringExtra("foodId");
         if(idFromIntent != null && !idFromIntent.isEmpty()){
@@ -249,10 +264,26 @@ public class FoodDetailActivity extends AppCompatActivity {
         DocumentReference foodRef = mFirestore.document(foodTableStr + "/" + mFoodItemID);
         mOpenDate = Utility.parseDateTime(Utility.getCurrentTimeStr(), aConst.DATE_TIME_PATTERN);
 
-        populateFoodItemTransaction(aConst.ALIVE_RECORD, null, consumerRef, null,
-                donorRef, null, foodRef, mOpenDate, bookStatus, foodItemTransaction);
+        DocumentReference finalConsumerRef = consumerRef;
+        foodRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    FoodItemInfo item = document.toObject(FoodItemInfo.class);
+                    if (item.getCount() > 0) {
+                        populateFoodItemTransaction(aConst.ALIVE_RECORD, null, finalConsumerRef, null,
+                                donorRef, null, foodRef, mOpenDate, bookStatus, foodItemTransaction);
 
-        postFoodTransactionToFirebase(foodItemTransaction);
+                        postFoodTransactionToFirebase(foodItemTransaction);
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "Not enough quantity left. Cannot book this.", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+            }
+        }
+    });
     }
 
     public void populateFoodItemTransaction(Long aliveRecord, DocumentReference cdReview,
@@ -350,5 +381,9 @@ public class FoodDetailActivity extends AppCompatActivity {
         mFirestore.collection(getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_INFO))
                 .document(foodItemId).update("count", FieldValue.increment(-1));
     }
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UiHandler.getInstance().context = this;
+    }
 }
