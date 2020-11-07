@@ -184,9 +184,8 @@ public class MainActivity extends AppCompatActivity {
         Cache.getInstance(this).add(getResources().getString(R.string.CACHE_KEY_NETWORK_STATUS),true);
     }
     private void BackgroundStuff() {
-        new CountDownTimer(Long.MAX_VALUE, 10000){
-            @Override
-            public void onTick(long millisUntilFinished) {
+            ThreadPoolManager.getInstance().addCallable(()->{
+            while (true){
                 // Network checking
                 ConnectivityManager cm = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo nInfo = cm.getActiveNetworkInfo();
@@ -194,20 +193,18 @@ public class MainActivity extends AppCompatActivity {
                 InetAddress ipAddr = null;
                 try {
                     ipAddr = InetAddress.getByName("google.com");
-                }catch (Exception e){ }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 if (ipAddr == null){
                     connected = false;
                 }else {
                     connected = (!ipAddr.equals("")) && connected;
                 }
                 uiHandler.sendMessage(MessageUtil.createMessage(MESSAGE_NETWORK_STATUS,Boolean.toString(connected)));
+                Thread.sleep(10000);
             }
-
-            @Override
-            public void onFinish() {
-
-            }
-        }.start();
+            });
     }
 
     @Override
