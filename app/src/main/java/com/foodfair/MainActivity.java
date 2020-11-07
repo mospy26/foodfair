@@ -18,7 +18,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.foodfair.ui.login.Login;
-import com.foodfair.ui.profiles.UserProfileActivity;
 import com.foodfair.ui.qrscanner.QRScanner;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;

@@ -208,9 +208,9 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 1 || requestCode == 2) {
-            locationManager = (LocationManager)
-                    getSystemService(Context.LOCATION_SERVICE);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+//            locationManager /= (LocationManager)
+//                    getSystemService(Context.LOCATION_SERVICE);
+//            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
             setSignUpBtn();
         }
     }

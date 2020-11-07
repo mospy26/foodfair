@@ -21,7 +21,6 @@ import com.foodfair.model.ReviewInfo;
 import com.foodfair.model.UsersInfo;
 import com.foodfair.ui.book_success.BookSuccessActivity;
 import com.foodfair.ui.book_success.BookSuccessViewModel;
-import com.foodfair.ui.profiles.UserProfileViewModel;
 import com.foodfair.utilities.Const;
 import com.foodfair.utilities.Utility;
 import com.google.android.gms.maps.model.LatLng;

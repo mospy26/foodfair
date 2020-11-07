@@ -110,7 +110,7 @@ public class SetUp extends AppCompatActivity {
     private void setupPreferred() {
         preferredMeat.setOnClickListener(v -> {
             String _preferredMeatList = sharedPreferences.getString(
-                    getString(R.string.config_preferred_meat), "");
+                    getString(R.string.setting_search_distance), "");
             Log.d("Preferred meat", _preferredMeatList);
             ArrayList<String> checkedItemStrings = new ArrayList<>();
             List<String> itemList = new ArrayList<String>();
@@ -128,18 +128,18 @@ public class SetUp extends AppCompatActivity {
             if(_preferredMeatList != null && !_preferredMeatList.isEmpty()
                     && !_preferredMeatList.equals(getString(R.string.setting_all))){
                 for(String _preferredMeat: _preferredMeatArray) {
-                    checkedItemStrings.add(_preferredMeat.trim());
+//                    checkedItemStrings.add(_preferredMeat.trim());
                 }
                 for(int i=0; i < allItems.length; i++){
-                    checkedItems[i] =
-                            Arrays.stream(_preferredMeatArray).anyMatch(allItems[i]::contains);
+//                    checkedItems[i] =
+//                            Arrays.stream(_preferredMeatArray).anyMatch(allItems[i]::contains);
                 }
 
             } else {
                 int i = 0;
                 for(String _preferredMeat: allItems) {
-                    checkedItemStrings.add(_preferredMeat);
-                    checkedItems[i] = true;
+//                    checkedItemStrings.add(_preferredMeat);
+//                    checkedItems[i] = true;
                     i++;
                 }
             }
@@ -148,11 +148,11 @@ public class SetUp extends AppCompatActivity {
             builder.setTitle(R.string.setting_preferred_meat)
                     .setMultiChoiceItems(allItems, checkedItems,
                             (dialog, which, isChecked) -> {
-                                if(isChecked){
-                                    checkedItemStrings.add(allItems[which]);
-                                } else {
-                                    checkedItemStrings.remove(allItems[which]);
-                                }
+//                                if(isChecked){
+//                                    checkedItemStrings.add(allItems[which]);
+//                                } else {
+//                                    checkedItemStrings.remove(allItems[which]);
+//                                }
 
                             })
                     .setPositiveButton(R.string.ok,
@@ -374,8 +374,8 @@ public class SetUp extends AppCompatActivity {
             HashMap<String, Object> locationData = new HashMap<>();
             try {
                 JSONObject parsed = new JSONObject(user.getLocation());
-                Object lat = parsed.getString("lat");
-                Object lon = parsed.getString("long");
+                Object lat = Double.parseDouble(parsed.getString("lat"));
+                Object lon = Double.parseDouble(parsed.getString("long"));
                 locationData.put("lat", lat);
                 locationData.put("lon", lon);
                 locationData.put("badges", new ArrayList<>());
