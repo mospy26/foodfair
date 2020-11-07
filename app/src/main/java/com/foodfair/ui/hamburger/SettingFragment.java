@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -33,7 +34,9 @@ import com.foodfair.databinding.FragmentSettingBinding;
 import com.foodfair.model.UsersInfo;
 import com.foodfair.ui.login.Login;
 import com.foodfair.utilities.Const;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -41,6 +44,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.squareup.picasso.Picasso;
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.Places;
+
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+
 
 import org.w3c.dom.Text;
 
@@ -59,6 +70,8 @@ public class SettingFragment extends Fragment {
     private FirebaseFirestore mFirestore;
     private Query query;
 
+    private final static String TAG = "SettingFragment";
+
     SharedPreferences sharedPreferences;
     Float convertedToKm;
 
@@ -75,6 +88,8 @@ public class SettingFragment extends Fragment {
     SwitchCompat newReview;
     ImageView profilePhoto;
     TextView profileInfo;
+    TextView userLocation;
+    UsersInfo usersInfo;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -97,6 +112,7 @@ public class SettingFragment extends Fragment {
         newReview = root.findViewById(R.id.switch_new_review);
         profilePhoto = root.findViewById(R.id.profile_image);
         profileInfo = root.findViewById(R.id.profile_info);
+        userLocation = root.findViewById(R.id.user_location);
 
         sharedPreferences = getActivity().getSharedPreferences("foodfair", Context.MODE_PRIVATE);
 
@@ -139,6 +155,16 @@ public class SettingFragment extends Fragment {
 
         }
 
+        if (!Places.isInitialized()) {
+            Places.initialize(getContext(), getResources().getString(R.string.places));
+        }
+
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+                getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+        ((EditText)autocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).setTextSize(12.0f);
+
         // Load profile information
         // Get proper user id
         //String userId = "yXnhEl9OBqgKqHLAPMPV";
@@ -151,14 +177,44 @@ public class SettingFragment extends Fragment {
                 .document(userId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                UsersInfo usersInfo = documentSnapshot.toObject(UsersInfo.class);
+                usersInfo = documentSnapshot.toObject(UsersInfo.class);
                 if(usersInfo != null) {
                     Picasso.get().load(usersInfo.getProfileImage())
                             .into(profilePhoto);
                     profileInfo.setText("\n" + usersInfo.getName() + "\n\n" + usersInfo.getBio());
+
+                    userLocation.setText(usersInfo.getLocation());
                 }
             }
         });
+
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+                // TODO: update to DB UserInfo.location
+                if(usersInfo != null) {
+                    mFirestore.collection(
+                            getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO))
+                            .document(userId).update("location", place.getName())
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    userLocation.setText(place.getName());
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
+
 
         searchSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 

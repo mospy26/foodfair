@@ -103,5 +103,6 @@
     <string name="FIREBASE_COLLECTION_REVIEW_INFO">reviewInfo</string>
     <string name="firebase_username">firebase username</string>
     <string name="places">AIzaSyBlDU3a7HGpvApHEfOUVBG39MmxIBBJdrM</string>
-    
+    <string name="setting_your_location">Your location:</string>
+
 </resources>
