@@ -39,7 +39,7 @@ import org.json.JSONObject;
 
 public class SetUpMap extends AppCompatActivity implements OnMapReadyCallback {
 
-    private static final int DEFAULT_ZOOM = 15;
+    private static final int DEFAULT_ZOOM = 12;
 
     private GoogleMap mMap;
     private Marker mLastMarker;
@@ -74,26 +74,34 @@ public class SetUpMap extends AppCompatActivity implements OnMapReadyCallback {
 
         mDefaultLocation = new LatLng(-33.852, 151.211);
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        checkPerms();
+    }
 
-        getLocation(this, locationResult);
+    private boolean checkPerms() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return false;
+        } else {
+            // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+            getLocation(this, locationResult);
+            return true;
+        }
+    }
 
-        // Button that saves the location user chose
-//        Button saveButton;
-//        saveButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.e("TAG", "User chose: " + mLastMarker.getPosition().toString());
-//                // Once the creation mode has ended remove the listener
-//                mMap.setOnMapClickListener(null);
-//            }
-//        });
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 1) {
+            // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+            getLocation(this, locationResult);
+        }
     }
 
     private boolean getLocation(Context context, LocationResult result) {
