@@ -1,11 +1,14 @@
 package com.foodfair.ui.foodpages;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,6 +86,14 @@ public class FoodDetailActivity extends AppCompatActivity {
         setContentView(R.layout.food_item);
         foodDetailModel = new FoodDetailModel();
         InitUI();
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("foodfair", Context.MODE_PRIVATE);
+        String uid = sharedPref.getString("firebasekey", null);
+        Long status = sharedPref.getLong(uid + "_status", -1);
+        if (status == 0) {
+            View view = findViewById(R.id.fooddetail_bookButton);
+            view.setVisibility(View.GONE);
+        }
+
         Intent intent = getIntent();
         String idFromIntent = intent.getStringExtra("foodId");
         if(idFromIntent != null && !idFromIntent.isEmpty()){

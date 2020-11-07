@@ -54,8 +54,8 @@ public class Login extends AppCompatActivity {
 //        getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("uid", Context.MODE_PRIVATE);
-        String uid = sharedPref.getString("uid", null);
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("foodfair", Context.MODE_PRIVATE);
+        String uid = sharedPref.getString("firebasekey", null);
 
         firebaseAuth = FirebaseAuth.getInstance();
 

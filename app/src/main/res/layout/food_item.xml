@@ -152,6 +152,7 @@
                 android:text="Book this food"
                 android:backgroundTint="@color/milkGreen"
                 android:onClick="onBookClick"
+                android:id="@+id/fooddetail_bookButton"
                 >
             </Button>
         </LinearLayout>
