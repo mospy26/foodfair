@@ -37,7 +37,8 @@ public class FoodPostingAdapter extends   RecyclerView.Adapter<FoodPostingAdapte
         items = new ArrayList<>();
         this.context = context;
         String uid = FirebaseAuth.getInstance().getUid();
-        System.out.println(uid);
+        String uidFormat = "usersInfo/" +uid;
+        System.out.println(uidFormat);
         ref.collection("foodItemInfo").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -45,13 +46,10 @@ public class FoodPostingAdapter extends   RecyclerView.Adapter<FoodPostingAdapte
                 {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         FoodItemInfo item = document.toObject(FoodItemInfo.class);
-                        String[] splitted = item.getDonorRef().getPath().split("/");
-                        if(item.getCount() > 0 && item.getStatus().equals(1) && splitted[1] != uid)
+                        if(item.getStatus().equals(1) && item.getCount() != 0  && !item.getDonorRef().getPath().equals(uidFormat))
                         {
-                        items.add(item);
+                            items.add(item);
                         }
-
-
                     }
 
                 }
@@ -86,13 +84,13 @@ public class FoodPostingAdapter extends   RecyclerView.Adapter<FoodPostingAdapte
                 DocumentSnapshot rf = task.getResult();
                 if (rf.exists()) {
                     String name = (String) rf.get("name");
-                    holder.foodPostedBy.setText(name);
+                    holder.foodPostedBy.setText("Posted By "  +name);
                 }
 
 
             }
         });
-        Picasso.get().load(items.get(position).getImageDescription().get(0)).into(holder.foodImage);
+        Picasso.get().load(items.get(position).getImageDescription().get(0)).resize(400,400).centerCrop().into(holder.foodImage);
 
 
 
