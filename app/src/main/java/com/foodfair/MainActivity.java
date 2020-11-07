@@ -30,7 +30,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.foodfair.network.FoodFairWSClient;
 import com.foodfair.network.Register;
-import com.foodfair.notification.MyFirebaseMessagingService;
 import com.foodfair.task.MessageUtil;
 import com.foodfair.task.ThreadPoolManager;
 import com.foodfair.task.UiHandler;
@@ -42,7 +41,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 
 import java.net.InetAddress;
