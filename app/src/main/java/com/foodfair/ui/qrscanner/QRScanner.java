@@ -266,8 +266,9 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
     private String _getPeriod() {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
-        period = cal.get(Calendar.YEAR) + "" + cal.get(Calendar.MONTH);
-        return cal.get(Calendar.YEAR) + "" + cal.get(Calendar.MONTH);
+        int month = cal.get(Calendar.MONTH) + 1;
+        period = cal.get(Calendar.YEAR) + "" + month;
+        return period;
     }
 
     private void updateLeaderboard() {
