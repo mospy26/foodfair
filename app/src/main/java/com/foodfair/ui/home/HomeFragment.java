@@ -1,6 +1,8 @@
 package com.foodfair.ui.home;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +33,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
@@ -47,12 +55,9 @@ public class HomeFragment extends Fragment {
         recyclerView = root.findViewById(R.id.list);
         System.out.println(recyclerView);
         dbReference = FirebaseFirestore.getInstance();
-        Query query = dbReference.collection("foodItemInfo").whereEqualTo("status",1);
 
-
+        Query query = dbReference.collection("foodItemInfo").whereEqualTo("status",1).whereNotEqualTo("count", 0);
         FirestoreRecyclerOptions<FoodItemInfo> foodItemInfoFirestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<FoodItemInfo>().setQuery(query, FoodItemInfo.class).build();
-
-
         adapter = new FirestoreRecyclerAdapter<FoodItemInfo, FoodPostingHolder>(foodItemInfoFirestoreRecyclerOptions) {
 
 
@@ -66,17 +71,44 @@ public class HomeFragment extends Fragment {
             @Override
             protected void onBindViewHolder(@NonNull FoodPostingHolder holder, int position, @NonNull FoodItemInfo model) {
 
+
+                holder.foodTitle.setText(model.getName());
+                holder.foodPostedDate.setText("Expires " + Utility.timeStampToDateString(model.getDateExpire()));
+
+
+
+
                 DocumentReference ref = model.getDonorRef();
+
+
                 ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         DocumentSnapshot rf = task.getResult();
                         if (rf.exists()) {
                             String name = (String) rf.get("name");
-                            holder.foodPostedBy.setText(name);
-                            holder.foodTitle.setText(model.getName());
-                            holder.foodPostedDate.setText("Expires  " + Utility.timeStampToDateString(model.getDateExpire()));
 
+                            if(((Map) rf.get("asDonor") != null))
+                            {
+                               Map map = (Map) rf.get("asDonor");
+                               double lat = (double) map.get("lat");
+                               double lon = (double) map.get("lon");
+
+
+                               Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+                                List<Address> addresses = new ArrayList<>();
+                                try {
+                                    addresses = geocoder.getFromLocation(lat, lon, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                                String address = addresses.get(0).getAddressLine(0);
+
+                                System.out.println(address);
+                            }
+
+                            holder.foodPostedBy.setText(name);
                             if (model.getImageDescription() != null && model.getImageDescription().size() != 0) {
                                 Picasso.get().load(model.getImageDescription().get(0)).into(holder.imageToDisplay);
                             }
@@ -84,9 +116,9 @@ public class HomeFragment extends Fragment {
                             holder.foodItemId = ((DocumentSnapshot) adapter.getSnapshots().getSnapshot(position)).getId();
                         }
 
-
                     }
                 });
+
 
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
