@@ -23,7 +23,6 @@ import com.foodfair.model.FooditemTransaction;
 import com.foodfair.model.ReviewInfo;
 import com.foodfair.model.UsersInfo;
 import com.foodfair.ui.foodpages.FoodDetailActivity;
-import com.foodfair.ui.profiles.UserProfileActivity;
 import com.foodfair.utilities.Utility;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;

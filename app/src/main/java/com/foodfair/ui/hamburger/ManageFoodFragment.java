@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.foodfair.R;
 import com.foodfair.databinding.FragmentManageFoodBinding;
 import com.foodfair.model.FooditemTransaction;
+import com.foodfair.utilities.Const;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -55,13 +56,17 @@ public class ManageFoodFragment extends Fragment implements
 
         mQueryConsumer = mFirestore.collection(
                 getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_TRANSACTION))
-                .whereEqualTo(FooditemTransaction.FIELD_CONSUMER, userCriteria);
+                .whereEqualTo(FooditemTransaction.FIELD_CONSUMER, userCriteria)
+                .whereEqualTo(FooditemTransaction.FIELD_STATUS,
+                        Const.getInstance().TRANSACTION_STATUS.get("booked"));
 
         mAdapterConsumer = new ManageFoodAdapter(mQueryConsumer, this, false);
 
         mQueryDonor = mFirestore.collection(
                 getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_TRANSACTION))
-                .whereEqualTo(FooditemTransaction.FIELD_DONOR, userCriteria);
+                .whereEqualTo(FooditemTransaction.FIELD_DONOR, userCriteria)
+                .whereEqualTo(FooditemTransaction.FIELD_STATUS,
+                        Const.getInstance().TRANSACTION_STATUS.get("booked"));
 
         mAdapterDonor = new ManageFoodAdapter(mQueryDonor, this, true);
 
