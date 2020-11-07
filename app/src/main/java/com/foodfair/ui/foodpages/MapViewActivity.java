@@ -339,20 +339,24 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
 
                     if (foodItemList != null && !foodItemList.isEmpty()) {
                         foodItemRef = (DocumentReference) foodItemList.get(0);
-
+                        String foodId = foodItemRef.getId();
                         foodItemRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                 // retrieved the foodItemInfo collection, get the image Uri
                                 FoodItemInfo foodItemInfo = documentSnapshot.toObject(FoodItemInfo.class);
-                                ArrayList<String> imgs = foodItemInfo.getImageDescription();
-                                String title = foodItemInfo.getName();
-                                String description = foodItemInfo.getTextDescription();
+                                if(foodItemInfo != null){
+                                    ArrayList<String> imgs = foodItemInfo.getImageDescription();
+                                    String title = foodItemInfo.getName();
+                                    String description = foodItemInfo.getTextDescription();
 
-                                if (!imgs.isEmpty()) {
-                                    String firstImg = imgs.get(0);
-                                    // add the food image onto the map
-                                    addMarkerToMap(nearbyUser, firstImg, title, description);
+                                    if (!imgs.isEmpty()) {
+                                        String firstImg = imgs.get(0);
+                                        // add the food image onto the map
+                                        addMarkerToMap(nearbyUser, firstImg, title, description);
+                                    }
+                                }else{
+                                    Log.d("MapView", foodId+" is not a complete foodItem or doesnt in the firebase." );
                                 }
                             }
                         });
