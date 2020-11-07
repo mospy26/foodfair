@@ -55,8 +55,8 @@ public class Login extends AppCompatActivity {
 //        getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("uid", Context.MODE_PRIVATE);
-        String uid = sharedPref.getString("uid", null);
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("foodfair", Context.MODE_PRIVATE);
+        String uid = sharedPref.getString("firebasekey", null);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -140,6 +140,11 @@ public class Login extends AppCompatActivity {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     user = document.toObject(UsersInfo.class);
+                    // store it globally for access
+                    sharedPreferences = getSharedPreferences("foodfair", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putLong(userId + "_status", user.getStatus());
+                    editor.commit();
                 } else {
                     Toast.makeText(context, "Invalid Login", Toast.LENGTH_LONG).show();
                 }

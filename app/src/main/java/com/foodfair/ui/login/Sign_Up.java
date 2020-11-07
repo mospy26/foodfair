@@ -111,6 +111,10 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
 //            return "Email cannot be empty";
 //        }
 
+        if (emailValue == null || emailValue.equals("")) {
+            return "Email cannot be empty";
+        }
+
         String passwordValue = password.getText().toString().trim();
         String confirmPasswordValue = confirmPassword.getText().toString().trim();
 
@@ -249,6 +253,7 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
                 sharedPreferences = getSharedPreferences("foodfair", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("firebasekey", userId);
+                editor.putLong(userId + "_status", user.getStatus());
                 editor.commit();
                 Intent intent = new Intent(context, SetUp.class);
                 startActivity(intent);

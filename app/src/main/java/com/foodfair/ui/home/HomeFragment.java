@@ -1,6 +1,8 @@
 package com.foodfair.ui.home;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -119,6 +121,13 @@ public class HomeFragment extends Fragment {
         });
 
         FloatingActionButton postButton = root.findViewById(R.id.post_food_button);
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("foodfair", Context.MODE_PRIVATE);
+        String uid = sharedPref.getString("firebasekey", null);
+        Long status = sharedPref.getLong(uid + "_status", -1);
+        if (status == 2) {
+            postButton.setVisibility(View.GONE);
+        }
+
         postButton.setOnClickListener(view ->{
             Intent intent = new Intent(getContext(), PostFoodActivity.class);
             startActivity(intent);
