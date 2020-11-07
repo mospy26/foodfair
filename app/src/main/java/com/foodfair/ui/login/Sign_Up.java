@@ -63,6 +63,9 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
     private Button signUpBtn;
     private final String[] GENDERS = {"Male", "Female", "Other", "Prefer to not say"};
     private final String[] STATUS = {"Restaurant", "User", "Charity"};
+    private final Long STATUS_RESTAURANT = 0L;
+    private final Long STATUS_USER = 1L;
+    private final Long STATUS_CHARITY = 2L;
 
     private LoadingDialog loadingDialog = new LoadingDialog(this);
     private FirebaseAuth firebaseAuth;
@@ -105,7 +108,7 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
             return "Name cannot be empty";
         }
 
-        String emaiValue = email.getText().toString().trim();
+        String emailValue = email.getText().toString().trim();
 //
 //        if (Patterns.EMAIL_ADDRESS.matcher(emaiValue).matches()) {
 //            return "Email cannot be empty";
@@ -244,6 +247,14 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
         user.setJoinDate(rightNow);
         user.setName(name.getText().toString());
         user.setStatus((long) Arrays.asList(STATUS).indexOf(status.getSelectedItem().toString()));
+        if (user.getStatus().equals(STATUS_CHARITY) || user.getStatus().equals(STATUS_USER)){
+            HashMap<String,Object> asConsumer = new HashMap<>();
+            asConsumer.put(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_BADGES),new ArrayList<Long>());
+            asConsumer.put(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS),new ArrayList<DocumentReference>());
+            asConsumer.put(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_TRANSACTIONS), new ArrayList<DocumentReference>());
+            user.setAsConsumer(asConsumer);
+        }
+
         documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
