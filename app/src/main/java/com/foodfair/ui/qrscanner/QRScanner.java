@@ -45,6 +45,8 @@ import com.google.firebase.firestore.Query;
 import com.google.gson.Gson;
 import com.google.zxing.Result;
 
+import org.w3c.dom.Document;
+
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -308,11 +310,11 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
                             }
                             saveRanking();
 
-//                            if (((ArrayList) consumer.getAsConsumer().get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_TRANSACTIONS))).size() == 5) {
-//                                addBadgeToConsumer(201L);
-//                            } else if (((ArrayList) consumer.getAsConsumer().get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_TRANSACTIONS))).size() == 1) {
-//                                addBadgeToConsumer(200L);
-//                            }
+                            if (((ArrayList<DocumentReference>) consumer.getAsConsumer().get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_TRANSACTIONS))).size() == 5) {
+                                addBadgeToConsumer(201L);
+                            } else if (((ArrayList<DocumentReference>) consumer.getAsConsumer().get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_TRANSACTIONS))).size() == 1) {
+                                addBadgeToConsumer(200L);
+                            }
                         }
                     }
 
@@ -356,7 +358,17 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
         Map<String, Object> asConsumer = consumer.getAsConsumer();
         asConsumer.replace(badgesString, badgesSet.stream().collect(Collectors.toList()));
         FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO))
-                .document(consumerId).update("asConsumer", asConsumer);
+                .document(consumerId).update("asConsumer", asConsumer).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Log.d("Consumer badges", "added");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("Consumer badges", "unsuccessful");
+            }
+        });
     }
 
     public void approveTransactionAndSave(FooditemTransaction transaction) {
