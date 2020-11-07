@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.foodfair.MainActivity;
 import com.foodfair.R;
 import com.foodfair.model.UsersInfo;
+import com.foodfair.task.UiHandler;
 import com.foodfair.utilities.Cache;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -158,5 +159,10 @@ public class Login extends AppCompatActivity {
                 }
             }
         });
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UiHandler.getInstance().context = this;
     }
 }

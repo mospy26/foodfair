@@ -1,5 +1,6 @@
 package com.foodfair.task;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -8,17 +9,21 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
+import com.foodfair.R;
 import com.foodfair.network.BookFood;
 import com.foodfair.network.Package;
 import com.foodfair.network.TransmittedPackage;
+import com.foodfair.utilities.Cache;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import static com.foodfair.task.MessageUtil.MESSAGE_BODY;
+import static com.foodfair.task.MessageUtil.MESSAGE_NETWORK_STATUS;
 
 public class UiHandler extends Handler {
 
     static UiHandler instance = null;
-    Context context;
+    public Context context;
     public UiHandler(Looper looper) {
         super(looper);
     }
@@ -43,9 +48,28 @@ public class UiHandler extends Handler {
             case MessageUtil.MESSAGE_WS_MESSAGE:
                 handleWSMessage(msg);
                 break;
+            case MESSAGE_NETWORK_STATUS:
+                handleNetworkConnectionStatus(Boolean.parseBoolean(msg.getData().getString(MESSAGE_BODY)));
+                break;
             default:
                 break;
         }
+    }
+
+    private void handleNetworkConnectionStatus(boolean currentConnectionStatu) {
+        Boolean beforeConnectionStatus =(Boolean)
+                Cache.getInstance(context).getStoredObject(context.getResources().getString(R.string.CACHE_KEY_NETWORK_STATUS));
+        if (beforeConnectionStatus == null){
+            beforeConnectionStatus = true;
+        }
+        if (beforeConnectionStatus){
+            if (!currentConnectionStatu){
+                Snackbar.make(((Activity)context).getWindow().getDecorView(),
+                        "Lose Network Connection.", Snackbar.LENGTH_LONG).show();
+            }
+        }
+        Cache.getInstance(context).add(context.getResources().getString(R.string.CACHE_KEY_NETWORK_STATUS),
+                new Boolean(currentConnectionStatu));
     }
 
     private void handleWSMessage(Message msg) {

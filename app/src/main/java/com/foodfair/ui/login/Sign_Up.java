@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.foodfair.R;
 import com.foodfair.model.User;
 import com.foodfair.model.UsersInfo;
+import com.foodfair.task.UiHandler;
 import com.foodfair.utilities.Cache;
 import com.foodfair.utilities.LoadingDialog;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -260,5 +261,10 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
                 Log.e("Sign Up", e.getMessage());
             }
         });
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UiHandler.getInstance().context = this;
     }
 }

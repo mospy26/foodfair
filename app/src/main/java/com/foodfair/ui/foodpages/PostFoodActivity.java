@@ -29,6 +29,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import com.foodfair.model.FoodItemInfo;
+import com.foodfair.task.UiHandler;
 import com.foodfair.ui.foodpages.MapViewActivity;
 import com.foodfair.utilities.Utility;
 import com.foodfair.utilities.Const;
@@ -580,5 +581,10 @@ public class PostFoodActivity extends AppCompatActivity {
         });
 
 
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UiHandler.getInstance().context = this;
     }
 }

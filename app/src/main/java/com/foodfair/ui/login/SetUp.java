@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.foodfair.MainActivity;
 import com.foodfair.R;
 import com.foodfair.model.UsersInfo;
+import com.foodfair.task.UiHandler;
 import com.foodfair.utilities.Cache;
 import com.foodfair.utilities.Const;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -411,5 +412,10 @@ public class SetUp extends AppCompatActivity {
                 updateUserLocation(user);
             }
         }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UiHandler.getInstance().context = this;
     }
 }

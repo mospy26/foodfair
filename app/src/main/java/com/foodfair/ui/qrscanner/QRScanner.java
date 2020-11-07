@@ -26,6 +26,7 @@ import com.foodfair.model.Leaderboard;
 import com.foodfair.model.Ranking;
 import com.foodfair.model.User;
 import com.foodfair.model.UsersInfo;
+import com.foodfair.task.UiHandler;
 import com.foodfair.ui.qr_success.QRSuccess;
 import com.foodfair.utilities.Cache;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -112,6 +113,8 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
     @Override
     protected void onResume() {
         super.onResume();
+        UiHandler.getInstance().context = this;
+
         if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA}, 1);
         } else {

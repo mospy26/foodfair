@@ -21,6 +21,7 @@ import com.foodfair.model.ReviewInfo;
 import com.foodfair.model.UsersInfo;
 import com.foodfair.network.BookFood;
 import com.foodfair.network.FoodFairWSClient;
+import com.foodfair.task.UiHandler;
 import com.foodfair.ui.book_success.BookSuccessActivity;
 import com.foodfair.ui.book_success.BookSuccessViewModel;
 import com.foodfair.utilities.Const;
@@ -351,5 +352,9 @@ public class FoodDetailActivity extends AppCompatActivity {
         mFirestore.collection(getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_INFO))
                 .document(foodItemId).update("count", FieldValue.increment(-1));
     }
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UiHandler.getInstance().context = this;
+    }
 }

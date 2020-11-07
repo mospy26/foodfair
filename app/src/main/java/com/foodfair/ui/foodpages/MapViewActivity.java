@@ -10,6 +10,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.foodfair.task.UiHandler;
 import com.foodfair.utilities.MarshmallowPermission;
 import com.foodfair.R;
 import com.foodfair.model.FoodItemInfo;
@@ -405,5 +406,9 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
         Picasso.get().load(imgUrl).resize(200, 200).into(mapTarget);
 
     }
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UiHandler.getInstance().context = this;
+    }
 }
