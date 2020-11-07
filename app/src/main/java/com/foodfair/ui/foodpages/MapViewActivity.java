@@ -73,7 +73,6 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
     private List<UsersInfo> mUsersInfoList;
 
 
-
     // The entry point to the Fused Location Provider.
     private FusedLocationProviderClient mFusedLocationProviderClient;
 
@@ -169,7 +168,7 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
 
     }
 
-    
+
     /**
      * Updates the map's UI settings based on whether the user has granted location permission.
      */
@@ -189,9 +188,10 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
                 mLastKnownLocation = null;
                 mLocationPermissionGranted = marshmallowPermission
-                        .checkLocationPermission(PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);;
+                        .checkLocationPermission(PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                ;
             }
-        } catch (SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
     }
@@ -253,7 +253,7 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
                     }
                 });
             }
-        } catch (SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
     }
@@ -263,19 +263,19 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
      * Firebase register and login jobs
      */
     private void firebaseRegisterAndLogin(String email, String password) {
-      mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this,
-              new OnCompleteListener<AuthResult>() {
-                  @Override
-                  public void onComplete(@NonNull Task<AuthResult> task) {
-                      if (task.isSuccessful()) {
-                          // Sign in success, update UI with the signed-in user's information
-                          Log.d("TAG", "createUserWithEmail:success");
-                      } else {
-                          // If sign in fails, display a message to the user.
-                          Log.w("TAG", "createUserWithEmail:failure", task.getException());
-                      }
-                  }
-              });
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this,
+                new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("TAG", "createUserWithEmail:success");
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("TAG", "createUserWithEmail:failure", task.getException());
+                        }
+                    }
+                });
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -312,6 +312,9 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
         for (UsersInfo users : mUsersInfoList) {
             try {
                 donors = users.getAsDonor();
+                if (donors == null) {
+                    continue;
+                }
                 Object lonObj = donors.get("lon");
                 Object latObj = donors.get("lat");
                 if (lonObj instanceof String) {
@@ -329,7 +332,7 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
 
                 double dist = Math.abs(calcDist(userLat, userLon, deviceLat, deviceLon));
 
-                if (dist <= maxDist ) {
+                if (dist <= maxDist) {
                     // mark the this user on the map
                     final LatLng nearbyUser = new LatLng(userLat, userLon);
 
@@ -345,7 +348,7 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                 // retrieved the foodItemInfo collection, get the image Uri
                                 FoodItemInfo foodItemInfo = documentSnapshot.toObject(FoodItemInfo.class);
-                                if(foodItemInfo != null){
+                                if (foodItemInfo != null) {
                                     ArrayList<String> imgs = foodItemInfo.getImageDescription();
                                     String title = foodItemInfo.getName();
                                     String description = foodItemInfo.getTextDescription();
@@ -355,8 +358,8 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
                                         // add the food image onto the map
                                         addMarkerToMap(nearbyUser, firstImg, title, description);
                                     }
-                                }else{
-                                    Log.d("MapView", foodId+" is not a complete foodItem or doesnt in the firebase." );
+                                } else {
+                                    Log.d("MapView", foodId + " is not a complete foodItem or doesnt in the firebase.");
                                 }
                             }
                         });
@@ -365,14 +368,13 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
                 }
 
             } catch (NullPointerException e) {
+                e.printStackTrace();
                 Log.d(TAG, "Longitude and latitude information invalid");
 
             }
         }
 
     }
-
-
 
 
     public static int calcDist(double latA, double lonA, double latB, double lonB) {
@@ -383,11 +385,11 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
                         Math.cos(Math.toRadians(latB)) *
                         Math.cos(Math.toRadians(lonA - lonB)));
 
-        return new Double((Math.toDegrees(Math.acos(theDistance))) * 69.09*1.6093).intValue();
+        return new Double((Math.toDegrees(Math.acos(theDistance))) * 69.09 * 1.6093).intValue();
     }
 
 
-    public Bitmap resizeMapIcons(String iconName,int width, int height){
+    public Bitmap resizeMapIcons(String iconName, int width, int height) {
         Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(),
                 getResources().getIdentifier(iconName, "drawable", getPackageName()));
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
