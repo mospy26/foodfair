@@ -29,6 +29,7 @@ import com.foodfair.model.UsersInfo;
 import com.foodfair.task.UiHandler;
 import com.foodfair.ui.qr_success.QRSuccess;
 import com.foodfair.utilities.Cache;
+import com.foodfair.utilities.Const;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -45,10 +46,12 @@ import com.google.gson.Gson;
 import com.google.zxing.Result;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Adopted from https://github.com/yuriy-budiyev/code-scanner
@@ -65,6 +68,7 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
     private Cache cache;
     private Ranking ranking;
     String period;
+    String consumerId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,6 +164,7 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
                                 DocumentSnapshot document = task.getResult();
                                 if (document.exists()) {
                                     consumer = document.toObject(UsersInfo.class);
+                                    consumerId = document.getId();
                                     onStateChange(null);
                                     Log.d("Transaction Consumer", "DocumentSnapshot data: " + document.getData());
                                 } else {
@@ -192,7 +197,7 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
                     }
                 } else {
                     // Could not complete firestore call
-                    Log.e("CRAP", "helloworld");
+                    Log.e("Transaction", "Could not be obtained");
                 }
             });
         }
@@ -287,7 +292,12 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
                             if (document.exists()) {
                                 ranking = document.toObject(Ranking.class);
                                 ranking.setScore(ranking.getScore() + 100);
+                                ranking.setDonationCount(ranking.getDonationCount() + 1);
+                                if (ranking.getDonationCount() == 5) {
+                                    addBadgeToDonor(201L);
+                                }
                             } else {
+                                addBadgeToDonor(200L);
                                 ranking = new Ranking();
                                 ranking.setDonationCount(1L);
                                 ranking.setAverageRating(2.9999);
@@ -318,6 +328,27 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
             }
         });
     }
+
+    private void addBadgeToDonor(Long badgeId) {
+        String badgesString = getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_BADGES);
+        Set<Long> badges = (Set<Long>) donor.getAsDonor().get(badgesString);
+        badges.add(badgeId);
+        Map<String, Object> asDonor = donor.getAsDonor();
+        asDonor.replace(badgesString, new ArrayList<>(badges));
+        FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO))
+                .document(FirebaseAuth.getInstance().getCurrentUser().getUid()).update("asDonor", asDonor);
+    }
+
+    private void addBadgeToConsumer(Long badgeId) {
+        String badgesString = getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_BADGES);
+        Set<Long> badges = (Set<Long>) consumer.getAsDonor().get(badgesString);
+        badges.add(badgeId);
+        Map<String, Object> asConsumer = consumer.getAsConsumer();
+        asConsumer.replace(badgesString, badges);
+        FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO))
+                .document(FirebaseAuth.getInstance().getCurrentUser().getUid()).update("asConsumer", asConsumer);
+    }
+
 //    private void fetchLeaderboard(String period) {
 //        FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_LEADERBOARD)).document(period).collection("ranking").document(FirebaseAuth.getInstance().getUid()).get().addOnCompleteListener(task -> {
 //            if (task.isSuccessful()) {
