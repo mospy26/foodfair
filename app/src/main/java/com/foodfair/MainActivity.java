@@ -81,9 +81,9 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home,
-                R.id.nav_user_profile, R.id.nav_history_of_items, R.id.nav_leaderboards,
-                R.id.nav_manage_food_postings, R.id.nav_settings)
+                R.id.nav_home, R.id.nav_user_profile, R.id.nav_history_of_items,
+                R.id.nav_leaderboards, R.id.nav_manage_food_bookings,
+                R.id.nav_view_food_postings, R.id.nav_qr_scanner, R.id.nav_settings)
                 .setDrawerLayout(drawer)
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -94,17 +94,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if(item.getItemId() == R.id.nav_user_profile ||
-                    item.getItemId() == R.id.nav_settings) {
+                    item.getItemId() == R.id.nav_settings ||
+                    item.getItemId() == R.id.nav_history_of_items ||
+                    item.getItemId() == R.id.nav_manage_food_bookings ||
+                    item.getItemId() == R.id.nav_qr_scanner) {
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     if(user != null){
                         navController.navigate(item.getItemId());
-                        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-                        drawer.close();
                     } else {
                         Toast toast = new Toast(getApplicationContext())
                                 .makeText(getApplicationContext(), "Please sign in", Toast.LENGTH_SHORT);
                         toast.show();
                     }
+                    DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                    drawer.close();
                 } else if(item.getItemId() == R.id.nav_qr_scanner) {
                     Intent intent = new Intent(getApplicationContext(), QRScanner.class);
                     // Could be startActivityForResult or something
