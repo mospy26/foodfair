@@ -55,18 +55,29 @@ public class MarshmallowPermission {
          * device. The result of the permission request is handled by a callback,
          * onRequestPermissionsResult.
          */
-        if (ContextCompat.checkSelfPermission(activity,
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            ActivityCompat.requestPermissions(activity,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    requestCode);
+        String[] targetPermission = {
+                Manifest.permission.ACCESS_FINE_LOCATION
+        };
 
-            //!!!!!!!! check this later
+        // find which permissions are needed
+        List<String> listPermNeeded = new ArrayList<>();
+        for (String perm : targetPermission) {
+            if (ContextCompat.checkSelfPermission(activity, perm) !=
+                    PackageManager.PERMISSION_GRANTED) {
+                listPermNeeded.add(perm);
+            }
+        }
+
+        // Ask for missing permissions
+        if (!listPermNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(activity,
+                    listPermNeeded.toArray(new String[listPermNeeded.size()]),
+                    requestCode);
             return false;
         }
+
+        return true;
+
     }
 
 }

@@ -12,6 +12,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -29,7 +31,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import com.foodfair.model.FoodItemInfo;
-import com.foodfair.task.UiHandler;
+import com.foodfair.model.UsersInfo;
 import com.foodfair.ui.foodpages.MapViewActivity;
 import com.foodfair.utilities.Utility;
 import com.foodfair.utilities.Const;
@@ -45,6 +47,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -70,9 +74,6 @@ import java.util.Set;
 public class PostFoodActivity extends AppCompatActivity {
 
 
-    // !!!!!! Assume we have user ID!!!
-    private static final String UID = "yXnhEl9OBqgKqHLAPMPV";
-
     // developer-defined request codes
     private static final int READ_PHOTO_REQ_CODE = 101;
     private static final int OPEN_CAMERA_REQ_CODE = 102;
@@ -89,7 +90,9 @@ public class PostFoodActivity extends AppCompatActivity {
     private EditText etAllergen;
     private EditText etQuantity;
     private EditText etDescription;
-
+    private FirebaseUser mFirebaseUser;
+    String mUserTableStr;
+    String mFoodTableStr;
     Bitmap mTakenImage;
     FoodItemInfo mFoodItemInfo = new FoodItemInfo();
 
@@ -127,10 +130,15 @@ public class PostFoodActivity extends AppCompatActivity {
         mFireStorage = FirebaseStorage.getInstance();
         mStorageRef = mFireStorage.getReference();
 
+        mUserTableStr = getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO);
+        mFoodTableStr = getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_INFO);
 
         // Firestore register and login
         mAuth = FirebaseAuth.getInstance();
-//        firebaseRegisterAndLogin(mFirebaseEmail, mFirebasePassword);
+        // firebaseRegisterAndLogin(mFirebaseEmail, mFirebasePassword);
+
+        // Get firebase user
+        mFirebaseUser = mAuth.getCurrentUser();
 
     }
 
@@ -410,11 +418,10 @@ public class PostFoodActivity extends AppCompatActivity {
             String userTableStr = getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO);
             // DocumentReference donorRef = mFirestore.document(userTableStr + "/" + UID);
 
-            // Get firebase user
-            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
             DocumentReference donorRef;
-            if(firebaseUser != null){
-                donorRef = mFirestore.document(userTableStr + "/" + firebaseUser.getUid());
+            if(mFirebaseUser != null){
+                donorRef = mFirestore.document(userTableStr + "/" + mFirebaseUser.getUid());
             } else {
                 Toast toast = new Toast(this).makeText(this,
                         "Please sign in", Toast.LENGTH_SHORT);
@@ -466,20 +473,27 @@ public class PostFoodActivity extends AppCompatActivity {
 
         String foodTableStr = getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_INFO);
         CollectionReference foodCollect = mFirestore.collection(foodTableStr);
-        foodCollect.document().set(foodItemInfo)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+        foodCollect.add(foodItemInfo)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
+                    public void onSuccess(DocumentReference documentReference) {
+                        updateUserInfoItemOnShelf(mFirebaseUser.getUid() ,documentReference.getId());
                         Log.d(TAG, "DocumentSnapshot successfully written!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(PostFoodActivity.this,
+                                        "Unable to Book this food at the moment", Toast.LENGTH_LONG).show();
+                            }
+                        });
+
                     }
                 });
-
 
     }
 
@@ -579,12 +593,34 @@ public class PostFoodActivity extends AppCompatActivity {
                 Log.d(TAG, "Successfully uploaded image onto storage");
             }
         });
-
-
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        UiHandler.getInstance().context = this;
+
+    public void updateUserInfoItemOnShelf(String userId, String foodId){
+
+
+        DocumentReference foodRef = mFirestore.document(mFoodTableStr + "/" + foodId);
+
+        mFirestore.collection(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO))
+                .document(userId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                String itemsOnShelf = getResources().getString(R.string.ITEMS_ON_SHELF);
+                if (document.exists()) {
+                    UsersInfo usersInfo = document.toObject(UsersInfo.class);
+                    Map<String, Object> asDonor = usersInfo.getAsDonor();
+                    if (asDonor != null && !asDonor.isEmpty()) {
+                        ArrayList<DocumentReference> itemList = (ArrayList<DocumentReference>)
+                                asDonor.get(itemsOnShelf);
+                        itemList.add(foodRef);
+                        asDonor.replace(itemsOnShelf, itemList);
+                        mFirestore.collection(mUserTableStr)
+                                .document(userId).update("asDonor", asDonor);
+                    }
+                    Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                } else {
+                    Log.d("TAG", "No such document");
+                }
+            }
+        });
     }
 }
