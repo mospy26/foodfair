@@ -58,7 +58,7 @@ public class HomeFragment extends Fragment {
 
 
 
-        Query query = dbReference.collection("foodItemInfo").whereNotEqualTo("donorRef",df).whereEqualTo("status",1);
+        Query query = dbReference.collection("foodItemInfo").whereNotEqualTo("donorRef",df);
 
 
 
@@ -96,6 +96,7 @@ public class HomeFragment extends Fragment {
                             }
                             ;
                             holder.foodItemId = ((DocumentSnapshot) adapter.getSnapshots().getSnapshot(position)).getId();
+
                         }
 
 
