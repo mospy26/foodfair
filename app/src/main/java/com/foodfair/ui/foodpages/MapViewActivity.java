@@ -100,23 +100,25 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
             mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
         }
 
-        setContentView(R.layout.activity_map_view);
-
         // Prompt the user for permission.
-        mLocationPermissionGranted = marshmallowPermission
-                .checkLocationPermission(PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        if (mLocationPermissionGranted = marshmallowPermission
+                .checkLocationPermission(PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION)) {
 
-        setUpMapIfNeeded();
-
-        // initialise Firebase
-        mFirestore = FirebaseFirestore.getInstance();
-        mFireStorage = FirebaseStorage.getInstance();
-        mStorageRef = mFireStorage.getReference();
+            setContentView(R.layout.activity_map_view);
 
 
-        // Firestore register and login
-        mAuth = FirebaseAuth.getInstance();
-//        firebaseRegisterAndLogin(mFirebaseEmail, mFirebasePassword);
+            setUpMapIfNeeded();
+
+            // initialise Firebase
+            mFirestore = FirebaseFirestore.getInstance();
+            mFireStorage = FirebaseStorage.getInstance();
+            mStorageRef = mFireStorage.getReference();
+
+
+            // Firestore register and login
+            mAuth = FirebaseAuth.getInstance();
+            //        firebaseRegisterAndLogin(mFirebaseEmail, mFirebasePassword);
+        }
 
 
     }
@@ -323,26 +325,26 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
                     ArrayList<DocumentReference> foodItemList =
                             (ArrayList<DocumentReference>) donors.get("itemsOnShelf");
 
-                    if (!foodItemList.isEmpty()) {
+                    if (foodItemList != null && !foodItemList.isEmpty()) {
                         foodItemRef = (DocumentReference) foodItemList.get(0);
-                    }
 
-                    foodItemRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            // retrieved the foodItemInfo collection, get the image Uri
-                            FoodItemInfo foodItemInfo = documentSnapshot.toObject(FoodItemInfo.class);
-                            ArrayList<String> imgs = foodItemInfo.getImageDescription();
-                            String title = foodItemInfo.getName();
-                            String description = foodItemInfo.getTextDescription();
+                        foodItemRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                // retrieved the foodItemInfo collection, get the image Uri
+                                FoodItemInfo foodItemInfo = documentSnapshot.toObject(FoodItemInfo.class);
+                                ArrayList<String> imgs = foodItemInfo.getImageDescription();
+                                String title = foodItemInfo.getName();
+                                String description = foodItemInfo.getTextDescription();
 
-                            if (!imgs.isEmpty()) {
-                                String firstImg = imgs.get(0);
-                                // add the food image onto the map
-                                addMarkerToMap(nearbyUser, firstImg, title, description);
+                                if (!imgs.isEmpty()) {
+                                    String firstImg = imgs.get(0);
+                                    // add the food image onto the map
+                                    addMarkerToMap(nearbyUser, firstImg, title, description);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
 
                 }
 
