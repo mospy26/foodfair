@@ -14,6 +14,7 @@ import com.foodfair.model.FooditemTransaction;
 import com.foodfair.model.UsersInfo;
 import com.foodfair.utilities.Const;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -21,6 +22,9 @@ import com.google.firebase.firestore.Query;
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Document;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ManageFoodAdapter extends FirestoreAdapter<ManageFoodAdapter.ViewHolder>{
 
@@ -124,8 +128,12 @@ public class ManageFoodAdapter extends FirestoreAdapter<ManageFoodAdapter.ViewHo
                     @Override
                     public void onClick(View v) {
                         // Update firebase - transaction success
-                        snapshot.getReference().update(FooditemTransaction.FIELD_STATUS,
+                        Map<String, Object> updateMap = new HashMap<String, Object>();
+                        updateMap.put(FooditemTransaction.FIELD_STATUS,
                                 Const.getInstance().TRANSACTION_STATUS.get("Success"));
+                        updateMap.put(FooditemTransaction.FIELD_FINISH_DATE,
+                                Timestamp.now());
+                        snapshot.getReference().update(updateMap);
                         foodRef.update("status",
                                 Const.getInstance().TRANSACTION_STATUS.get("success"));
                     }
