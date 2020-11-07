@@ -19,7 +19,6 @@ import com.foodfair.model.FooditemTransaction;
 import com.foodfair.model.ReviewInfo;
 import com.foodfair.model.UsersInfo;
 import com.foodfair.ui.foodpages.FoodDetailActivity;
-import com.foodfair.ui.profiles.UserProfileActivity;
 import com.foodfair.utilities.Utility;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -89,8 +88,8 @@ public class HistoryAdapter extends FirestoreAdapter<HistoryAdapter.ViewHolder> 
             binding.toFromPhoto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, UserProfileActivity.class);
-                    context.startActivity(intent);
+//                    Intent intent = new Intent(context, UserProfileActivity.class);
+//                    context.startActivity(intent);
                 }
             });
             // Firestore

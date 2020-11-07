@@ -98,7 +98,7 @@
                     android:layout_width="320dp"
                     android:layout_height="match_parent"
                     android:stretchColumns="1">
-                    <TableRow>
+                    <TableRow android:visibility="gone">
                         <TextView
                             style="@style/TableLeftCell"
                             android:text="Age" />
