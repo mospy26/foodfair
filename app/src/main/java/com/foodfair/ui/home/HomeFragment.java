@@ -23,6 +23,7 @@ import com.foodfair.ui.foodpages.FoodDetailActivity;
 import com.foodfair.ui.foodpages.MapViewActivity;
 import com.foodfair.ui.foodpages.PostFoodActivity;
 import com.foodfair.ui.login.Sign_Up;
+import com.foodfair.utilities.FoodPostingAdapter;
 import com.foodfair.utilities.Utility;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,7 +33,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends Fragment {
 
@@ -57,66 +63,20 @@ public class HomeFragment extends Fragment {
        DocumentReference df = dbReference.collection("usersInfo").document("XWNQVbEdFKWbGOnok7wgMARYXgp2");
 
 
+       FoodItemInfo n = new FoodItemInfo();
+       n.setName("LOL");
 
-        Query query = dbReference.collection("foodItemInfo");
+       List<FoodItemInfo> fd = new ArrayList<>();
+       fd.add(n);
 
+       recyclerView.setHasFixedSize(true);
+       recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+       FoodPostingAdapter adapt = new FoodPostingAdapter(getContext());
 
-        FirestoreRecyclerOptions<FoodItemInfo> foodItemInfoFirestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<FoodItemInfo>().setQuery(query, FoodItemInfo.class).build();
-
-
-
-
-        adapter = new FirestoreRecyclerAdapter<FoodItemInfo, FoodPostingHolder>(foodItemInfoFirestoreRecyclerOptions){
-
-
-            @NonNull
-            @Override
-            public FoodPostingHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.foodposting, parent, false);
-                return new FoodPostingHolder(view);
-            }
-
-            @Override
-            protected void onBindViewHolder(@NonNull FoodPostingHolder holder, int position, @NonNull FoodItemInfo model) {
-
-                DocumentReference ref = model.getDonorRef();
-                ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        DocumentSnapshot rf = task.getResult();
-                        if (rf.exists()) {
-                            String name = (String) rf.get("name");
-                            holder.foodPostedBy.setText(name);
-                            holder.foodItemId = ((DocumentSnapshot) adapter.getSnapshots().getSnapshot(position)).getId();
-
-                        }
-
-                        holder.foodTitle.setText(model.getName());
-                        holder.foodPostedDate.setText("Expires  " + Utility.timeStampToDateString(model.getDateExpire()));
-                        Picasso.get().load(model.getImageDescription().get(0)).into(holder.imageToDisplay);
-                    }
-                });
+       recyclerView.setAdapter(adapt);
 
 
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        //Start Food Detail Activity
-                        Intent intent = new Intent(getContext(), FoodDetailActivity.class);
-                        intent.putExtra("foodId",holder.foodItemId);
-                        startActivity(intent);
-                    }
-                });
 
-            }
-        };
-
-
-        //recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
-        recyclerView.setAdapter(adapter);
-
-        fabStuff(root);
         return root;
     }
 
@@ -141,15 +101,5 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        adapter.stopListening();
-    }
 }

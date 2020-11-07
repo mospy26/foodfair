@@ -6,9 +6,10 @@ import android.os.Parcelable;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class FoodItemInfo /*implements Parcelable*/ {
+public class FoodItemInfo implements Serializable {
     ArrayList<Long> allergyInfo;
     Integer count;
     Timestamp dateExpire;
