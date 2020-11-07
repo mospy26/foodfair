@@ -27,6 +27,7 @@ import com.foodfair.utilities.Utility;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -124,7 +125,7 @@ public class HomeFragment extends Fragment {
         SharedPreferences sharedPref = getActivity().getSharedPreferences("foodfair", Context.MODE_PRIVATE);
         String uid = sharedPref.getString("firebasekey", null);
         Long status = sharedPref.getLong(uid + "_status", -1);
-        if (status == 2) {
+        if (status == 2 || FirebaseAuth.getInstance().getCurrentUser() == null) {
             postButton.setVisibility(View.GONE);
         }
 
