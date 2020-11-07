@@ -338,9 +338,9 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
                     saveTotalRanking();
 
                     if (((ArrayList<DocumentReference>) consumer.getAsConsumer().get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_TRANSACTIONS))).size() == 5) {
-                        addBadgeToConsumer(201L);
+                        addBadgeToConsumer(101L);
                     } else if (((ArrayList<DocumentReference>) consumer.getAsConsumer().get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_TRANSACTIONS))).size() == 1) {
-                        addBadgeToConsumer(200L);
+                        addBadgeToConsumer(100L);
                     }
                 }
             }
