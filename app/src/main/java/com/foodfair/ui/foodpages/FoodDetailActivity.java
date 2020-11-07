@@ -51,6 +51,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 public class FoodDetailActivity extends AppCompatActivity {
 
@@ -76,6 +77,7 @@ public class FoodDetailActivity extends AppCompatActivity {
     String mDonorID;
     String mFoodItemID;
     Timestamp mOpenDate;
+
 
     private FirebaseFirestore mFirestore;
 
@@ -281,9 +283,9 @@ public class FoodDetailActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Not enough quantity left. Cannot book this.", Toast.LENGTH_LONG).show();
                         return;
                     }
+                }
             }
-        }
-    });
+        });
     }
 
     public void populateFoodItemTransaction(Long aliveRecord, DocumentReference cdReview,
@@ -318,9 +320,15 @@ public class FoodDetailActivity extends AppCompatActivity {
                         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                         FoodFairWSClient.globalCon.send(g.toJson(new BookFood(uid,
                                 foodItemTransaction.getDonor().getId(),documentReference.getId()
-                                ).buildToMessage(foodItemTransaction.getDonor().getId(),uid)));
+                        ).buildToMessage(foodItemTransaction.getDonor().getId(),uid)));
+
+                        String transID = documentReference.getId();
 
                         quantityDecrement(foodId);
+                        // add to userinfo -> asconsumer -> transaction (array)
+                        updateConsumerTrans(UID, transID);
+
+
                         returnBookSuccessPage(documentReference.getId());
                     }
                 })
@@ -385,5 +393,35 @@ public class FoodDetailActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         UiHandler.getInstance().context = this;
+    }
+
+    public void updateConsumerTrans(String userId, String transId) {
+
+        mFirestore.collection(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO))
+                .document(userId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                String transStr = "transactions";
+                String userTableStr = getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO);
+                String transTableStr = getResources().getString(R.string.FIREBASE_COLLECTION_TRANSACTION_INFO);
+                if (document.exists()) {
+                    UsersInfo usersInfo = document.toObject(UsersInfo.class);
+                    Map<String, Object> asConsumer = usersInfo.getAsConsumer();
+                    if (asConsumer != null && !asConsumer.isEmpty()) {
+                        ArrayList<DocumentReference> transList = (ArrayList<DocumentReference>)
+                                asConsumer.get(transStr);
+                        DocumentReference transRef = mFirestore.document(transTableStr + "/" + transId);
+                        transList.add(transRef);
+                        asConsumer.replace(transStr, transList);
+                        mFirestore.collection(userTableStr)
+                                .document(userId).update("asConsumer", asConsumer);
+                    }
+                    Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                } else {
+                    Log.d("TAG", "No such document");
+                }
+            }
+        });
+
     }
 }
