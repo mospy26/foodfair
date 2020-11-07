@@ -247,6 +247,7 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
         user.setJoinDate(rightNow);
         user.setName(name.getText().toString());
         user.setStatus((long) Arrays.asList(STATUS).indexOf(status.getSelectedItem().toString()));
+
         if (user.getStatus().equals(STATUS_CHARITY) || user.getStatus().equals(STATUS_USER)){
             HashMap<String,Object> asConsumer = new HashMap<>();
             asConsumer.put(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_BADGES),new ArrayList<Long>());
@@ -254,6 +255,10 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
             asConsumer.put(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_TRANSACTIONS), new ArrayList<DocumentReference>());
             user.setAsConsumer(asConsumer);
         }
+
+        if (user.getStatus().equals(STATUS_CHARITY)) user.setProfileImage("https://files.123freevectors.com/wp-content/uploads/freevectorimage/charity-logo-with-hand-free-vector-1945.jpg");
+        if (user.getStatus().equals(STATUS_RESTAURANT)) user.setProfileImage("https://i.pinimg.com/originals/c1/0f/be/c10fbe5d868abef9f1a1f6be1f72b732.jpg");
+        if (user.getStatus().equals(STATUS_USER)) user.setProfileImage("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRionTtxUfdanGm9HhxO8Y81zfBuKeAiaDwrw&usqp=CAU");
 
         documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
