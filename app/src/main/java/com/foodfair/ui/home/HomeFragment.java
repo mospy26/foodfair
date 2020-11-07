@@ -47,7 +47,8 @@ public class HomeFragment extends Fragment {
         recyclerView = root.findViewById(R.id.list);
         System.out.println(recyclerView);
         dbReference = FirebaseFirestore.getInstance();
-        Query query = dbReference.collection("foodItemInfo");
+        Query query = dbReference.collection("foodItemInfo").whereEqualTo("status",1);
+
 
         FirestoreRecyclerOptions<FoodItemInfo> foodItemInfoFirestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<FoodItemInfo>().setQuery(query, FoodItemInfo.class).build();
 
