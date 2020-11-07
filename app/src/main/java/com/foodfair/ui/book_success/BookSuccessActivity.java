@@ -144,10 +144,12 @@ public class BookSuccessActivity extends AppCompatActivity {
                 UsersInfo donor = donorTask.getResult().toObject(UsersInfo.class);
                 bookSuccessViewModel.mDonorName.setValue(donor.getName());
                 Map<String,Object> asDonor = donor.getAsDonor();
-                Double lat =
-                        (Double)asDonor.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_LAT));
-                Double lon =
-                        (Double)asDonor.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_LON));
+                Double lat = 23d;
+                Double lon = 23d;
+                if (asDonor != null){
+                    lat =(Double)asDonor.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_LAT));
+                    lon = (Double)asDonor.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_LON));
+                }
                 bookSuccessViewModel.mLocationLatLng.setValue(new LatLng(lat,lon));
                 bookSuccessViewModel.mPickupLocation.setValue(donor.getLocation().toString());
             }

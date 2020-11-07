@@ -307,8 +307,12 @@ public class FoodDetailActivity extends AppCompatActivity {
         String donorAddr = donorInfo.getLocation().toString();
         String donorName = donorInfo.getName();
         String foodName = foodInfo.getName();
-        double lat = (double) donorInfo.getAsDonor().get("lat");
-        double lon = (double) donorInfo.getAsDonor().get("lon");
+        double lat = 23d;
+        double lon = 23d;
+        if (donorInfo.getAsDonor() != null){
+            lat = (double) donorInfo.getAsDonor().get("lat");
+            lon = (double) donorInfo.getAsDonor().get("lon");
+        }
         LatLng geoloc = new LatLng(lat, lon);
         String foodUrl = foodInfo.getImageDescription().get(0);
         Timestamp transactionStartDate = mOpenDate;
