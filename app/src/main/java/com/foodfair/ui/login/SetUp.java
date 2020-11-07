@@ -110,7 +110,7 @@ public class SetUp extends AppCompatActivity {
     private void setupPreferred() {
         preferredMeat.setOnClickListener(v -> {
             String _preferredMeatList = sharedPreferences.getString(
-                    getString(R.string.config_preferred_meat), "");
+                    getString(R.string.setting_search_distance), "");
             Log.d("Preferred meat", _preferredMeatList);
             ArrayList<String> checkedItemStrings = new ArrayList<>();
             List<String> itemList = new ArrayList<String>();
@@ -374,8 +374,8 @@ public class SetUp extends AppCompatActivity {
             HashMap<String, Object> locationData = new HashMap<>();
             try {
                 JSONObject parsed = new JSONObject(user.getLocation());
-                Object lat = parsed.getString("lat");
-                Object lon = parsed.getString("long");
+                Object lat = Double.parseDouble(parsed.getString("lat"));
+                Object lon = Double.parseDouble(parsed.getString("long"));
                 locationData.put("lat", lat);
                 locationData.put("lon", lon);
                 locationData.put("badges", new ArrayList<>());
