@@ -46,12 +46,14 @@ import com.google.gson.Gson;
 import com.google.zxing.Result;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Adopted from https://github.com/yuriy-budiyev/code-scanner
@@ -305,6 +307,12 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
                                 ranking.setDonor(transaction.getDonor());
                             }
                             saveRanking();
+
+//                            if (((ArrayList) consumer.getAsConsumer().get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_TRANSACTIONS))).size() == 5) {
+//                                addBadgeToConsumer(201L);
+//                            } else if (((ArrayList) consumer.getAsConsumer().get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_TRANSACTIONS))).size() == 1) {
+//                                addBadgeToConsumer(200L);
+//                            }
                         }
                     }
 
@@ -331,36 +339,25 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
 
     private void addBadgeToDonor(Long badgeId) {
         String badgesString = getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_BADGES);
-        Set<Long> badges = (Set<Long>) donor.getAsDonor().get(badgesString);
-        badges.add(badgeId);
+        ArrayList<Long> badges = (ArrayList<Long>) donor.getAsDonor().get(badgesString);
+        Set<Long> badgesSet = badges.stream().collect(Collectors.toSet());
+        badgesSet.add(badgeId);
         Map<String, Object> asDonor = donor.getAsDonor();
-        asDonor.replace(badgesString, new ArrayList<>(badges));
+        asDonor.replace(badgesString, badgesSet.stream().collect(Collectors.toList()));
         FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO))
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid()).update("asDonor", asDonor);
     }
 
     private void addBadgeToConsumer(Long badgeId) {
         String badgesString = getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_BADGES);
-        Set<Long> badges = (Set<Long>) consumer.getAsDonor().get(badgesString);
-        badges.add(badgeId);
+        ArrayList<Long> badges = (ArrayList<Long>) consumer.getAsConsumer().get(badgesString);
+        Set<Long> badgesSet = badges.stream().collect(Collectors.toSet());
+        badgesSet.add(badgeId);
         Map<String, Object> asConsumer = consumer.getAsConsumer();
-        asConsumer.replace(badgesString, badges);
+        asConsumer.replace(badgesString, badgesSet.stream().collect(Collectors.toList()));
         FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO))
-                .document(FirebaseAuth.getInstance().getCurrentUser().getUid()).update("asConsumer", asConsumer);
+                .document(consumerId).update("asConsumer", asConsumer);
     }
-
-//    private void fetchLeaderboard(String period) {
-//        FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_LEADERBOARD)).document(period).collection("ranking").document(FirebaseAuth.getInstance().getUid()).get().addOnCompleteListener(task -> {
-//            if (task.isSuccessful()) {
-//                DocumentSnapshot document = task.getResult();
-//                if (document.exists()) {
-//                    leaderboard = document.toObject(Leaderboard.class);
-//                } else {
-//                    leaderboard = null;
-//                }
-//            }
-//        });
-//    }
 
     public void approveTransactionAndSave(FooditemTransaction transaction) {
 
