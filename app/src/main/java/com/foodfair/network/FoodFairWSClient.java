@@ -18,15 +18,6 @@ import static com.foodfair.task.MessageUtil.MESSAGE_WS_MESSAGE;
 
 public class FoodFairWSClient extends WebSocketClient {
 
-    static {
-        try {
-//            globalCon = new FoodFairWSClient(new URI("ws://10.16.149.237:8585"));
-            globalCon = new FoodFairWSClient(new URI("ws://ss.caihuashuai.com:8282"));
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static FoodFairWSClient globalCon;
 
     private FoodFairWSClient(URI serverUri, Draft draft) {

@@ -47,7 +47,9 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         uiHandler =  UiHandler.createHandler(this.getMainLooper(),this);
         if (user != null){
-            FoodFairWSClient.globalCon.close();
+            if (FoodFairWSClient.globalCon != null){
+                FoodFairWSClient.globalCon.close();
+            }
             try {
                 FoodFairWSClient.globalCon = new FoodFairWSClient(new URI("ws://ss.caihuashuai.com:8282"));
             } catch (URISyntaxException e) {
