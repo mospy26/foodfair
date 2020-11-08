@@ -20,13 +20,13 @@
     <fragment
         android:id="@+id/nav_view_food_postings"
         android:name="com.foodfair.ui.hamburger.ViewFoodItemFragment"
-        android:label="@string/menu_manage_food_bookings"
+        android:label="@string/menu_view_food_postings"
         tools:layout="@layout/fragment_view_food" />
 
     <fragment
         android:id="@+id/nav_manage_food_bookings"
         android:name="com.foodfair.ui.hamburger.ManageFoodFragment"
-        android:label="@string/menu_view_food_postings"
+        android:label="@string/menu_manage_food_bookings"
         tools:layout="@layout/fragment_manage_food" />
 
     <fragment

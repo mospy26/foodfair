@@ -82,6 +82,7 @@
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_login">FullscreenActivity</string>
     <string name="title_activity_sign__up">FullscreenActivity</string>
+    <string name="title_book_success">Booking confirmed!</string>
 
     <!--    Firebase account  -->
     <string name="firebase_email">tom@gmail.com</string>
