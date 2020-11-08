@@ -1,6 +1,6 @@
 package com.foodfair.ui.hamburger;
 
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.foodfair.R;
 import com.foodfair.databinding.FragmentManageFoodBinding;
 import com.foodfair.model.FooditemTransaction;
-import com.foodfair.ui.book_success.BookSuccessActivity;
 import com.foodfair.utilities.Const;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,6 +20,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class ManageFoodFragment extends Fragment implements
         ManageFoodAdapter.OnManageFoodSelectedListener, View.OnClickListener {
@@ -75,6 +76,26 @@ public class ManageFoodFragment extends Fragment implements
 
         mBinding.bookingList.setAdapter(mAdapterConsumer);
         mBinding.bookingList.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        SharedPreferences sharedPreferences = getActivity()
+                .getSharedPreferences("foodfair", MODE_PRIVATE);
+
+        Long userStatus = sharedPreferences.getLong(userId + "_status", 9L);
+
+        // Only STATUS_USER can see the btn
+        if(!userStatus.equals(1L)) {
+            mBinding.btnSwitch.setVisibility(View.GONE);
+        }
+
+        // STATUS_RESTAURANT can only donate
+        if(userStatus.equals(0L)) {
+            isAsDonor = true;
+            mBinding.textManageFood.setText("Your Bookings");
+            // STATUS_CHARITY can only consume
+        } else if (userStatus.equals(2L)) {
+            isAsDonor = false;
+            mBinding.textManageFood.setText("Your Pending Requests");
+        }
 
         mBinding.btnSwitch.setOnClickListener(new View.OnClickListener() {
             @Override

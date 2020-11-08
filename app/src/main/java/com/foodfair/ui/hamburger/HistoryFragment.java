@@ -1,5 +1,6 @@
 package com.foodfair.ui.hamburger;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,14 +14,14 @@ import com.foodfair.R;
 import com.foodfair.databinding.FragmentHistoryBinding;
 import com.foodfair.model.FooditemTransaction;
 import com.foodfair.utilities.Const;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class HistoryFragment extends Fragment implements
         HistoryAdapter.OnHistorySelectedListener, View.OnClickListener {
@@ -76,6 +77,26 @@ public class HistoryFragment extends Fragment implements
         mBinding.historyList.setHasFixedSize(true);
         mBinding.historyList.setAdapter(mAdapterDonor);
         mBinding.historyList.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        SharedPreferences sharedPreferences = getActivity()
+                .getSharedPreferences("foodfair", MODE_PRIVATE);
+
+        Long userStatus = sharedPreferences.getLong(userId + "_status", 9L);
+
+        // Only STATUS_USER can see the btn
+        if(!userStatus.equals(1L)) {
+            mBinding.btnSwitch.setVisibility(View.GONE);
+        }
+
+        // STATUS_RESTAURANT can only donate
+        if(userStatus.equals(0L)) {
+            isAsDonor = true;
+            mBinding.textHistory.setText("Donation History");
+        // STATUS_CHARITY can only consume
+        } else if (userStatus.equals(2L)) {
+            isAsDonor = false;
+            mBinding.textHistory.setText("Consumption History");
+        }
 
         mBinding.btnSwitch.setOnClickListener(new View.OnClickListener() {
             @Override

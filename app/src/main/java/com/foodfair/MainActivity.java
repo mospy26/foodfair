@@ -29,26 +29,22 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.foodfair.network.FoodFairWSClient;
-import com.foodfair.network.Register;
 import com.foodfair.task.MessageUtil;
 import com.foodfair.task.ThreadPoolManager;
 import com.foodfair.task.UiHandler;
 import com.foodfair.ui.login.Login;
 import com.foodfair.ui.qrscanner.QRScanner;
 import com.foodfair.utilities.Cache;
-import com.foodfair.utilities.Const;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.gson.Gson;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 import static com.foodfair.task.MessageUtil.MESSAGE_NETWORK_STATUS;
-import static com.foodfair.task.MessageUtil.MESSAGE_WS_MESSAGE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -57,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private MenuItem signInMenu;
     UiHandler uiHandler;
+
+    private FirebaseFirestore mFireStore;
 
     private NavController navController;
 
@@ -86,6 +84,15 @@ public class MainActivity extends AppCompatActivity {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
 
+        mFireStore = FirebaseFirestore.getInstance();
+        sharedPreferences = getSharedPreferences("foodfair", MODE_PRIVATE);
+        String userId = FirebaseAuth.getInstance().getUid();
+        Long userStatus = 9L;
+        if(userId != null) {
+            userStatus = sharedPreferences.getLong(userId + "_status", 9L);
+        }
+
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -98,14 +105,14 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            Long finalUserStatus = userStatus;
+            navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if(item.getItemId() == R.id.nav_user_profile ||
                     item.getItemId() == R.id.nav_settings ||
                     item.getItemId() == R.id.nav_history_of_items ||
-                    item.getItemId() == R.id.nav_view_food_postings ||
                     item.getItemId() == R.id.nav_manage_food_bookings) {
                     if(user != null){
                         navController.navigate(item.getItemId());
@@ -113,6 +120,22 @@ public class MainActivity extends AppCompatActivity {
                         Toast toast = new Toast(getApplicationContext())
                                 .makeText(getApplicationContext(), "Please sign in", Toast.LENGTH_SHORT);
                         toast.show();
+                    }
+                    DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                    drawer.close();
+                } else if(item.getItemId() == R.id.nav_view_food_postings) {
+                    // User can't access this page if not logged in or is charity
+                    if(finalUserStatus.equals(9L) || user == null){
+                        Toast toast = new Toast(getApplicationContext())
+                                .makeText(getApplicationContext(), "Please sign in", Toast.LENGTH_SHORT);
+                        toast.show();
+                    } else if (finalUserStatus.equals(2L)) {
+                        Toast toast = new Toast(getApplicationContext())
+                                .makeText(getApplicationContext(),
+                                        "You do not have permission to view this page", Toast.LENGTH_SHORT);
+                        toast.show();
+                    } else {
+                        navController.navigate(item.getItemId());
                     }
                     DrawerLayout drawer = findViewById(R.id.drawer_layout);
                     drawer.close();
