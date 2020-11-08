@@ -170,7 +170,7 @@ public class Sign_Up extends AppCompatActivity implements LocationListener {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG);
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                 Log.e("Sign Up", "Sign Up Failed");
                 Log.e("Sign Up", e.getMessage());
             }
