@@ -87,6 +87,8 @@ public class LeaderboardAdapter extends FirestoreAdapter<LeaderboardAdapter.View
                         binding.leaderboardRank.setText(String.valueOf(leaderboardPosition));
                         if(usersInfo.getProfileImage() != null && !usersInfo.getProfileImage().isEmpty()) {
                             Picasso.get().load(usersInfo.getProfileImage())
+                                    .resize(230, 230)
+                                    .onlyScaleDown().centerCrop()
                                     .into(binding.icon);
                         }
                         binding.userName.setText(usersInfo.getName());

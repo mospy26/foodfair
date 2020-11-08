@@ -64,6 +64,8 @@ public class ViewFoodItemAdapter extends FirestoreAdapter<ViewFoodItemAdapter.Vi
             Resources resources = itemView.getResources();
 
             Picasso.get().load(foodItemInfo.getImageDescription().get(0))
+                    .resize(230, 230)
+                    .onlyScaleDown().centerCrop()
                     .into(binding.foodPhoto);
             binding.foodNameFood.setText(foodItemInfo.getName());
             binding.quantity.setText("Quantity: " + foodItemInfo.getCount());

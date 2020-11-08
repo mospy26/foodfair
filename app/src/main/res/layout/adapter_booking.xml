@@ -88,7 +88,7 @@
                 android:layout_toRightOf="@+id/food_photo"
                 android:text="loading information 2" />-->
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/confirm_button_layout"
@@ -98,23 +98,23 @@
                 android:layout_marginTop="16dp">
 
                 <Button
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:id="@+id/booking_confirm_btn"
                     android:background="@drawable/ic_check_circle"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_weight="0.5"/>
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginHorizontal="25dp"/>
 
                 <Button
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:id="@+id/booking_decline_btn"
                     android:background="@drawable/ic_bin"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_weight="0.5"/>
+                    android:layout_alignParentRight="true"
+                    android:layout_marginHorizontal="25dp"/>
 
 
-            </LinearLayout>
+            </RelativeLayout>
 
             <TextView
                 android:layout_width="match_parent"

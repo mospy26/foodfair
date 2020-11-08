@@ -180,6 +180,8 @@ public class SettingFragment extends Fragment {
                 usersInfo = documentSnapshot.toObject(UsersInfo.class);
                 if(usersInfo != null) {
                     Picasso.get().load(usersInfo.getProfileImage())
+                            .resize(230, 230)
+                            .onlyScaleDown().centerCrop()
                             .into(profilePhoto);
                     profileInfo.setText("\n" + usersInfo.getName() + "\n\n" + usersInfo.getBio());
 

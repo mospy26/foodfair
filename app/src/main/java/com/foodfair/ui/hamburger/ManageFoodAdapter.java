@@ -114,6 +114,8 @@ public class ManageFoodAdapter extends FirestoreAdapter<ManageFoodAdapter.ViewHo
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         UsersInfo usersInfo = documentSnapshot.toObject(UsersInfo.class);
                         Picasso.get().load(usersInfo.getProfileImage())
+                                .resize(230, 230)
+                                .onlyScaleDown().centerCrop()
                                 .into(binding.profileImage);
                         String userRequest;
                         if(isAsDonor){
@@ -133,6 +135,8 @@ public class ManageFoodAdapter extends FirestoreAdapter<ManageFoodAdapter.ViewHo
                         FoodItemInfo foodItemInfo = documentSnapshot.toObject(FoodItemInfo.class);
                         if(foodItemInfo != null && foodItemInfo.getImageDescription().size() > 0){
                             Picasso.get().load(foodItemInfo.getImageDescription().get(0))
+                                    .resize(230, 230)
+                                    .onlyScaleDown().centerCrop()
                                     .into(binding.foodPhoto);
                         }
                         binding.foodNameFood.setText(foodItemInfo.getName());
