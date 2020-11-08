@@ -74,10 +74,6 @@ public class HistoryFragment extends Fragment implements
 
         mAdapterConsumer = new HistoryAdapter(mQueryConsumer, this, false);
 
-        mBinding.historyList.setHasFixedSize(true);
-        mBinding.historyList.setAdapter(mAdapterDonor);
-        mBinding.historyList.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         SharedPreferences sharedPreferences = getActivity()
                 .getSharedPreferences("foodfair", MODE_PRIVATE);
 
@@ -92,11 +88,17 @@ public class HistoryFragment extends Fragment implements
         if(userStatus.equals(0L)) {
             isAsDonor = true;
             mBinding.textHistory.setText("Donation History");
+            mBinding.historyList.setAdapter(mAdapterDonor);
         // STATUS_CHARITY can only consume
         } else if (userStatus.equals(2L)) {
             isAsDonor = false;
             mBinding.textHistory.setText("Consumption History");
+            mBinding.historyList.setAdapter(mAdapterConsumer);
+        } else {
+            mBinding.historyList.setAdapter(mAdapterDonor);
         }
+        mBinding.historyList.setHasFixedSize(true);
+        mBinding.historyList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mBinding.btnSwitch.setOnClickListener(new View.OnClickListener() {
             @Override

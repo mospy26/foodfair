@@ -74,9 +74,6 @@ public class ManageFoodFragment extends Fragment implements
 
         mAdapterDonor = new ManageFoodAdapter(mQueryDonor, this, true);
 
-        mBinding.bookingList.setAdapter(mAdapterConsumer);
-        mBinding.bookingList.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         SharedPreferences sharedPreferences = getActivity()
                 .getSharedPreferences("foodfair", MODE_PRIVATE);
 
@@ -90,12 +87,17 @@ public class ManageFoodFragment extends Fragment implements
         // STATUS_RESTAURANT can only donate
         if(userStatus.equals(0L)) {
             isAsDonor = true;
-            mBinding.textManageFood.setText("Your Bookings");
+            mBinding.textManageFood.setText("Your Pending Requests");
+            mBinding.bookingList.setAdapter(mAdapterDonor);
             // STATUS_CHARITY can only consume
         } else if (userStatus.equals(2L)) {
             isAsDonor = false;
-            mBinding.textManageFood.setText("Your Pending Requests");
+            mBinding.textManageFood.setText("Your Bookings");
+            mBinding.bookingList.setAdapter(mAdapterConsumer);
+        } else {
+            mBinding.bookingList.setAdapter(mAdapterConsumer);
         }
+        mBinding.bookingList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mBinding.btnSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
