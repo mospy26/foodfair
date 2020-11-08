@@ -89,18 +89,18 @@ public class HistoryAdapter extends FirestoreAdapter<HistoryAdapter.ViewHolder> 
                 binding.toFrom.setText("From");
                 binding.restaurantItemRating.setIsIndicator(false);
             }
-            binding.toFromPhoto.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                    Intent intent = new Intent(context, UserProfileActivity.class);
-//                    context.startActivity(intent);
-                    Fragment fragment = new ProfileFragment();
-                    AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                    activity.getSupportFragmentManager().beginTransaction().replace(
-                            R.id.drawer_layout, fragment).addToBackStack(null).commit();
-
-                }
-            });
+//            binding.toFromPhoto.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+////                    Intent intent = new Intent(context, UserProfileActivity.class);
+////                    context.startActivity(intent);
+//                    Fragment fragment = new ProfileFragment();
+//                    AppCompatActivity activity = (AppCompatActivity) v.getContext();
+//                    activity.getSupportFragmentManager().beginTransaction().replace(
+//                            R.id.drawer_layout, fragment).addToBackStack(null).commit();
+//
+//                }
+//            });
             // Firestore
             mFirestore = FirebaseFirestore.getInstance();
 

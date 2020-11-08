@@ -40,7 +40,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/food_name"
                 android:layout_toRightOf="@+id/food_photo"
-                android:text="loading information 2" />
+                android:text="loading information 2"
+                android:visibility="invisible"/>
 
             <TextView
                 android:layout_width="wrap_content"
