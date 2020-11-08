@@ -33,9 +33,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.model.Document;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class HistoryAdapter extends FirestoreAdapter<HistoryAdapter.ViewHolder> {
 
@@ -172,6 +175,7 @@ public class HistoryAdapter extends FirestoreAdapter<HistoryAdapter.ViewHolder> 
                         reviewInfo.setTransactionRef(snapshot.getReference());
                         reviewInfo.setTextReview(binding.reviewText.getText().toString());
                         reviewInfo.setRating(new Double(binding.restaurantItemRating.getRating()));
+                        reviewInfo.setImageReviews(new ArrayList<>());
                         binding.reviewText.setText("Submitting your review...");
                         binding.reviewText.setEnabled(false);
 
@@ -182,18 +186,65 @@ public class HistoryAdapter extends FirestoreAdapter<HistoryAdapter.ViewHolder> 
                                 public void onComplete(@NonNull Task<Void> task) {
                                     binding.reviewText.setText("");
                                     binding.reviewText.setEnabled(true);
+
                                 }
                             });
                         } else {
                             CollectionReference reviewCollection = mFirestore.collection("reviewInfo");
                             String id = reviewCollection.document().getId();
+                            DocumentReference reviewRef = reviewCollection.document(id);
                             reviewCollection.document(id).set(reviewInfo).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    // update review reference to transaction collection
-                                    snapshot.getReference().update("cdReview", reviewCollection.document(id));
-                                    binding.reviewText.setText("");
-                                    binding.reviewText.setEnabled(true);
+                                    if (task.isSuccessful()){
+                                        // update review reference to transaction collection
+                                        snapshot.getReference().update("cdReview", reviewRef);
+                                        binding.reviewText.setText("");
+                                        binding.reviewText.setEnabled(true);
+                                        transaction.getConsumer().get().addOnCompleteListener(consumerTask->{
+                                            if (consumerTask.isSuccessful()){
+                                                UsersInfo consumer = consumerTask.getResult().toObject(UsersInfo.class);
+                                                HashMap<String,Object> asConsumer = (HashMap<String, Object>) consumer.getAsConsumer();
+                                                String keyReview =
+                                                        context.getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_REVIEWS);
+                                                if (asConsumer == null){
+                                                    asConsumer = new HashMap<>();
+                                                    asConsumer.put(keyReview,new ArrayList<DocumentReference>());
+                                                }
+                                                ArrayList<DocumentReference> reviewRefs =
+                                                        (ArrayList)asConsumer.get(keyReview);
+                                                if (reviewRefs == null){
+                                                    reviewRefs = new ArrayList<>();
+                                                    asConsumer.put(keyReview,reviewRefs);
+                                                }
+                                                reviewRefs.add(reviewRef);
+                                                transaction.getConsumer().update(context.getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_KEY_AS_CONSUMER),asConsumer);
+                                            }
+                                        }) ;
+
+                                        transaction.getDonor().get().addOnCompleteListener(donorTask->{
+                                            if (donorTask.isSuccessful()){
+                                                UsersInfo donor = donorTask.getResult().toObject(UsersInfo.class);
+                                                HashMap<String,Object> asDonor =
+                                                        (HashMap<String, Object>) donor.getAsConsumer();
+                                                String keyReview =
+                                                        context.getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_REVIEWS);
+                                                if (asDonor == null){
+                                                    asDonor = new HashMap<>();
+                                                    asDonor.put(keyReview,new ArrayList<DocumentReference>());
+                                                }
+                                                ArrayList<DocumentReference> reviewRefs =
+                                                        (ArrayList)asDonor.get(keyReview);
+                                                if (reviewRefs == null){
+                                                    reviewRefs = new ArrayList<>();
+                                                    asDonor.put(keyReview,reviewRefs);
+                                                }
+                                                reviewRefs.add(reviewRef);
+                                                transaction.getDonor().update(context.getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_KEY_AS_DONOR),asDonor);
+                                            }
+                                        }) ;
+                                    }
+
                                 }
                             });
                         }

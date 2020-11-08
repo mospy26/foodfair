@@ -121,7 +121,7 @@ public class ProfileFragment extends Fragment {
     private void viewModelObserverSetup() {
         profileViewModel.currentUserInfo.observe(getViewLifecycleOwner(), currentUserInfo -> {
             View userBaseLayout = findViewById(R.id.userProfile_userBaseLayout);
-            if (userBaseLayout == null){
+            if (userBaseLayout == null) {
                 View view = LayoutInflater.from(getContext()).inflate(R.layout.user_profile_baseuser,
                         headLayout, false);
                 headLayout.addView(view);
@@ -138,7 +138,7 @@ public class ProfileFragment extends Fragment {
             profileViewModel.bio.setValue(currentUserInfo.getBio());
             profileViewModel.allergy.setValue((ArrayList<Long>) currentUserInfo.getAllergy());
             profileViewModel.preference.setValue(currentUserInfo.getPreference());
-                profileViewModel.location.setValue(currentUserInfo.getLocation().toString());
+            profileViewModel.location.setValue(currentUserInfo.getLocation().toString());
             profileViewModel.joinDate.setValue(currentUserInfo.getJoinDate());
             profileViewModel.lastLoginDate.setValue(currentUserInfo.getLastLogin());
 
@@ -146,7 +146,7 @@ public class ProfileFragment extends Fragment {
             Map<String, Object> asConsumer = currentUserInfo.getAsConsumer();
             if (asConsumer != null) {
                 View wholeAsConsumerLayout = findViewById(R.id.userProfile_wholeAsConsumer);
-                if (wholeAsConsumerLayout == null){
+                if (wholeAsConsumerLayout == null) {
                     View view = LayoutInflater.from(getContext()).inflate(R.layout.user_profile_consumer,
                             headLayout, false);
                     headLayout.addView(view);
@@ -158,15 +158,17 @@ public class ProfileFragment extends Fragment {
                 profileViewModel.asConsumerTotalReviewCount.setValue(reviews.size());
                 ArrayList<Number> consumerBadges =
                         (ArrayList<Number>) asConsumer.get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_BADGES));
-                profileViewModel.asConsumerGotBadgeCount.setValue(consumerBadges.size());
-                profileViewModel.asConsumerBadges.setValue(consumerBadges);
+                if (consumerBadges != null){
+                    profileViewModel.asConsumerGotBadgeCount.setValue(consumerBadges.size());
+                    profileViewModel.asConsumerBadges.setValue(consumerBadges);
+                }
             }
 
             // as donor
             HashMap<String, Object> asDonor = (HashMap<String, Object>) currentUserInfo.getAsDonor();
             if (asDonor != null) {
                 View wholeAsDonorLayout = findViewById(R.id.userProfile_wholeAsDonor);
-                if (wholeAsDonorLayout == null){
+                if (wholeAsDonorLayout == null) {
                     View view = LayoutInflater.from(getContext()).inflate(R.layout.user_profile_donor,
                             headLayout, false);
                     headLayout.addView(view);
@@ -220,7 +222,7 @@ public class ProfileFragment extends Fragment {
 
         // ---------
         profileViewModel.profileImageUrl.observe(getViewLifecycleOwner(), profileImageUrl -> {
-            if (profileImageUrl != null){
+            if (profileImageUrl != null) {
                 Picasso.get().load(profileImageUrl).into(profileCircleImageView);
             }
         });
@@ -228,13 +230,13 @@ public class ProfileFragment extends Fragment {
             nameTextView.setText(name);
         });
         profileViewModel.type.observe(getViewLifecycleOwner(), type -> {
-            if (type.equals(0L)){
+            if (type.equals(0L)) {
                 typeTextView.setText("Restaurant");
             }
-            if (type.equals(1L)){
+            if (type.equals(1L)) {
                 typeTextView.setText("User");
             }
-            if (type.equals(2L)){
+            if (type.equals(2L)) {
                 typeTextView.setText("Charity");
             }
         });
@@ -523,8 +525,8 @@ public class ProfileFragment extends Fragment {
         reviewsDateTextView = findViewById(R.id.userProfile_reviewsDateTextView);
         reviewsRatingBar = findViewById(R.id.userProfile_reviewsRatingBar);
         reviewsTextReviewTextView = findViewById(R.id.userProfile_reviewsTextReviewTextView);
-        if (reviewsImageShapeableImageViews.isEmpty()){
-            if (findViewById(R.id.userProfile_reviewsImageReviewShapeableImageView1) != null){
+        if (reviewsImageShapeableImageViews.isEmpty()) {
+            if (findViewById(R.id.userProfile_reviewsImageReviewShapeableImageView1) != null) {
                 reviewsImageShapeableImageViews.add(findViewById(R.id.userProfile_reviewsImageReviewShapeableImageView1));
                 reviewsImageShapeableImageViews.add(findViewById(R.id.userProfile_reviewsImageReviewShapeableImageView2));
                 reviewsImageShapeableImageViews.add(findViewById(R.id.userProfile_reviewsImageReviewShapeableImageView3));
@@ -542,8 +544,8 @@ public class ProfileFragment extends Fragment {
         donorOnShelfFoodNameTextView = findViewById(R.id.userProfile_donorOnShelfFoodNameTextView);
         donorOnShelfDateOnTextView = findViewById(R.id.userProfile_donorOnShelfDateOnTextView);
         donorOnShelfDateExpireTextView = findViewById(R.id.userProfile_donorOnShelfDateExpireTextView);
-        if (donorOnShelfFoodImageShapeableImageViews.isEmpty()){
-            if (findViewById(R.id.userProfile_donorOnShelfFoodImageImageView1) != null){
+        if (donorOnShelfFoodImageShapeableImageViews.isEmpty()) {
+            if (findViewById(R.id.userProfile_donorOnShelfFoodImageImageView1) != null) {
                 donorOnShelfFoodImageShapeableImageViews.add(findViewById(R.id.userProfile_donorOnShelfFoodImageImageView1));
                 donorOnShelfFoodImageShapeableImageViews.add(findViewById(R.id.userProfile_donorOnShelfFoodImageImageView2));
                 donorOnShelfFoodImageShapeableImageViews.add(findViewById(R.id.userProfile_donorOnShelfFoodImageImageView3));
@@ -559,8 +561,8 @@ public class ProfileFragment extends Fragment {
         ;
         donorReviewedItemReviewedDateTextView = findViewById(R.id.userProfile_donorReviewedItemReviewedDateTextView);
         donorReviewedItemRatingBar = findViewById(R.id.userProfile_donorReviewedItemRatingBar);
-        if (donorReviewedItemImageShapeableImageViews.isEmpty()){
-            if (findViewById(R.id.userProfile_donorReviewedItemFoodImageImageView1) != null){
+        if (donorReviewedItemImageShapeableImageViews.isEmpty()) {
+            if (findViewById(R.id.userProfile_donorReviewedItemFoodImageImageView1) != null) {
                 donorReviewedItemImageShapeableImageViews.add(findViewById(R.id.userProfile_donorReviewedItemFoodImageImageView1));
                 donorReviewedItemImageShapeableImageViews.add(findViewById(R.id.userProfile_donorReviewedItemFoodImageImageView2));
                 donorReviewedItemImageShapeableImageViews.add(findViewById(R.id.userProfile_donorReviewedItemFoodImageImageView3));
@@ -577,13 +579,13 @@ public class ProfileFragment extends Fragment {
 
     private void fetchDBInfo(String userId) {
         UsersInfo usersInfoCached = (UsersInfo) cache.getStoredObject(userId);
-        if (usersInfoCached == null){
+        if (usersInfoCached == null) {
             FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO)).document(userId).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         UsersInfo usersInfo = document.toObject(UsersInfo.class);
-                        cache.add(userId,usersInfo);
+                        cache.add(userId, usersInfo);
                         setUserProfileUI(usersInfo);
                         Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                     } else {
@@ -593,75 +595,80 @@ public class ProfileFragment extends Fragment {
                     int k = 1;
                 }
             });
-        }else{
+        } else {
             setUserProfileUI(usersInfoCached);
         }
     }
-    private void setConsumerReviewFoodInfoUI(ReviewInfo reviewInfo){
+
+    private void setConsumerReviewFoodInfoUI(ReviewInfo reviewInfo) {
         DocumentReference food = reviewInfo.getFoodRef();
         String foodId = food.getId();
         FoodItemInfo foodItemInfoCached = (FoodItemInfo) cache.getStoredObject(foodId);
-        if (foodItemInfoCached == null){
+        if (foodItemInfoCached == null) {
             food.get().addOnCompleteListener(foodTask -> {
                 if (foodTask.isSuccessful()) {
-                    FoodItemInfo foodItemInfo =foodTask.getResult().toObject(FoodItemInfo.class);
-                    cache.add(foodId,foodItemInfo);
+                    FoodItemInfo foodItemInfo = foodTask.getResult().toObject(FoodItemInfo.class);
+                    cache.add(foodId, foodItemInfo);
                     profileViewModel.consumerReviewFoodInfo.setValue(foodItemInfo);
                 }
             });
-        }else {
+        } else {
             profileViewModel.consumerReviewFoodInfo.setValue(foodItemInfoCached);
         }
     }
+
     private void setDonorReviewFoodInfoUI(ReviewInfo reviewInfo) {
         DocumentReference documentReference = reviewInfo.getFoodRef();
         String foodId = documentReference.getId();
-        FoodItemInfo foodItemInfoCached = (FoodItemInfo)cache.getStoredObject(foodId);
-        if (foodItemInfoCached == null){
+        FoodItemInfo foodItemInfoCached = (FoodItemInfo) cache.getStoredObject(foodId);
+        if (foodItemInfoCached == null) {
             documentReference.get().addOnCompleteListener(foodTask -> {
                 if (foodTask.isSuccessful()) {
                     FoodItemInfo foodItemInfo = foodTask.getResult().toObject(FoodItemInfo.class);
-                    cache.add(foodId,foodItemInfo);
+                    cache.add(foodId, foodItemInfo);
                     profileViewModel.donorReviewedFoodInfo.setValue(foodItemInfo);
                 }
             });
-        }else {
+        } else {
             profileViewModel.donorReviewedFoodInfo.setValue(foodItemInfoCached);
         }
     }
-    private void setDonorReviewUserInfoUI(ReviewInfo reviewInfo){
+
+    private void setDonorReviewUserInfoUI(ReviewInfo reviewInfo) {
         DocumentReference userRef = reviewInfo.getFromUser();
         String userId = userRef.getId();
-        UsersInfo usersInfoCached = (UsersInfo)cache.getStoredObject(userId);
-        if (usersInfoCached == null){
+        UsersInfo usersInfoCached = (UsersInfo) cache.getStoredObject(userId);
+        if (usersInfoCached == null) {
             userRef.get().addOnCompleteListener(userTask -> {
                 if (userTask.isSuccessful()) {
                     UsersInfo usersInfo = userTask.getResult().toObject(UsersInfo.class);
-                    cache.add(userId,usersInfo);
+                    cache.add(userId, usersInfo);
                     profileViewModel.donorReviewedUserInfo.setValue(usersInfo);
                 }
             });
-        }else{
+        } else {
             profileViewModel.donorReviewedUserInfo.setValue(usersInfoCached);
         }
     }
-    private void setConsumerReviewDonorUserInfoUI(ReviewInfo reviewInfo){
+
+    private void setConsumerReviewDonorUserInfoUI(ReviewInfo reviewInfo) {
         DocumentReference donor =
                 reviewInfo.getToUser();
         String donorId = donor.getId();
         UsersInfo donorInfoCached = (UsersInfo) cache.getStoredObject(donorId);
-        if (donorInfoCached == null){
+        if (donorInfoCached == null) {
             donor.get().addOnCompleteListener(donorTask -> {
                 if (donorTask.isSuccessful()) {
                     UsersInfo donorInfo = donorTask.getResult().toObject(UsersInfo.class);
-                    cache.add(donorId,donorInfo);
+                    cache.add(donorId, donorInfo);
                     profileViewModel.consumerReviewDonorUserInfo.setValue(donorInfo);
                 }
             });
-        }else{
+        } else {
             profileViewModel.consumerReviewDonorUserInfo.setValue(donorInfoCached);
         }
     }
+
     private void setUserProfileUI(UsersInfo usersInfo) {
         profileViewModel.currentUserInfo.setValue(usersInfo);
         // -- as Consumer --
@@ -673,19 +680,19 @@ public class ProfileFragment extends Fragment {
             if (reviews.size() > 0) {
                 DocumentReference lastReviewRef = reviews.get(reviews.size() - 1);
                 String reviewId = lastReviewRef.getId();
-                ReviewInfo reviewInfoCached = (ReviewInfo)cache.getStoredObject(reviewId);
-                if (reviewInfoCached == null){
+                ReviewInfo reviewInfoCached = (ReviewInfo) cache.getStoredObject(reviewId);
+                if (reviewInfoCached == null) {
                     lastReviewRef.get().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             // In review document
                             ReviewInfo reviewInfo = task.getResult().toObject(ReviewInfo.class);
-                            cache.add(reviewId,reviewInfo);
+                            cache.add(reviewId, reviewInfo);
                             profileViewModel.consumerReviewInfo.setValue(reviewInfo);
                             setConsumerReviewFoodInfoUI(reviewInfo);
                             setConsumerReviewDonorUserInfoUI(reviewInfo);
                         }
                     });
-                }else{
+                } else {
                     profileViewModel.consumerReviewInfo.setValue(reviewInfoCached);
                     setConsumerReviewFoodInfoUI(reviewInfoCached);
                     setConsumerReviewDonorUserInfoUI(reviewInfoCached);
@@ -704,15 +711,17 @@ public class ProfileFragment extends Fragment {
                 DocumentReference docRef = itemsOnShelf.get(itemsOnShelf.size() - 1);
                 String itemId = docRef.getId();
                 FoodItemInfo itemInfoCached = (FoodItemInfo) cache.getStoredObject(itemId);
-                if (itemInfoCached == null){
+                if (itemInfoCached == null) {
                     docRef.get().addOnCompleteListener(foodTask -> {
                         if (foodTask.isSuccessful()) {
                             FoodItemInfo foodItemInfo = foodTask.getResult().toObject(FoodItemInfo.class);
-                            cache.add(itemId,foodItemInfo);
-                            profileViewModel.donorOnShelfFoodInfo.setValue(foodItemInfo);
+                            cache.add(itemId, foodItemInfo);
+                            if (foodItemInfo != null) {
+                                profileViewModel.donorOnShelfFoodInfo.setValue(foodItemInfo);
+                            }
                         }
                     });
-                }else {
+                } else {
                     profileViewModel.donorOnShelfFoodInfo.setValue(itemInfoCached);
                 }
             }
@@ -724,11 +733,11 @@ public class ProfileFragment extends Fragment {
                 DocumentReference docRef = itemsReviewed.get(itemsReviewed.size() - 1);
                 String itemId = docRef.getId();
                 ReviewInfo reviewInfoCached = (ReviewInfo) cache.getStoredObject(itemId);
-                if (reviewInfoCached == null){
+                if (reviewInfoCached == null) {
                     docRef.get().addOnCompleteListener(reviewedItemTask -> {
                         if (reviewedItemTask.isSuccessful()) {
                             ReviewInfo reviewInfo = reviewedItemTask.getResult().toObject(ReviewInfo.class);
-                            cache.add(itemId,reviewInfo);
+                            cache.add(itemId, reviewInfo);
                             profileViewModel.donorReviewedInfo.setValue(reviewInfo);
 
                             setDonorReviewUserInfoUI(reviewInfoCached);
@@ -737,7 +746,7 @@ public class ProfileFragment extends Fragment {
 
                         }
                     });
-                }else {
+                } else {
                     profileViewModel.donorReviewedInfo.setValue(reviewInfoCached);
                     setDonorReviewUserInfoUI(reviewInfoCached);
                     setDonorReviewFoodInfoUI(reviewInfoCached);
