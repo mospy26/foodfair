@@ -740,8 +740,8 @@ public class ProfileFragment extends Fragment {
                             cache.add(itemId, reviewInfo);
                             profileViewModel.donorReviewedInfo.setValue(reviewInfo);
 
-                            setDonorReviewUserInfoUI(reviewInfoCached);
-                            setDonorReviewFoodInfoUI(reviewInfoCached);
+                            setDonorReviewUserInfoUI(reviewInfo);
+                            setDonorReviewFoodInfoUI(reviewInfo);
 
 
                         }
