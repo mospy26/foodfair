@@ -101,11 +101,12 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if(item.getItemId() == R.id.nav_user_profile ||
                     item.getItemId() == R.id.nav_settings ||
                     item.getItemId() == R.id.nav_history_of_items ||
+                    item.getItemId() == R.id.nav_view_food_postings ||
                     item.getItemId() == R.id.nav_manage_food_bookings) {
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     if(user != null){
                         navController.navigate(item.getItemId());
                     } else {
@@ -116,9 +117,18 @@ public class MainActivity extends AppCompatActivity {
                     DrawerLayout drawer = findViewById(R.id.drawer_layout);
                     drawer.close();
                 } else if(item.getItemId() == R.id.nav_qr_scanner) {
-                    Intent intent = new Intent(getApplicationContext(), QRScanner.class);
-                    // Could be startActivityForResult or something
-                    startActivity(intent);
+                    if(user != null){
+                        Intent intent = new Intent(getApplicationContext(), QRScanner.class);
+                        // Could be startActivityForResult or something
+                        startActivity(intent);
+                    } else {
+                        Toast toast = new Toast(getApplicationContext())
+                                .makeText(getApplicationContext(), "Please sign in", Toast.LENGTH_SHORT);
+                        toast.show();
+                        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                        drawer.close();
+                    }
+
                 } else {
                     navController.navigate(item.getItemId());
                     DrawerLayout drawer = findViewById(R.id.drawer_layout);
