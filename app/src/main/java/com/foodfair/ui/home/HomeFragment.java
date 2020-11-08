@@ -18,12 +18,12 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.foodfair.FoodPostingHolder;
 import com.foodfair.R;
-import com.foodfair.databinding.FragmentHomeBinding;
 import com.foodfair.model.FoodItemInfo;
 import com.foodfair.ui.foodpages.FoodDetailActivity;
 import com.foodfair.ui.foodpages.MapViewActivity;
 import com.foodfair.ui.foodpages.PostFoodActivity;
 import com.foodfair.ui.login.Sign_Up;
+import com.foodfair.utilities.FoodPostingAdapter;
 import com.foodfair.utilities.Utility;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -33,45 +33,51 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
-public class HomeFragment extends Fragment implements
-    HomeAdapter.OnHomeItemSelectedListener, View.OnClickListener {
+import java.util.ArrayList;
+import java.util.List;
 
-//    private HomeViewModel homeViewModel;
-//    private FirebaseFirestore dbReference;
-//    private FirestoreRecyclerAdapter adapter;
-//    private RecyclerView recyclerView;
+public class HomeFragment extends Fragment {
 
-    private FragmentHomeBinding mBinding;
+    private HomeViewModel homeViewModel;
+    private FirebaseFirestore dbReference;
+    private FirestoreRecyclerAdapter adapter;
+    private RecyclerView recyclerView;
 
-    private HomeAdapter mAdapter;
-    private FirebaseFirestore mFirestore;
-    private Query mQuery;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        homeViewModel =
+                ViewModelProviders.of(this).get(HomeViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        recyclerView = root.findViewById(R.id.list);
+        System.out.println(recyclerView);
+        dbReference = FirebaseFirestore.getInstance();
 
-        mBinding = FragmentHomeBinding.inflate(getLayoutInflater());
-        // Enable Firestore logging
-        FirebaseFirestore.setLoggingEnabled(true);
+        // Queries items where status is "1" and the count is greater than 0
 
-        // Firestore
-        mFirestore = FirebaseFirestore.getInstance();
-
-        // TODO: @Sadman, add more criteria here and order by if you can. 
-        mQuery = mFirestore.collection("foodItemInfo")
-                .whereGreaterThan("count", 0);
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+       DocumentReference df = dbReference.collection("usersInfo").document("XWNQVbEdFKWbGOnok7wgMARYXgp2");
 
 
-        mAdapter = new HomeAdapter(mQuery, this);
+       FoodItemInfo n = new FoodItemInfo();
+       n.setName("LOL");
 
-        //recyclerView.setHasFixedSize(true);
-        mBinding.list.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
-        mBinding.list.setAdapter(mAdapter);
+       List<FoodItemInfo> fd = new ArrayList<>();
+       fd.add(n);
 
-        fabStuff(mBinding.getRoot());
-        return mBinding.getRoot();
+       recyclerView.setHasFixedSize(true);
+       recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+       FoodPostingAdapter adapt = new FoodPostingAdapter(getContext());
+
+       recyclerView.setAdapter(adapt);
+
+
+
+        return root;
     }
 
     private void fabStuff(View root) {
@@ -95,31 +101,5 @@ public class HomeFragment extends Fragment implements
         });
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if(mAdapter != null){
-            mAdapter.startListening();
-        }
-    }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        if(mAdapter != null){
-            mAdapter.stopListening();
-        }
-    }
-
-    @Override
-    public void onHomeItemSelected(DocumentSnapshot snapshot) {
-        Intent intent = new Intent(getContext(), FoodDetailActivity.class);
-                    intent.putExtra("foodId", snapshot.getReference().getId());
-                    startActivity(intent);
-    }
-
-    @Override
-    public void onClick(View v) {
-
-    }
 }
