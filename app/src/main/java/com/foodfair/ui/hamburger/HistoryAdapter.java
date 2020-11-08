@@ -145,6 +145,24 @@ public class HistoryAdapter extends FirestoreAdapter<HistoryAdapter.ViewHolder> 
                     }
                 });
 
+                transaction.getCdReview().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        ReviewInfo reviewInfo = documentSnapshot.toObject(ReviewInfo.class);
+                        if (reviewInfo!=null){
+                            Double rating = reviewInfo.getRating();
+                            if (rating!=null){
+                                binding.restaurantItemRating.setRating(rating.floatValue());
+                            }
+
+                            String textDescription = reviewInfo.getTextReview();
+                            if (textDescription != null){
+                                binding.reviewText.setText(textDescription);
+                            }
+                        }
+                    }
+                });
+
                 DocumentReference userRef;
                 if(isAsDonor){
                     userRef = transaction.getConsumer();
