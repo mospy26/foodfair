@@ -77,8 +77,8 @@ public class ViewFoodItemAdapter extends FirestoreAdapter<ViewFoodItemAdapter.Vi
                     }
 //                    Intent intent =  new Intent(context, UserProfileActivity.class);
                     // get user id information and send before starting
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    String userId = user.getUid();
+//                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//                    String userId = user.getUid();
 //                    intent.putExtra("userId", userId);
 //                    context.startActivity(intent);
                 }

@@ -7,12 +7,10 @@
     android:layout_height="300dp"
     android:layout_margin="20dp"
     android:elevation="300dp"
-    android:focusableInTouchMode="true"
     app:cardBackgroundColor="#FFE8C2"
     android:background="?android:attr/selectableItemBackground"
     app:cardCornerRadius="5dp"
     android:foreground="?android:attr/selectableItemBackground"
-    android:clickable="true"
     app:cardElevation="40dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,6 +24,9 @@
             android:fontFamily="@font/museo"
             android:text="Title of Food"
             android:typeface="normal"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +40,7 @@
             android:fontFamily="@font/museo"
             android:text="Posted By:"
             android:typeface="normal"
+            android:layout_marginStart="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/postedDate"
             app:layout_constraintHorizontal_bias="0.055"
@@ -53,6 +55,7 @@
             android:fontFamily="@font/museo"
             android:text="Date:"
             android:typeface="normal"
+            android:layout_marginStart="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -62,13 +65,13 @@
 
         <ImageView
             android:id="@+id/foodImage"
-            android:layout_width="294dp"
-            android:layout_height="202dp"
+            android:layout_width="230dp"
+            android:layout_height="230dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.336"
+            app:layout_constraintVertical_bias="0.55"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

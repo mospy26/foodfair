@@ -59,9 +59,9 @@ public class ManageFoodFragment extends Fragment implements
 
         mQueryConsumer = mFirestore.collection(
                 getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_TRANSACTION))
-                .whereEqualTo(FooditemTransaction.FIELD_CONSUMER, userCriteria)
-                .whereEqualTo(FooditemTransaction.FIELD_STATUS,
-                        Const.getInstance().TRANSACTION_STATUS.get("booked"));
+                .whereEqualTo(FooditemTransaction.FIELD_CONSUMER, userCriteria);
+//                .whereEqualTo(FooditemTransaction.FIELD_STATUS,
+//                        Const.getInstance().TRANSACTION_STATUS.get("booked"));
 
         mAdapterConsumer = new ManageFoodAdapter(mQueryConsumer, this, false);
 
@@ -130,11 +130,6 @@ public class ManageFoodFragment extends Fragment implements
 
     @Override
     public void onManageFoodSelected(DocumentSnapshot snapshot) {
-        if(!isAsDonor){
-            Intent intent = new Intent(getContext(), BookSuccessActivity.class);
-            intent.putExtra("transactionId", snapshot.getReference().getId());
-            startActivity(intent);
-        }
 
     }
 }

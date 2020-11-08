@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.foodfair.databinding.FragmentLeaderboardBinding;
+import com.foodfair.utilities.Utility;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -43,11 +44,14 @@ public class LeaderboardFragment extends Fragment implements
         // Firestore
         mFirestore = FirebaseFirestore.getInstance();
 
+        String leaderboardPeriodFormat = "yyyyMM";
+        String currentPeriod = Utility.getCurrentTimeStr(leaderboardPeriodFormat);
+
         // Get monthly leaderboard
         mQueryMonthly = mFirestore.collection(("leaderboard"))
-                .document("period 1")
+                .document(currentPeriod)
                 .collection("ranking")
-                .orderBy("position", Query.Direction.ASCENDING)
+                .orderBy("score", Query.Direction.DESCENDING)
                 .limit(10);
 
         mAdapterMonthly = new LeaderboardAdapter(mQueryMonthly, this){
@@ -73,7 +77,7 @@ public class LeaderboardFragment extends Fragment implements
         mQueryAllTime = mFirestore.collection(("leaderboard"))
                 .document("total")
                 .collection("ranking")
-                .orderBy("position", Query.Direction.DESCENDING)
+                .orderBy("score", Query.Direction.DESCENDING)
                 .limit(10);
 
         mAdapterAllTime = new LeaderboardAdapter(mQueryAllTime, this);
