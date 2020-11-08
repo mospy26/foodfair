@@ -55,7 +55,7 @@ public class LeaderboardAdapter extends FirestoreAdapter<LeaderboardAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(getSnapshot(position), mListener);
+        holder.bind(getSnapshot(position), mListener, position);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -73,7 +73,8 @@ public class LeaderboardAdapter extends FirestoreAdapter<LeaderboardAdapter.View
         }
 
         public void bind(final DocumentSnapshot snapshot,
-                         final OnLeaderboardSelectListener listener) {
+                         final OnLeaderboardSelectListener listener,
+                         int leaderboardPosition) {
             Ranking ranking = snapshot.toObject(Ranking.class);
             Resources resources = itemView.getResources();
 
@@ -83,11 +84,15 @@ public class LeaderboardAdapter extends FirestoreAdapter<LeaderboardAdapter.View
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     UsersInfo usersInfo = documentSnapshot.toObject(UsersInfo.class);
                     if(usersInfo != null){
-                        binding.leaderboardRank.setText(ranking.getPosition().toString());
-                        Picasso.get().load(usersInfo.getProfileImage())
-                                .into(binding.icon);
+                        binding.leaderboardRank.setText(String.valueOf(leaderboardPosition));
+                        if(usersInfo.getProfileImage() != null && !usersInfo.getProfileImage().isEmpty()) {
+                            Picasso.get().load(usersInfo.getProfileImage())
+                                    .into(binding.icon);
+                        }
                         binding.userName.setText(usersInfo.getName());
                         binding.userBio.setText(usersInfo.getBio());
+                        binding.donationCount.setText("Total Donations: " + ranking.getDonationCount());
+                        binding.donationScore.setText("Score: " + ranking.getScore());
                     } else {
                         // TODO: Error messages
                     }

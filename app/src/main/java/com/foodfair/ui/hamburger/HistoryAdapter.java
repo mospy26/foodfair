@@ -172,11 +172,18 @@ public class HistoryAdapter extends FirestoreAdapter<HistoryAdapter.ViewHolder> 
                         reviewInfo.setTransactionRef(snapshot.getReference());
                         reviewInfo.setTextReview(binding.reviewText.getText().toString());
                         reviewInfo.setRating(new Double(binding.restaurantItemRating.getRating()));
-                        binding.reviewText.setText("");
+                        binding.reviewText.setText("Submitting your review...");
+                        binding.reviewText.setEnabled(false);
 
 
                         if(transaction.getCdReview() != null){
-                            transaction.getCdReview().set(reviewInfo);
+                            transaction.getCdReview().set(reviewInfo).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    binding.reviewText.setText("");
+                                    binding.reviewText.setEnabled(true);
+                                }
+                            });
                         } else {
                             CollectionReference reviewCollection = mFirestore.collection("reviewInfo");
                             String id = reviewCollection.document().getId();
@@ -185,6 +192,8 @@ public class HistoryAdapter extends FirestoreAdapter<HistoryAdapter.ViewHolder> 
                                 public void onComplete(@NonNull Task<Void> task) {
                                     // update review reference to transaction collection
                                     snapshot.getReference().update("cdReview", reviewCollection.document(id));
+                                    binding.reviewText.setText("");
+                                    binding.reviewText.setEnabled(true);
                                 }
                             });
                         }

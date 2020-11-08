@@ -41,7 +41,7 @@
         <activity
             android:name=".ui.book_success.BookSuccessActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_login"
+            android:label="@string/title_book_success"
             android:theme="@style/FullscreenTheme" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

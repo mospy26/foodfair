@@ -13,10 +13,6 @@
             android:icon="@drawable/ic_menu_profile"
             android:title="@string/menu_user_profile" />
         <item
-            android:id="@+id/nav_history_of_items"
-            android:icon="@drawable/ic_menu_history"
-            android:title="@string/menu_history_of_items" />
-        <item
             android:id="@+id/nav_leaderboards"
             android:icon="@drawable/ic_menu_leaderboard"
             android:title="@string/menu_leaderboards" />
@@ -28,6 +24,10 @@
             android:id="@+id/nav_view_food_postings"
             android:icon="@drawable/ic_menu_cart"
             android:title="@string/menu_view_food_postings" />
+        <item
+            android:id="@+id/nav_history_of_items"
+            android:icon="@drawable/ic_menu_history"
+            android:title="@string/menu_history_of_items" />
         <item
             android:id="@+id/nav_qr_scanner"
             android:icon="@drawable/ic_qr_scanner"

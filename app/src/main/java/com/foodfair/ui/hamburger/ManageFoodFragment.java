@@ -61,7 +61,7 @@ public class ManageFoodFragment extends Fragment implements
                 getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_TRANSACTION))
                 .whereEqualTo(FooditemTransaction.FIELD_CONSUMER, userCriteria)
                 .whereEqualTo(FooditemTransaction.FIELD_STATUS,
-                        Const.getInstance().TRANSACTION_STATUS.get("booked"));
+                        Const.getInstance().TRANSACTION_STATUS.get("Booked"));
 
         mAdapterConsumer = new ManageFoodAdapter(mQueryConsumer, this, false);
 
@@ -69,7 +69,7 @@ public class ManageFoodFragment extends Fragment implements
                 getResources().getString(R.string.FIREBASE_COLLECTION_FOOD_ITEM_TRANSACTION))
                 .whereEqualTo(FooditemTransaction.FIELD_DONOR, userCriteria)
                 .whereEqualTo(FooditemTransaction.FIELD_STATUS,
-                        Const.getInstance().TRANSACTION_STATUS.get("booked"));
+                        Const.getInstance().TRANSACTION_STATUS.get("Booked"));
 
         mAdapterDonor = new ManageFoodAdapter(mQueryDonor, this, true);
 
@@ -130,11 +130,6 @@ public class ManageFoodFragment extends Fragment implements
 
     @Override
     public void onManageFoodSelected(DocumentSnapshot snapshot) {
-        if(!isAsDonor){
-            Intent intent = new Intent(getContext(), BookSuccessActivity.class);
-            intent.putExtra("transactionId", snapshot.getReference().getId());
-            startActivity(intent);
-        }
 
     }
 }

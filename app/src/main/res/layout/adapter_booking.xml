@@ -80,20 +80,20 @@
                 android:textSize="20sp"
                 android:text="Loading information..."/>
 
-            <TextView
+            <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/quantity"
                 android:layout_below="@+id/food_name_food"
                 android:layout_toRightOf="@+id/food_photo"
-                android:text="loading information 2" />
+                android:text="loading information 2" />-->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/confirm_button_layout"
                 android:orientation="horizontal"
-                android:layout_below="@id/quantity"
+                android:layout_below="@id/food_name_food"
                 android:layout_toRightOf="@id/food_photo"
                 android:layout_marginTop="16dp">
 
@@ -101,14 +101,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/booking_confirm_btn"
-                    android:layout_marginHorizontal="20dp"
+                    android:background="@drawable/ic_check_circle"
+                    android:layout_marginHorizontal="10dp"
                     android:layout_weight="0.5"/>
 
                 <Button
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/booking_decline_btn"
-                    android:layout_marginHorizontal="20dp"
+                    android:background="@drawable/ic_bin"
+                    android:layout_marginHorizontal="10dp"
                     android:layout_weight="0.5"/>
 
 
@@ -119,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/confirm_text"
                 android:orientation="horizontal"
-                android:layout_below="@id/quantity"
+                android:layout_below="@id/food_name_food"
                 android:layout_toRightOf="@id/food_photo"
                 android:layout_marginTop="16dp"
                 android:text="Accepted"/>

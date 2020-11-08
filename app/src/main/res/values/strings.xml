@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">foodfair</string>
+    <string name="app_name">Food Fair</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -82,6 +82,7 @@
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_login">FullscreenActivity</string>
     <string name="title_activity_sign__up">FullscreenActivity</string>
+    <string name="title_book_success">Booking confirmed!</string>
 
     <!--    Firebase account  -->
     <string name="firebase_email">tom@gmail.com</string>
