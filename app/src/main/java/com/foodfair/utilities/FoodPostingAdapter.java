@@ -109,7 +109,7 @@ public class FoodPostingAdapter extends   RecyclerView.Adapter<FoodPostingAdapte
 
         holder.foodName.setText(items.get(position).getName());
         holder.foodPostedDate.setText("Expires " + Utility.timeStampToDateString(items.get(position).getDateExpire()));
-        holder.whenWasFoodPosted.setText("Posted on " + Utility.timeStampToDateString(items.get(position).getDateOn()));
+        //holder.whenWasFoodPosted.setText("Posted on " + Utility.timeStampToDateString(items.get(position).getDateOn()));
 
         DocumentReference ref = items.get(position).getDonorRef();
         ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -161,7 +161,7 @@ public class FoodPostingAdapter extends   RecyclerView.Adapter<FoodPostingAdapte
             foodPostedDate = itemView.findViewById(R.id.postedDate);
             foodImage = itemView.findViewById(R.id.foodImage);
             foodPostedBy = itemView.findViewById(R.id.userPosted);
-            whenWasFoodPosted = itemView.findViewById(R.id.postedDate2);
+            //whenWasFoodPosted = itemView.findViewById(R.id.postedDate2);
         }
     }
 
