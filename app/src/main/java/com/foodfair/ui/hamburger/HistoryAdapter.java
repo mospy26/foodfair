@@ -144,24 +144,25 @@ public class HistoryAdapter extends FirestoreAdapter<HistoryAdapter.ViewHolder> 
 
                     }
                 });
+                if (transaction.getCdReview() != null){
+                    transaction.getCdReview().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            ReviewInfo reviewInfo = documentSnapshot.toObject(ReviewInfo.class);
+                            if (reviewInfo!=null){
+                                Double rating = reviewInfo.getRating();
+                                if (rating!=null){
+                                    binding.restaurantItemRating.setRating(rating.floatValue());
+                                }
 
-                transaction.getCdReview().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        ReviewInfo reviewInfo = documentSnapshot.toObject(ReviewInfo.class);
-                        if (reviewInfo!=null){
-                            Double rating = reviewInfo.getRating();
-                            if (rating!=null){
-                                binding.restaurantItemRating.setRating(rating.floatValue());
-                            }
-
-                            String textDescription = reviewInfo.getTextReview();
-                            if (textDescription != null){
-                                binding.reviewText.setText(textDescription);
+                                String textDescription = reviewInfo.getTextReview();
+                                if (textDescription != null){
+                                    binding.reviewText.setText(textDescription);
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                }
 
                 DocumentReference userRef;
                 if(isAsDonor){
@@ -244,7 +245,7 @@ public class HistoryAdapter extends FirestoreAdapter<HistoryAdapter.ViewHolder> 
                                             if (donorTask.isSuccessful()){
                                                 UsersInfo donor = donorTask.getResult().toObject(UsersInfo.class);
                                                 HashMap<String,Object> asDonor =
-                                                        (HashMap<String, Object>) donor.getAsConsumer();
+                                                        (HashMap<String, Object>) donor.getAsDonor();
                                                 String keyReview =
                                                         context.getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_DONOR_REVIEWS);
                                                 if (asDonor == null){

@@ -26,6 +26,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -379,9 +380,9 @@ public class SetUp extends AppCompatActivity {
                 Object lon = Double.parseDouble(parsed.getString("long"));
                 locationData.put("lat", lat);
                 locationData.put("lon", lon);
-                locationData.put("badges", new ArrayList<>());
-                locationData.put("itemsOnShelf", new ArrayList<>());
-                locationData.put("itemsReviewed", new ArrayList<>());
+                locationData.put("badges", new ArrayList<Long>());
+                locationData.put("itemsOnShelf", new ArrayList<DocumentReference>());
+                locationData.put("itemsReviewed", new ArrayList<DocumentReference>());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
