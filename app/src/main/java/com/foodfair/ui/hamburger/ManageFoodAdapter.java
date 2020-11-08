@@ -131,12 +131,12 @@ public class ManageFoodAdapter extends FirestoreAdapter<ManageFoodAdapter.ViewHo
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         FoodItemInfo foodItemInfo = documentSnapshot.toObject(FoodItemInfo.class);
-                        if(foodItemInfo != null && foodItemInfo.getCount() > 0){
+                        if(foodItemInfo != null && foodItemInfo.getImageDescription().size() > 0){
                             Picasso.get().load(foodItemInfo.getImageDescription().get(0))
                                     .into(binding.foodPhoto);
                         }
                         binding.foodNameFood.setText(foodItemInfo.getName());
-                        binding.quantity.setText("Quantity: " + foodItemInfo.getCount());
+                        //binding.quantity.setText("Quantity: " + foodItemInfo.getCount());
                     }
                 });
 
