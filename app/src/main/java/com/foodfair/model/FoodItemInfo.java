@@ -21,6 +21,24 @@ public class FoodItemInfo implements Serializable {
     String textDescription;
     Long type;
     String city;
+    double distanceToUser;
+    private String itemID;
+
+    public String getItemID() {
+        return itemID;
+    }
+
+    public void setItemID(String itemID) {
+        this.itemID = itemID;
+    }
+
+    public double getDistanceToUser() {
+        return distanceToUser;
+    }
+
+    public void setDistanceToUser(double distanceToUser) {
+        this.distanceToUser = distanceToUser;
+    }
 
     public String getCity() {
         return city;
@@ -109,6 +127,12 @@ public class FoodItemInfo implements Serializable {
     public void setType(Long type) {
         this.type = type;
     }
+
+
+
+
+
+
 //
 //    @Override
 //    public int describeContents() {
