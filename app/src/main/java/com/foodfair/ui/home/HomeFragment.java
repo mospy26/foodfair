@@ -59,15 +59,8 @@ public class HomeFragment extends Fragment {
 
         // Queries items where status is "1" and the count is greater than 0
 
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-       DocumentReference df = dbReference.collection("usersInfo").document("XWNQVbEdFKWbGOnok7wgMARYXgp2");
 
 
-       FoodItemInfo n = new FoodItemInfo();
-       n.setName("LOL");
-
-       List<FoodItemInfo> fd = new ArrayList<>();
-       fd.add(n);
 
        recyclerView.setHasFixedSize(true);
        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -77,6 +70,8 @@ public class HomeFragment extends Fragment {
 
 
 
+
+       fabStuff(root);
         return root;
     }
 
