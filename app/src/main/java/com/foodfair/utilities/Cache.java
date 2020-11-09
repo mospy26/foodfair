@@ -61,7 +61,8 @@ public class Cache {
     }
 
     public CacheObject get(String key) {
-        return cache.getOrDefault(key, null);
+        return null;
+//        return cache.getOrDefault(key, null);
     }
 
     public Object getStoredObject(String key){
