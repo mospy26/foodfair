@@ -325,7 +325,7 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
                         totalRanking.setDonationCount(totalRanking.getDonationCount() + 1);
                         if (totalRanking.getDonationCount() == 5) {
                             addBadgeToDonor(201L);
-                            cache.add(FirebaseAuth.getInstance().getCurrentUser().getUid(), donor);
+//                            cache.add(FirebaseAuth.getInstance().getCurrentUser().getUid(), donor);
                         }
                     } else {
                         addBadgeToDonor(200L);
@@ -335,7 +335,7 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
                         totalRanking.setScore(100L);
                         totalRanking.setDonor(transaction.getDonor());
                     }
-                    saveTotalRanking();
+                    saveTotalRanking(totalRanking);
 
                     if (((ArrayList<DocumentReference>) consumer.getAsConsumer().get(getResources().getString(R.string.FIREBASE_COLLECTION_USER_INFO_SUB_KEY_OF_AS_CONSUMER_TRANSACTIONS))).size() == 5) {
                         addBadgeToConsumer(101L);
@@ -348,7 +348,7 @@ public class QRScanner extends AppCompatActivity implements OnStateChangeListene
         });
     }
 
-    public void saveTotalRanking() {
+    public void saveTotalRanking(Ranking ranking) {
         CollectionReference leaderboardRef = FirebaseFirestore.getInstance().collection(getResources().getString(R.string.FIREBASE_COLLECTION_LEADERBOARD));
         FirebaseFirestore.getInstance().collection(("leaderboard"))
                 .document("total")
