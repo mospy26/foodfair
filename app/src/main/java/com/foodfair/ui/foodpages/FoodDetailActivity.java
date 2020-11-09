@@ -380,9 +380,7 @@ public class FoodDetailActivity extends AppCompatActivity {
             // Bring up the second activity
             startActivityForResult(intent, BOOK_SUCCESS_REQ_CODE);
         }
-
-
-
+        finish();
     }
 
     public void quantityDecrement(String foodItemId) {
